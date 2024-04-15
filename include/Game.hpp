@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
+#include "Board.hpp"
 class Game{
   public:
-    Game(int width , int height, std::string title);	
+    Board board;
+    Game(int width , int height,int fps, std::string title);	
     Game(const Game& other) = delete;
 	  Game& operator=(const Game& other) = delete;
     ~Game() noexcept;
