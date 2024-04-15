@@ -1,9 +1,8 @@
 #include "../include/Game.hpp"
-
+#include "../include/Settings.hpp"
 int main(){
-  const int screenW = 800;
-  const int screenH = 600;
-  Game game {screenW, screenH,60, "Tetris"};
+
+  Game game {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
   while (!game.GameShouldClose()) {
     game.Tick(); 
   }

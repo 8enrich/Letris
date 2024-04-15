@@ -3,16 +3,16 @@ template<typename T>
 class Vec2 {
 public:
   Vec2() = default;
-  Vec2(T x, T y):
+  constexpr Vec2(T x, T y):
     x(x), y(y)
   {}
-  Vec2(T n):
+  constexpr Vec2(T n):
     x(n), y(n)
   {}
-  T GetX() const {return x;}
-  T GetY() const {return y;}
-  void SetX(T x_in) {x = x_in;}
-  void SetY(T y_in) {y = y_in;}
+  constexpr T GetX() const {return x;}
+  constexpr T GetY() const {return y;}
+  constexpr void SetX(T x_in) {x = x_in;}
+  constexpr void SetY(T y_in) {y = y_in;}
 public:
   bool operator>=(const T rhs) const {return x >= rhs && y >= rhs;} 
   bool operator>=(const Vec2& rhs) const {return x >= rhs.x && y >= rhs.y;} 

@@ -39,6 +39,12 @@ void Board::Draw() const {
     for (int iX = 0; iX < width; ++iX){
       DrawCell({iX, iY});
     }
-  } 
+  }
+  DrawBorder();
 
+}
+
+void Board::DrawBorder() const {
+  ray_wrapper::DrawRectangleLinesEx(screenPos - (cellSize/2), 
+      Vec2{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }

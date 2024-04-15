@@ -1,8 +1,9 @@
 #include "../include/Game.hpp"
+#include "../include/Settings.hpp"
 #include <raylib.h>
 #include <assert.h>
 Game::Game(int width, int height, int fps, std::string title) :
-  board({200, 200}, {10, 20}, 15, 2)
+  board(settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding)
 {
   assert(!GetWindowHandle()); // Impede que sejam abertas duas janelas. caso ocorra, o programa fecha.
   SetTargetFPS(fps);

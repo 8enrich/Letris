@@ -19,6 +19,7 @@ public:
   void SetCell(Vec2<int> pos, Color c);
   void DrawCell(Vec2<int> pos) const;
   void Draw() const;
+  void DrawBorder() const;
 
 private:
   std::vector<Cell> cells;
