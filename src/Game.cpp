@@ -26,17 +26,17 @@ void Game::Tick(){
   Game::Update();
   Game::Draw();
   EndDrawing();
-  tick++;
+  tickCount++;
 }
 
 void Game::Draw(){
   ClearBackground(BLACK);
   board.Draw();
-  if(!(tick % 10)){ /*Esse 10 é um número mágico por enquanto(só coloquei num valor razoável),
+  if(!(tickCount % 10)){ /*Esse 10 é um número mágico por enquanto(só coloquei num valor razoável),
                       ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.
                       Acho que esse número pode até ficar em settings, mas ele não é constante justamente por causa
                       da dificudalde aumentar*/
-    shape.setBoardPos(0, 1);
+    shape.updatePosition();
   }
   shape.Draw();
 }

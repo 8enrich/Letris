@@ -33,8 +33,12 @@ void Shape::Draw() const {
   }
 }
 
-void Shape::setBoardPos(int x, int y){
-  boardPos += Vec2{x, y};
+void Shape::updatePosition(){
+  setBoardPos(newPosition);
+}
+
+void Shape::setBoardPos(Vec2<int> newPosition){
+  boardPos += newPosition;
 }
 
 void Shape::Rotate(){
