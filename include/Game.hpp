@@ -12,6 +12,7 @@ class Game{
     bool GameShouldClose() const;
     void Tick();
   private:
+    int tickCount;
     void Draw();
     void Update();
 

@@ -14,7 +14,7 @@ Game::Game(int width, int height, int fps, std::string title) :
 }
 
 Game::~Game() noexcept{
-  assert(GetWindowHandle()); // Impede que feche uma janela que não existe. caso ocorra, o programa fehca
+  assert(GetWindowHandle()); // Impede que feche uma janela que não existe. caso ocorra, o programa fecha.
   CloseWindow();
 }
 bool Game::GameShouldClose() const{
@@ -26,11 +26,18 @@ void Game::Tick(){
   Game::Update();
   Game::Draw();
   EndDrawing();
+  tickCount++;
 }
 
 void Game::Draw(){
   ClearBackground(BLACK);
   board.Draw();
+  if(!(tickCount % 10)){ /*Esse 10 é um número mágico por enquanto(só coloquei num valor razoável),
+                      ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.
+                      Acho que esse número pode até ficar em settings, mas ele não é constante justamente por causa
+                      da dificudalde aumentar*/
+    shape.updatePosition();
+  }
   shape.Draw();
 }
 
