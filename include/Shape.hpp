@@ -14,6 +14,7 @@ public:
   Shape(const bool* shape_matrix, int dimension, Color color, const Board& board);
   void Draw() const;
   void Rotate();
+  void setBoardPos(int, int);
 private:
   Vec2<int> boardPos;
   Rotation currentRotation;
