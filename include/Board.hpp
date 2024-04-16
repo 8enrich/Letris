@@ -9,6 +9,7 @@ private:
       Cell();  
       void SetColor(Color color);
       void Remove();
+      bool Exists() const;
       Color GetColor() const;
     private:
       bool doExists;
@@ -18,9 +19,12 @@ public:
   Board(Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padding);
   void SetCell(Vec2<int> pos, Color c);
   void DrawCell(Vec2<int> pos) const;
+  void DrawCell(Vec2<int> pos, Color color) const;
   void Draw() const;
   void DrawBorder() const;
-
+  bool CellExists(Vec2<int> pos) const;
+  int GetWidth() const;
+  int GetHeight() const;
 private:
   std::vector<Cell> cells;
   const int width, height, cellSize, padding;

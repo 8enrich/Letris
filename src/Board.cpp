@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <raylib.h>
 Board::Cell::Cell() : doExists(false), c(WHITE) {}
-
+bool Board::Cell::Exists() const { return doExists;}
 void Board::Cell::SetColor(Color color) {
   c = color;
   doExists = true;
@@ -26,18 +26,23 @@ void Board::SetCell(Vec2<int> pos, Color c){
   cells[width*y + x].SetColor(c);
 }
 void Board::DrawCell(Vec2<int> pos) const{
+  Color c = cells[pos.GetY() * width + pos.GetX()].GetColor();
+  DrawCell(pos, c);
+}
+
+void Board::DrawCell(Vec2<int> pos, Color color) const {
   const int x = pos.GetX();
   const int y = pos.GetY();
   assert(x >= 0 && x < width && y >= 0 && y < height);
-  Color c = cells[y * width + x].GetColor();
   Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-  ray_wrapper::DrawRectangle(topLeft, {cellSize - padding}, c);
+  ray_wrapper::DrawRectangle(topLeft, {cellSize - padding}, color);
+ 
 }
-
 void Board::Draw() const {
   for (int iY = 0; iY < height; ++iY){
     for (int iX = 0; iX < width; ++iX){
-      DrawCell({iX, iY});
+      if(CellExists({iX, iY}))
+        DrawCell({iX, iY});
     }
   }
   DrawBorder();
@@ -47,4 +52,16 @@ void Board::Draw() const {
 void Board::DrawBorder() const {
   ray_wrapper::DrawRectangleLinesEx(screenPos - (cellSize/2), 
       Vec2{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
+}
+
+bool Board::CellExists(Vec2<int> pos) const {
+  return cells[pos.GetY()*width + pos.GetX()].Exists();
+}
+
+int Board::GetWidth() const {
+  return width;
+}
+
+int Board::GetHeight() const {
+  return height;
 }
