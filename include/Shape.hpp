@@ -1,6 +1,5 @@
 #pragma once
 #include "Vec2.hpp"
-#include "raylibWrapper.hpp"
 #include <raylib.h>
 #include "Board.hpp"
 class Shape {
@@ -13,6 +12,9 @@ public:
   };
   Shape(const bool* shape_matrix, int dimension, Color color, const Board& board);
   Shape(const Shape& other);
+	Shape& operator=(const Shape& other){
+    return *this = Shape(other);
+  }
   void Draw() const;
   void Rotate();
   void updatePosition(Vec2<int>);
@@ -20,6 +22,9 @@ public:
   void moveRight();
   void moveLeft();
   void moveDown();
+  Vec2<int> GetBoardPos();
+  int GetDimension();
+  Color GetColor();
 private:
   Vec2<int> boardPos;
   Rotation currentRotation;

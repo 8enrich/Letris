@@ -7,8 +7,20 @@ Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& 
   boardPos((board.GetWidth() - dimension)/2,0),
   board(board)
 {}
-Shape::Shape(const Shape& other):shape_matrix(other.shape_matrix), dimension(other.dimension), color(other.color), boardPos(other.boardPos), board(other.board){
+Shape::Shape(const Shape& other):
+  shape_matrix(other.shape_matrix), dimension(other.dimension), color(other.color), boardPos(other.boardPos), board(other.board)
+{}
 
+Vec2<int> Shape::GetBoardPos(){
+  return boardPos;
+}
+
+Color Shape::GetColor(){
+  return color;
+}
+
+int Shape::GetDimension(){
+  return dimension;
 }
 void Shape::Draw() const {
   for (int y = 0; y < dimension; ++y){

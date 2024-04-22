@@ -1,12 +1,11 @@
 #pragma once
 #include <string>
-#include <vector>
 #include "Board.hpp"
 #include "Shape.hpp"
 class Game{
   public:
 
-    Game(int width , int height,int fps, std::string title);	
+    Game(int width , int height,int fps, std::string title, Board board, Shape* shape);	
     Game(const Game& other) = delete;
 	  Game& operator=(const Game& other) = delete;
     ~Game() noexcept;
@@ -16,8 +15,7 @@ class Game{
     int tickCount;
     void Draw();
     void Update();
-
-    std::vector<Vec2<int>> filling;
+    void UpdateShape();
     Board board;
-    Shape shape;
+    Shape *shape;
 };

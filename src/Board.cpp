@@ -22,8 +22,8 @@ Board::Board (Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padd
 void Board::SetCell(Vec2<int> pos, Color c){
   const int x = pos.GetX(); 
   const int y = pos.GetY();
-  assert (x >= 0 && y >= 0 && x < width && y < height);
-  cells[width*y + x].SetColor(c);
+  if(x >= 0 && y >= 0 && x < width && y < height)
+    cells[width*y + x].SetColor(c);
 }
 void Board::DrawCell(Vec2<int> pos) const{
   Color c = cells[pos.GetY() * width + pos.GetX()].GetColor();
@@ -33,10 +33,12 @@ void Board::DrawCell(Vec2<int> pos) const{
 void Board::DrawCell(Vec2<int> pos, Color color) const {
   const int x = pos.GetX();
   const int y = pos.GetY();
-  assert(x >= 0 && x < width && y >= 0 && y < height);
-  Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-  ray_wrapper::DrawRectangle(topLeft, {cellSize - padding}, color);
- 
+
+  if(x >= 0 && x < width && y >= 0 && y < height){
+    Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
+    ray_wrapper::DrawRectangle(topLeft, {cellSize - padding}, color);
+    return;
+  } 
 }
 void Board::Draw() const {
   for (int iY = 0; iY < height; ++iY){
