@@ -3,8 +3,7 @@
 #include <raylib.h>
 #include <assert.h>
 Game::Game(int width, int height, int fps, std::string title) :
-  board(settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding),
-  shape(board)
+  board(settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding), shape(J_Shape(board))
 {
   assert(!GetWindowHandle()); // Impede que sejam abertas duas janelas. caso ocorra, o programa fecha.
   SetTargetFPS(fps);

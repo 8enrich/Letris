@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "Board.hpp"
 #include "Shape.hpp"
 class Game{
@@ -16,6 +17,7 @@ class Game{
     void Draw();
     void Update();
 
+    std::vector<Vec2<int>> filling;
     Board board;
-    J_Shape shape;
+    Shape shape;
 };

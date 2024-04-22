@@ -12,6 +12,7 @@ public:
     LEFT
   };
   Shape(const bool* shape_matrix, int dimension, Color color, const Board& board);
+  Shape(const Shape& other);
   void Draw() const;
   void Rotate();
   void updatePosition(Vec2<int>);
