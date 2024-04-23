@@ -1,6 +1,7 @@
 #include "../include/Game.hpp"
 #include <raylib.h>
 #include <assert.h>
+
 Game::Game(int width, int height, int fps, std::string title, Board board, Shape *shape) :
   board(board), 
   shape(shape)
@@ -29,17 +30,23 @@ void Game::Tick(){
 }
 
 void Game::UpdateShape(){
-  if (!(shape->GetBoardPos().GetY() >= 0 && shape->GetBoardPos().GetY() < board.GetHeight())){
-    for (int i = 0; i < shape->GetDimension(); i++){
-      for (int j = 0; j < shape->GetDimension(); i++){
-        board.SetCell(shape->GetBoardPos() +Vec2{i, j}, shape->GetColor());
+  if (!(shape->willFellOffTheBoard())){
+    Vec2<int> position_cells;
+    int dimension = shape->GetDimension();
+    for (int i = 0; i < dimension; i++){
+      for (int j = 0; j < dimension; j++){
+        bool cell = shape->GetShapeRotation(i, j);
+        if(cell){
+          position_cells = shape->GetBoardPos() + Vec2<int>{i, j};
+          board.SetCell(position_cells, shape->GetColor());
+        }
       }
     }
-    Shape tempshape = O_Shape(board);
-    shape = &tempshape;
+    Shape* next_shape = new O_Shape(board);
+    shape = next_shape;
   }
-
 }
+
 void Game::Draw(){
   ClearBackground(BLACK);
   board.Draw();
@@ -47,11 +54,11 @@ void Game::Draw(){
 }
 
 void Game::Update(){
-  if (!(tickCount%3)){  
+  if (!(tickCount%3)){
     if (IsKeyDown(KEY_W)) { shape->Rotate(); }
-    if (IsKeyDown(KEY_D)) { shape->moveRight();}
-    if (IsKeyDown(KEY_A)) { shape->moveLeft();}
-    if (IsKeyDown(KEY_S)) { shape->moveDown();}
+    if (IsKeyDown(KEY_D) && shape->willEscapeRight()){shape->moveRight();}
+    if (IsKeyDown(KEY_A) && shape->willEscapeLeft()){ shape->moveLeft();}
+    if (IsKeyDown(KEY_S) && shape->willFellOffTheBoard()){shape->moveDown();}
   }
   if(!(tickCount % 15)){/*Esse 15 é um número mágico por enquanto(só coloquei num valor razoável),
                       ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.

@@ -12,9 +12,7 @@ public:
   };
   Shape(const bool* shape_matrix, int dimension, Color color, const Board& board);
   Shape(const Shape& other);
-	Shape& operator=(const Shape& other){
-    return *this = Shape(other);
-  }
+	Shape& operator=(const Shape &other){return *this = Shape(other);}
   void Draw() const;
   void Rotate();
   void updatePosition(Vec2<int>);
@@ -25,7 +23,11 @@ public:
   Vec2<int> GetBoardPos();
   int GetDimension();
   Color GetColor();
-private:
+  bool willFellOffTheBoard();
+  bool *GetShapeRotation(int,int) const;
+  bool willEscapeRight();
+  bool willEscapeLeft();
+  private:
   Vec2<int> boardPos;
   Rotation currentRotation;
   const bool* shape_matrix;
@@ -35,6 +37,9 @@ private:
   const Vec2<int> downAddVector = {0, 1};
   const Vec2<int> rightAddVector = {1, 0};
   const Vec2<int> leftAddVector = {-1, 0};
+  int getLowestYCell();
+  int getRightestXCell();
+  int getLeftestXCell();
 };
 
 class I_Shape : public Shape{
