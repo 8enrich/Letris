@@ -6,9 +6,9 @@ class Shape {
 public:
   enum class Rotation {
     UP,
-    RIGHT,
     DOWN,
-    LEFT
+    LEFT,
+    RIGHT
   };
   Shape(const bool* shape_matrix, int dimension, Color color, const Board& board);
   Shape(const Shape& other);
@@ -23,10 +23,14 @@ public:
   Vec2<int> GetBoardPos();
   int GetDimension();
   Color GetColor();
-  bool willFellOffTheBoard();
+  bool willCollideDown();
+  bool willCollideRight();
+  bool willCollideLeft();
   bool GetShapeRotation(int,int) const;
   bool willEscapeRight();
   bool willEscapeLeft();
+  void resetBoardPos();
+  void resetRotation();
   private:
   Vec2<int> boardPos;
   Rotation currentRotation;
@@ -37,9 +41,10 @@ public:
   const Vec2<int> downAddVector = {0, 1};
   const Vec2<int> rightAddVector = {1, 0};
   const Vec2<int> leftAddVector = {-1, 0};
-  int getLowestYCell();
   int getRightestXCell();
   int getLeftestXCell();
+  bool hasCellRight();
+  bool hasCellLeft();
 };
 
 class I_Shape : public Shape{
