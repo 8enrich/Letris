@@ -35,18 +35,18 @@ void Shape::Draw() const {
   }
 }
 
-bool *Shape::GetShapeRotation(int x, int y) const{
+bool Shape::GetShapeRotation(int x, int y) const{
   switch (currentRotation) {
     case Shape::Rotation::UP:
-      return (bool*) shape_matrix[y * dimension + x];
+      break;
     case Shape::Rotation::DOWN:
-      return (bool*) shape_matrix[dimension * (dimension-1) - dimension * x + y];
+      return shape_matrix[dimension * (dimension-1) - dimension * x + y];
     case Shape::Rotation::LEFT:
-      return (bool*) shape_matrix[(dimension * dimension - 1) - dimension * y - x];
+      return shape_matrix[(dimension * dimension - 1) - dimension * y - x];
     case Shape::Rotation::RIGHT:
-      return (bool*) shape_matrix[dimension-1 + dimension * x - y];
+      return shape_matrix[dimension-1 + dimension * x - y];
   }
-  return (bool*) shape_matrix;
+  return shape_matrix[y * dimension + x];
 }
 
 void Shape::updatePosition(Vec2<int> addVector){

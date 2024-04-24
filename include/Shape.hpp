@@ -24,7 +24,7 @@ public:
   int GetDimension();
   Color GetColor();
   bool willFellOffTheBoard();
-  bool *GetShapeRotation(int,int) const;
+  bool GetShapeRotation(int,int) const;
   bool willEscapeRight();
   bool willEscapeLeft();
   private:
