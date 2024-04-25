@@ -15,22 +15,24 @@ public:
 	Shape& operator=(const Shape &other){return *this = Shape(other);}
   void Draw() const;
   void Rotate();
-  void updatePosition(Vec2<int>);
-  void fall();
-  void moveRight();
-  void moveLeft();
-  void moveDown();
+  void UpdatePosition(Vec2<int>);
+  void Fall();
+  void MoveRight();
+  void MoveLeft();
+  void MoveDown();
   Vec2<int> GetBoardPos();
   int GetDimension();
   Color GetColor();
-  bool willCollideDown();
-  bool willCollideRight();
-  bool willCollideLeft();
+  bool WillCollideDown();
+  bool WillCollideRight();
+  bool WillCollideLeft();
   bool GetShapeRotation(int,int) const;
-  bool willEscapeRight();
-  bool willEscapeLeft();
-  void resetBoardPos();
-  void resetRotation();
+  bool WillEscapeRight();
+  bool WillEscapeLeft();
+  bool WillEscapeDown();
+  void ResetBoardPos();
+  void ResetRotation();
+  void MoveIfCollided();
   private:
   Vec2<int> boardPos;
   Rotation currentRotation;
@@ -41,10 +43,12 @@ public:
   const Vec2<int> downAddVector = {0, 1};
   const Vec2<int> rightAddVector = {1, 0};
   const Vec2<int> leftAddVector = {-1, 0};
-  int getRightestXCell();
-  int getLeftestXCell();
-  bool hasCellRight();
-  bool hasCellLeft();
+  int GetRightestXCell();
+  int GetLeftestXCell();
+  int GetLowestYCell();
+  bool HasCellRight();
+  bool HasCellLeft();
+  bool HasCellDown();
 };
 
 class I_Shape : public Shape{

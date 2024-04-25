@@ -1,5 +1,4 @@
 #include "../include/Shape.hpp"
-#include <cstdio>
 
 Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& board) :
   shape_matrix(shape_matrix), 
@@ -50,43 +49,56 @@ bool Shape::GetShapeRotation(int x, int y) const{
   return shape_matrix[y * dimension + x];
 }
 
-void Shape::updatePosition(Vec2<int> addVector){
+void Shape::UpdatePosition(Vec2<int> addVector){
   boardPos += addVector;
 }
 
-void Shape::fall(){
-  moveDown();
+void Shape::Fall(){
+  MoveDown();
 }
 
-void Shape::moveRight(){
-  updatePosition(rightAddVector);
+void Shape::MoveRight(){
+  UpdatePosition(rightAddVector);
 }
 
-void Shape::moveLeft(){
-  updatePosition(leftAddVector);
+void Shape::MoveLeft(){
+  UpdatePosition(leftAddVector);
 }
 
-void Shape::moveDown(){
-  updatePosition(downAddVector);
+void Shape::MoveDown(){
+  UpdatePosition(downAddVector);
 }
 
-bool Shape::willEscapeRight(){
- return getRightestXCell() + rightAddVector.GetX() >= board.GetWidth();
+bool Shape::WillEscapeRight(){
+ return GetRightestXCell() + rightAddVector.GetX() >= board.GetWidth();
 }
 
-bool Shape::willEscapeLeft(){
-  return getLeftestXCell() + leftAddVector.GetX() < 0;
+bool Shape::WillEscapeLeft(){
+  return GetLeftestXCell() + leftAddVector.GetX() < 0;
 }
 
-bool Shape::willCollideRight(){
-  return willEscapeRight() || hasCellRight();
+bool Shape::WillEscapeDown(){
+  return GetLowestYCell() + downAddVector.GetY() >= board.GetHeight();
 }
 
-bool Shape::willCollideLeft(){
-  return willEscapeLeft() || hasCellLeft();
+bool Shape::WillCollideRight(){
+  return WillEscapeRight() || HasCellRight();
 }
 
-bool Shape::hasCellRight(){
+bool Shape::WillCollideLeft(){
+  return WillEscapeLeft() || HasCellLeft();
+}
+
+bool Shape::WillCollideDown(){
+  return WillEscapeDown() || HasCellDown();
+}
+
+void Shape::MoveIfCollided(){
+  while(WillCollideRight()){ boardPos += leftAddVector;}
+  while(WillCollideLeft()){ boardPos += rightAddVector;}
+}
+
+bool Shape::HasCellRight(){
   bool cell;
   Vec2<int> pos;
   for(int x = dimension - 1; x >= 0; --x){
@@ -99,7 +111,7 @@ bool Shape::hasCellRight(){
   return false;
 }
 
-bool Shape::hasCellLeft(){
+bool Shape::HasCellLeft(){
   bool cell;
   Vec2<int> pos;
   for(int x = dimension - 1; x >= 0; --x){
@@ -112,7 +124,7 @@ bool Shape::hasCellLeft(){
   return false;
 }
 
-bool Shape::willCollideDown(){
+bool Shape::HasCellDown(){
   bool cell;
   Vec2<int> pos;
   for(int y = dimension - 1; y >= 0; --y){
@@ -125,7 +137,7 @@ bool Shape::willCollideDown(){
   return false;
 }
 
-int Shape::getRightestXCell(){
+int Shape::GetRightestXCell(){
   for (int x = dimension - 1; x >= 0; --x){
     for (int y = dimension - 1; y >= 0; --y) {
       bool cell = GetShapeRotation(x, y);
@@ -135,7 +147,7 @@ int Shape::getRightestXCell(){
  return 0;
 }
 
-int Shape::getLeftestXCell(){
+int Shape::GetLeftestXCell(){
   for (int x = 0; x < dimension; ++x){
     for (int y = 0; y < dimension; ++y) {
       bool cell = GetShapeRotation(x, y);
@@ -145,9 +157,19 @@ int Shape::getLeftestXCell(){
  return 0;
 }
 
-void Shape::resetBoardPos(){ boardPos = Vec2<int>{(board.GetWidth() - dimension)/2, 0}; }
+int Shape::GetLowestYCell(){
+  for (int y = dimension - 1; y >= 0; --y){
+    for (int x = dimension - 1; x >= 0; --x){
+      bool cell = GetShapeRotation(x, y);
+      if (cell) { return (boardPos + Vec2<int>{x, y}).GetY(); }
+    }
+  }
+  return 0;
+}
 
-void Shape::resetRotation(){ currentRotation = Rotation(0); }
+void Shape::ResetBoardPos(){ boardPos = Vec2<int>{(board.GetWidth() - dimension)/2, 0}; }
+
+void Shape::ResetRotation(){ currentRotation = Rotation(0); }
 
 void Shape::Rotate(){
   currentRotation = Rotation((int(currentRotation) + 1) % 4);

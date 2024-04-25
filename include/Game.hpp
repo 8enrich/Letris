@@ -15,10 +15,10 @@ class Game{
     void Draw();
     void Update();
     void UpdateShape();
-    Shape *newShape();
-    Shape *nextShape();
+    Shape *NewShape();
+    Shape *NextShape();
     Board board;
-    Shape *shape = newShape();
+    Shape *shape = NewShape();
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),

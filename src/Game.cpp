@@ -30,32 +30,32 @@ void Game::Tick(){
   tickCount++;
 }
 
-Shape *Game::newShape(){
+Shape *Game::NewShape(){
   srand(time(NULL));
   return &shapes[rand()%7];
 }
 
-Shape *Game::nextShape(){
-  shape = newShape();
-  shape->resetBoardPos();
-  shape->resetRotation();
+Shape *Game::NextShape(){
+  shape = NewShape();
+  shape->ResetBoardPos();
+  shape->ResetRotation();
   return shape;
 }
 
 void Game::UpdateShape(){
-  if (shape->willCollideDown()){
-    Vec2<int> position_cells;
+  if (shape->WillCollideDown()){
+    Vec2<int> cellPosition;
     int dimension = shape->GetDimension();
     for (int x = 0; x < dimension; ++x){
       for (int y = 0; y < dimension; ++y){
         bool cell = shape->GetShapeRotation(x, y);
         if(cell){
-          position_cells = shape->GetBoardPos() + Vec2<int>{x, y};
-          board.SetCell(position_cells, shape->GetColor());
+          cellPosition = shape->GetBoardPos() + Vec2<int>{x, y};
+          board.SetCell(cellPosition, shape->GetColor());
         }
       }
     }
-    shape = nextShape();
+    shape = NextShape();
   }
 }
 
@@ -67,15 +67,18 @@ void Game::Draw(){
 
 void Game::Update(){
   if (!(tickCount%3)){
-    if(IsKeyDown(KEY_W)) { shape->Rotate(); }
-    if (!shape->willCollideRight() && IsKeyDown(KEY_D)){shape->moveRight();}
-    if (!shape->willCollideLeft() && IsKeyDown(KEY_A)){ shape->moveLeft();}
-    if (!shape->willCollideDown() && IsKeyDown(KEY_S)){shape->moveDown();}
+    if(IsKeyDown(KEY_W)) {
+      shape->Rotate();
+      shape->MoveIfCollided();
+    }
+    if (!shape->WillCollideRight() && IsKeyDown(KEY_D)){shape->MoveRight();}
+    if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
+    if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
   }
-  if(!(tickCount % 15) && !shape->willCollideDown()){/*Esse 15 é um número mágico por enquanto(só coloquei num valor razoável),
+  if(!shape->WillCollideDown() && !(tickCount % 15)){/*Esse 15 é um número mágico por enquanto(só coloquei num valor razoável),
                       ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.
                       Acho que esse número pode até ficar em settings, mas ele não é constante justamente por causa
                       da dificudalde aumentar*/
-    shape->fall();
+    shape->Fall();
   }
 }
