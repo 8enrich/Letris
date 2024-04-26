@@ -94,8 +94,14 @@ bool Shape::WillCollideDown(){
 }
 
 void Shape::MoveIfCollided(){
-  while(WillCollideRight()){ boardPos += leftAddVector;}
-  while(WillCollideLeft()){ boardPos += rightAddVector;}
+  if(WillCollideRight()){
+    do{boardPos += leftAddVector;} while(WillCollideRight());
+    boardPos += rightAddVector;
+  }
+  if(WillCollideLeft()){
+    do{ boardPos += rightAddVector;} while(WillCollideLeft());
+    boardPos += leftAddVector;
+  }
 }
 
 bool Shape::HasCellRight(){

@@ -66,11 +66,11 @@ void Game::Draw(){
 }
 
 void Game::Update(){
+  if(IsKeyPressed(KEY_W)) {
+    shape->Rotate();
+    shape->MoveIfCollided();
+  }
   if (!(tickCount%3)){
-    if(IsKeyDown(KEY_W)) {
-      shape->Rotate();
-      shape->MoveIfCollided();
-    }
     if (!shape->WillCollideRight() && IsKeyDown(KEY_D)){shape->MoveRight();}
     if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
     if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
