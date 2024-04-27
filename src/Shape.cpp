@@ -93,6 +93,29 @@ bool Shape::WillCollideDown(){
   return WillEscapeDown() || HasCellDown();
 }
 
+bool Shape::HasSpaceToRotate(){
+  Vec2<int> pos = {GetLeftestXCell(), GetLowestYCell()};
+  int rightFirstCollision = GetFirstRightCollisionX(pos);
+  int leftFirstCollision = GetFirstLeftCollisionX(pos);
+  return rightFirstCollision - leftFirstCollision > dimension;
+}
+
+int Shape::GetFirstLeftCollisionX(Vec2<int> pos){
+  int factor = 1;
+  Vec2<int> leftCollision;
+  do{ leftCollision = pos + (leftAddVector * factor++);}
+  while(!(board.CellExists(leftCollision)) && leftCollision.GetX() >= 0);
+  return leftCollision.GetX();
+}
+
+int Shape::GetFirstRightCollisionX(Vec2<int> pos){
+  int factor = 1, width = board.GetWidth();
+  Vec2<int> rightCollision;
+  do{ rightCollision = pos + (rightAddVector * factor++);}
+  while(!(board.CellExists(rightCollision)) && rightCollision.GetX() <= width);
+  return rightCollision.GetX();
+}
+
 void Shape::MoveIfCollided(){
   if(WillCollideRight()){
     do{boardPos += leftAddVector;} while(WillCollideRight());

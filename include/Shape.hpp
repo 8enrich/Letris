@@ -33,6 +33,7 @@ public:
   void ResetBoardPos();
   void ResetRotation();
   void MoveIfCollided();
+  bool HasSpaceToRotate();
   private:
   Vec2<int> boardPos;
   Rotation currentRotation;
@@ -49,6 +50,8 @@ public:
   bool HasCellRight();
   bool HasCellLeft();
   bool HasCellDown();
+  int GetFirstLeftCollisionX(Vec2<int>);
+  int GetFirstRightCollisionX(Vec2<int>);
 };
 
 class I_Shape : public Shape{

@@ -66,7 +66,7 @@ void Game::Draw(){
 }
 
 void Game::Update(){
-  if(IsKeyPressed(KEY_W)) {
+  if(shape->HasSpaceToRotate() && IsKeyPressed(KEY_W)) {
     shape->Rotate();
     shape->MoveIfCollided();
   }
