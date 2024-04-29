@@ -24,7 +24,9 @@ public:
   void DrawBorder() const;
   bool CellExists(Vec2<int> pos) const;
   int GetWidth() const;
-  int GetHeight() const;
+  int GetHeight() const; 
+  void RemoveCell(Vec2<int> pos);
+  Color GetCellColor(Vec2<int> pos);
 private:
   std::vector<Cell> cells;
   const int width, height, cellSize, padding;
