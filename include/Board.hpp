@@ -31,4 +31,6 @@ private:
   std::vector<Cell> cells;
   const int width, height, cellSize, padding;
   Vec2<int> screenPos;
+  const Board::Cell *GetCell(Vec2<int>) const;
+  Board::Cell *GetCell(Vec2<int>);
 };

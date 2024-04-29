@@ -130,7 +130,7 @@ void Shape::MoveIfCollided(){
 bool Shape::HasCellRight(){
   bool cell;
   Vec2<int> pos;
-  for(int x = dimension - 1; x >= 0; --x){
+  for(int x = dimension - 1; x >= dimension/2; --x){
     for(int y = dimension - 1; y >= 0; --y){
       cell = GetShapeRotation(x, y);
       pos = boardPos + Vec2<int>{x, y} + rightAddVector;
@@ -143,8 +143,8 @@ bool Shape::HasCellRight(){
 bool Shape::HasCellLeft(){
   bool cell;
   Vec2<int> pos;
-  for(int x = dimension - 1; x >= 0; --x){
-    for(int y = dimension - 1; y >= 0; --y){
+  for(int x = 0; x < dimension; ++x){
+    for(int y = 0; y < dimension; ++y){
       cell = GetShapeRotation(x, y);
       pos = boardPos + Vec2<int>{x, y} + leftAddVector;
       if (cell && board.CellExists(pos)) {return true;}
