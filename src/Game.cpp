@@ -37,8 +37,7 @@ void Game::Tick(){
 }
 
 Shape *Game::NewShape(){
-  srand(time(NULL));
-  return &shapes[rand()%7];
+  return &shapes[GetRandomValue(0, 6)];
 }
 
 Shape *Game::NextShape(){
@@ -60,37 +59,29 @@ void Game::CleanLines(){
     count = 0;
   }
 }
-void Game::DropLines(){
-  if(cleanedCount){
-    for (int i = 1; i <= board.GetHeight(); i++){
-      int count = 0;
-      for (int y = board.GetHeight(); y >=0; y--){
-        for (int x = board.GetWidth()-1; x >=0; x--){
-          if(!board.CellExists({x, y})) { count++; }
-        }
-        if (count == board.GetWidth()) {
-          bool LineAbove = false;
-          for (int x = board.GetWidth()-1; x>=0; x--){
-            if (y >= i && board.CellExists({x, y-i})) {
-              LineAbove = true;
-              break;
-            }
+void Game::DropLines() {
+    if (cleanedCount) {
+      for (int y = board.GetHeight() - 1; y >= 0; y--) {
+        bool lineClean = true;
+        for (int x = 0; x < board.GetWidth(); x++) {
+          if (board.CellExists({x, y})) {
+            lineClean = false;
+            break;
           }
-          if (LineAbove) {
-            for (int x = board.GetWidth()-1; x >=0; x--){
-              if (board.CellExists({x, y-i})) {
-                if (y >= i){
-                  board.SetCell({x, y}, board.GetCellColor({x, y-i}));
-                  board.RemoveCell({x, y-i});
-                }
+      }
+
+        if (lineClean) {
+          for (int i = y - cleanedCount; i >= 0; i--) {
+            for (int x = 0; x < board.GetWidth(); x++) {
+              if (board.CellExists({x, i})) {
+                board.SetCell({x, i + cleanedCount}, board.GetCellColor({x, i}));
+                board.RemoveCell({x, i});
               }
             }
           }
         }
-        count = 0;
-      }
     }
-  cleanedCount = 0;
+    cleanedCount = 0;
   }
 }
 void Game::UpdateShape(){
