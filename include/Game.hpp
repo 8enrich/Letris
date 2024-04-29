@@ -4,8 +4,7 @@
 #include "Shape.hpp"
 class Game{
   public:
-
-    Game(int width , int height,int fps, std::string title);	
+    Game(int width , int height,int fps, std::string title, Board board);
     Game(const Game& other) = delete;
 	  Game& operator=(const Game& other) = delete;
     ~Game() noexcept;
@@ -15,7 +14,16 @@ class Game{
     int tickCount;
     void Draw();
     void Update();
-
+    void UpdateShape();
+    Shape *NewShape();
+    Shape *NextShape();
     Board board;
-    J_Shape shape;
+    Shape *shape = NewShape();
+    Shape shapes[7] = {I_Shape(board),
+                       O_Shape(board),
+                       T_Shape(board),
+                       J_Shape(board),
+                       L_Shape(board),
+                       S_Shape(board),
+                       Z_Shape(board)};
 };

@@ -1,25 +1,40 @@
 #pragma once
 #include "Vec2.hpp"
-#include "raylibWrapper.hpp"
 #include <raylib.h>
 #include "Board.hpp"
 class Shape {
 public:
   enum class Rotation {
     UP,
-    RIGHT,
     DOWN,
-    LEFT
+    LEFT,
+    RIGHT
   };
   Shape(const bool* shape_matrix, int dimension, Color color, const Board& board);
+  Shape(const Shape& other);
+	Shape& operator=(const Shape &other){return *this = Shape(other);}
   void Draw() const;
   void Rotate();
-  void updatePosition(Vec2<int>);
-  void fall();
-  void moveRight();
-  void moveLeft();
-  void moveDown();
-private:
+  void UpdatePosition(Vec2<int>);
+  void Fall();
+  void MoveRight();
+  void MoveLeft();
+  void MoveDown();
+  Vec2<int> GetBoardPos();
+  int GetDimension();
+  Color GetColor();
+  bool WillCollideDown();
+  bool WillCollideRight();
+  bool WillCollideLeft();
+  bool GetShapeRotation(int,int) const;
+  bool WillEscapeRight();
+  bool WillEscapeLeft();
+  bool WillEscapeDown();
+  void ResetBoardPos();
+  void ResetRotation();
+  void MoveIfCollided();
+  bool HasSpaceToRotate();
+  private:
   Vec2<int> boardPos;
   Rotation currentRotation;
   const bool* shape_matrix;
@@ -29,6 +44,14 @@ private:
   const Vec2<int> downAddVector = {0, 1};
   const Vec2<int> rightAddVector = {1, 0};
   const Vec2<int> leftAddVector = {-1, 0};
+  int GetRightestXCell();
+  int GetLeftestXCell();
+  int GetLowestYCell();
+  bool HasCellRight();
+  bool HasCellLeft();
+  bool HasCellDown();
+  int GetFirstLeftCollisionX(Vec2<int>);
+  int GetFirstRightCollisionX(Vec2<int>);
 };
 
 class I_Shape : public Shape{

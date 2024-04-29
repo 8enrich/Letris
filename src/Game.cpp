@@ -1,16 +1,16 @@
 #include "../include/Game.hpp"
-#include "../include/Settings.hpp"
 #include <raylib.h>
 #include <assert.h>
-Game::Game(int width, int height, int fps, std::string title) :
-  board(settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding),
-  shape(board)
+#include <cstdlib>
+#include <time.h>
+
+Game::Game(int width, int height, int fps, std::string title, Board board) :
+  board(board) 
 {
   assert(!GetWindowHandle()); // Impede que sejam abertas duas janelas. caso ocorra, o programa fecha.
   SetTargetFPS(fps);
   InitWindow(width, height, title.c_str());
   SetExitKey(KEY_ESCAPE);
-  
 }
 
 Game::~Game() noexcept{
@@ -24,34 +24,61 @@ bool Game::GameShouldClose() const{
 void Game::Tick(){
   BeginDrawing();
   Game::Update();
+  Game::UpdateShape();
   Game::Draw();
   EndDrawing();
   tickCount++;
 }
 
+Shape *Game::NewShape(){
+  srand(time(NULL));
+  return &shapes[rand()%7];
+}
+
+Shape *Game::NextShape(){
+  shape = NewShape();
+  shape->ResetBoardPos();
+  shape->ResetRotation();
+  return shape;
+}
+
+void Game::UpdateShape(){
+  if (shape->WillCollideDown()){
+    Vec2<int> cellPosition;
+    int dimension = shape->GetDimension();
+    for (int x = 0; x < dimension; ++x){
+      for (int y = 0; y < dimension; ++y){
+        bool cell = shape->GetShapeRotation(x, y);
+        if(cell){
+          cellPosition = shape->GetBoardPos() + Vec2<int>{x, y};
+          board.SetCell(cellPosition, shape->GetColor());
+        }
+      }
+    }
+    shape = NextShape();
+  }
+}
+
 void Game::Draw(){
   ClearBackground(BLACK);
   board.Draw();
-  shape.Draw();
+  shape->Draw();
 }
 
 void Game::Update(){
-  if (IsKeyPressed(KEY_W)){
-    shape.Rotate();
+  if(shape->HasSpaceToRotate() && IsKeyPressed(KEY_W)) {
+    shape->Rotate();
+    shape->MoveIfCollided();
   }
-  if (IsKeyPressed(KEY_D)){
-    shape.moveRight();
+  if (!(tickCount%3)){
+    if (!shape->WillCollideRight() && IsKeyDown(KEY_D)){shape->MoveRight();}
+    if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
+    if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
   }
-  if(IsKeyPressed(KEY_A)){
-    shape.moveLeft();
-  }
-  if(IsKeyPressed(KEY_S)){
-    shape.moveDown();
-  }
-  if(!(tickCount % 10)){ /*Esse 10 é um número mágico por enquanto(só coloquei num valor razoável),
+  if(!shape->WillCollideDown() && !(tickCount % 15)){/*Esse 15 é um número mágico por enquanto(só coloquei num valor razoável),
                       ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.
                       Acho que esse número pode até ficar em settings, mas ele não é constante justamente por causa
                       da dificudalde aumentar*/
-    shape.fall();
+    shape->Fall();
   }
 }
