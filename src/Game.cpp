@@ -108,6 +108,12 @@ void Game::Draw(){
 }
 
 void Game::Update(){
+  if(!shape->WillCollideDown() && !(tickCount % 15)){/*Esse 15 é um número mágico por enquanto(só coloquei num valor razoável),
+                      ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.
+                      Acho que esse número pode até ficar em settings, mas ele não é constante justamente por causa
+                      da dificudalde aumentar*/
+    shape->Fall();
+  }
   if(shape->HasSpaceToRotate() && IsKeyPressed(KEY_W)) {
     shape->Rotate();
     shape->MoveIfCollided();
@@ -117,10 +123,5 @@ void Game::Update(){
     if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
     if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
   }
-  if(!shape->WillCollideDown() && !(tickCount % 15)){/*Esse 15 é um número mágico por enquanto(só coloquei num valor razoável),
-                      ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.
-                      Acho que esse número pode até ficar em settings, mas ele não é constante justamente por causa
-                      da dificudalde aumentar*/
-    shape->Fall();
-  }
+
 }

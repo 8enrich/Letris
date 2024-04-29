@@ -24,10 +24,10 @@ void Board::SetCell(Vec2<int> pos, Color c){
   const int x = pos.GetX(); 
   const int y = pos.GetY();
   if(x >= 0 && y >= 0 && x < width && y < height)
-    cells[width*y + x].SetColor(c);
+    GetCell(pos)->SetColor(c);
 }
 void Board::DrawCell(Vec2<int> pos) const{
-  Color c = cells[pos.GetY() * width + pos.GetX()].GetColor();
+  Color c = GetCell(pos)->GetColor();
   DrawCell(pos, c);
 }
 
@@ -58,19 +58,29 @@ void Board::DrawBorder() const {
 }
 
 Color Board::GetCellColor(Vec2<int> pos){
-  return cells[pos.GetY()*width + pos.GetX()].GetColor();
+  return GetCell(pos)->GetColor();
 }
+
 bool Board::CellExists(Vec2<int> pos) const {
-  return cells[pos.GetY()*width + pos.GetX()].Exists();
+  return GetCell(pos)->Exists();
 }
 
 void Board::RemoveCell(Vec2<int> pos){
-  cells[pos.GetY()*width + pos.GetX()].Remove();
+  GetCell(pos)->Remove();
 }
+
 int Board::GetWidth() const {
   return width;
 }
 
 int Board::GetHeight() const {
   return height;
+}
+
+Board::Cell *Board::GetCell(Vec2<int> pos){
+  return &cells[pos.GetY()*width + pos.GetX()];
+}
+
+const Board::Cell *Board::GetCell(Vec2<int> pos) const{
+  return &cells[pos.GetY()*width + pos.GetX()];
 }
