@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <raylib.h>
 Board::Cell::Cell() : doExists(false), c(WHITE) {}
+void Board::Cell::Remove() { doExists = false; }
 bool Board::Cell::Exists() const { return doExists;}
 void Board::Cell::SetColor(Color color) {
   c = color;
@@ -56,10 +57,16 @@ void Board::DrawBorder() const {
       Vec2{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }
 
+Color Board::GetCellColor(Vec2<int> pos){
+  return cells[pos.GetY()*width + pos.GetX()].GetColor();
+}
 bool Board::CellExists(Vec2<int> pos) const {
   return cells[pos.GetY()*width + pos.GetX()].Exists();
 }
 
+void Board::RemoveCell(Vec2<int> pos){
+  cells[pos.GetY()*width + pos.GetX()].Remove();
+}
 int Board::GetWidth() const {
   return width;
 }

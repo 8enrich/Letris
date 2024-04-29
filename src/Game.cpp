@@ -1,4 +1,5 @@
 #include "../include/Game.hpp"
+#include <cstdio>
 #include <raylib.h>
 #include <assert.h>
 #include <cstdlib>
@@ -7,7 +8,9 @@
 Game::Game(int width, int height, int fps, std::string title, Board board) :
   board(board) 
 {
-  assert(!GetWindowHandle()); // Impede que sejam abertas duas janelas. caso ocorra, o programa fecha.
+  assert(!GetWindowHandle());
+  shape = NextShape();
+  cleanedCount = 0;
   SetTargetFPS(fps);
   InitWindow(width, height, title.c_str());
   SetExitKey(KEY_ESCAPE);
@@ -25,7 +28,10 @@ void Game::Tick(){
   BeginDrawing();
   Game::Update();
   Game::UpdateShape();
+  Game::CleanLines();
   Game::Draw();
+  Game::DropLines();
+  Game::DropLines();
   EndDrawing();
   tickCount++;
 }
@@ -41,7 +47,52 @@ Shape *Game::NextShape(){
   shape->ResetRotation();
   return shape;
 }
-
+void Game::CleanLines(){
+  int count = 0;
+  for (int y = board.GetHeight(); y >= 0; y--){
+    for (int x = board.GetWidth()-1; x >= 0; x--){
+      if(board.CellExists({x, y})){ count++; }
+    }
+    if (count == board.GetWidth()){
+      cleanedCount++;
+      for (int x = board.GetWidth()-1; x >= 0; x--){ board.RemoveCell({x, y}); }
+    }
+    count = 0;
+  }
+}
+void Game::DropLines(){
+  if(cleanedCount){
+    for (int i = 1; i <= board.GetHeight(); i++){
+      int count = 0;
+      for (int y = board.GetHeight(); y >=0; y--){
+        for (int x = board.GetWidth()-1; x >=0; x--){
+          if(!board.CellExists({x, y})) { count++; }
+        }
+        if (count == board.GetWidth()) {
+          bool LineAbove = false;
+          for (int x = board.GetWidth()-1; x>=0; x--){
+            if (y >= i && board.CellExists({x, y-i})) {
+              LineAbove = true;
+              break;
+            }
+          }
+          if (LineAbove) {
+            for (int x = board.GetWidth()-1; x >=0; x--){
+              if (board.CellExists({x, y-i})) {
+                if (y >= i){
+                  board.SetCell({x, y}, board.GetCellColor({x, y-i}));
+                  board.RemoveCell({x, y-i});
+                }
+              }
+            }
+          }
+        }
+        count = 0;
+      }
+    }
+  cleanedCount = 0;
+  }
+}
 void Game::UpdateShape(){
   if (shape->WillCollideDown()){
     Vec2<int> cellPosition;

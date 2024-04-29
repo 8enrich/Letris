@@ -17,8 +17,11 @@ class Game{
     void UpdateShape();
     Shape *NewShape();
     Shape *NextShape();
+    void CleanLines();
+    void DropLines();
+    int cleanedCount;
     Board board;
-    Shape *shape = NewShape();
+    Shape *shape;
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),
