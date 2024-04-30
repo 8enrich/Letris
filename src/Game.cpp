@@ -114,6 +114,7 @@ void Game::Update(){
                       da dificudalde aumentar*/
     shape->Fall();
   }
+  if(IsKeyPressed(KEY_SPACE)){ shape->InstantFall(); }
   if(shape->HasSpaceToRotate() && IsKeyPressed(KEY_W)) {
     shape->Rotate();
     shape->MoveIfCollided();
