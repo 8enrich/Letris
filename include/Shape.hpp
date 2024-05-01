@@ -54,7 +54,7 @@ public:
   int GetFirstLeftCollisionX(Vec2<int>);
   int GetFirstRightCollisionX(Vec2<int>);
   int GetDistanceFromTheGround(Vec2<int>) const;
-  int GetLowestDistanceFromTheGround() const;
+  int GetShortestDistanceFromTheGround() const;
 };
 
 class I_Shape : public Shape{

@@ -32,7 +32,7 @@ void Shape::Draw() const {
   for (int y = 0; y < dimension; ++y){
     for (int x = 0; x < dimension; ++x) {
       bool cell = GetShapeRotation(x, y);
-      distanceFromTheGround = GetLowestDistanceFromTheGround();
+      distanceFromTheGround = GetShortestDistanceFromTheGround();
       if (cell) {
         board.DrawCell(boardPos + Vec2{x, y}, color);
         board.DrawCell(boardPos + Vec2{x, y + distanceFromTheGround}, offColor);
@@ -76,7 +76,7 @@ void Shape::MoveDown(){
 }
 
 void Shape::InstantFall(){
-  UpdatePosition(Vec2<int>{0, GetLowestDistanceFromTheGround()});
+  UpdatePosition(Vec2<int>{0, GetShortestDistanceFromTheGround()});
 }
 
 bool Shape::WillEscapeRight(){
@@ -131,10 +131,10 @@ int Shape::GetDistanceFromTheGround(Vec2<int> pos) const{
   Vec2<int> downCollision;
   do{ downCollision = pos + (downAddVector * factor++);}
   while(!(board.CellExists(downCollision)) && downCollision.GetY() < height);
-  return ++factor;
+  return factor;
 }
 
-int Shape::GetLowestDistanceFromTheGround() const{
+int Shape::GetShortestDistanceFromTheGround() const{
   int lowest = board.GetHeight() + 1, distance;
   for(int x = 0; x < dimension; ++x){
     for(int y = 0; y < dimension; ++y){
@@ -146,7 +146,7 @@ int Shape::GetLowestDistanceFromTheGround() const{
       }
     }
   }
-  return lowest - 3;
+  return lowest - 2;
 }
 
 void Shape::MoveIfCollided(){
