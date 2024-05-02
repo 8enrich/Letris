@@ -20,6 +20,7 @@ public:
   void MoveRight();
   void MoveLeft();
   void MoveDown();
+  void InstantFall();
   Vec2<int> GetBoardPos();
   int GetDimension();
   Color GetColor();
@@ -52,6 +53,8 @@ public:
   bool HasCellDown();
   int GetFirstLeftCollisionX(Vec2<int>);
   int GetFirstRightCollisionX(Vec2<int>);
+  int GetDistanceFromTheGround(Vec2<int>) const;
+  int GetShortestDistanceFromTheGround() const;
 };
 
 class I_Shape : public Shape{
