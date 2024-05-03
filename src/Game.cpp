@@ -66,13 +66,17 @@ void Game::DropLines(){
 
 void Game::DropLine(int line) {
   int width = board.GetWidth();
+  bool haveCell;
   for (int y = line - 1; y > 0; y--) {
+    haveCell = false;
     for (int x = 0; x < width; x++) {
       if (board.CellExists({x, y})){
+        haveCell = true;
         board.SetCell({x, y + 1}, board.GetCellColor({x, y}));
         board.RemoveCell({x, y});
       }
     }
+    if(!haveCell){ return; }
   }
 }
 
