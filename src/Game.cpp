@@ -29,6 +29,7 @@ void Game::Tick(){
   Game::UpdateShape();
   Game::ClearLines();
   Game::Draw();
+  Game::DropLines();
   EndDrawing();
   tickCount++;
 }
@@ -43,6 +44,7 @@ Shape *Game::NextShape(){
   shape->ResetRotation();
   return shape;
 }
+
 void Game::ClearLines(){
   int width = board.GetWidth(), height = board.GetHeight(), index = 0;
   for (int y = 0; y < height; y++){
@@ -50,12 +52,19 @@ void Game::ClearLines(){
       if(!board.CellExists({x, y})){ break; }
       if(x + 1 != width){ continue; }
       for (int i = 0; i < width; i++){ board.RemoveCell({i, y}); }
-      DropLines(y);
+      cleanedLines[index++] = y;
     }
   }
 }
 
-void Game::DropLines(int line) {
+void Game::DropLines(){
+  for(int i = 0; i < 4; i++){
+    DropLine(cleanedLines[i]);
+    cleanedLines[i] = 0;
+  }
+}
+
+void Game::DropLine(int line) {
   int width = board.GetWidth();
   for (int y = line - 1; y > 0; y--) {
     for (int x = 0; x < width; x++) {
@@ -66,6 +75,7 @@ void Game::DropLines(int line) {
     }
   }
 }
+
 void Game::UpdateShape(){
   if (shape->WillCollideDown()){
     Vec2<int> cellPosition;
@@ -106,5 +116,4 @@ void Game::Update(){
     if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
     if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
   }
-
 }
