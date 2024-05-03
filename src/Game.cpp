@@ -29,7 +29,6 @@ void Game::Tick(){
   Game::UpdateShape();
   Game::ClearLines();
   Game::Draw();
-  Game::GetLinesToClean();
   EndDrawing();
   tickCount++;
 }
@@ -51,20 +50,14 @@ void Game::ClearLines(){
       if(!board.CellExists({x, y})){ break; }
       if(x + 1 != width){ continue; }
       for (int i = 0; i < width; i++){ board.RemoveCell({i, y}); }
-      cleanedLines[index++] = y;
+      DropLines(y);
     }
   }
 }
 
-void Game::GetLinesToClean(){
-  for(int i = 0; i < 4; i++){
-    DropLines(cleanedLines[i]);
-    cleanedLines[i] = 0;
-  }
-}
 void Game::DropLines(int line) {
   int width = board.GetWidth();
-  for (int y = line; y > 0; y--) {
+  for (int y = line - 1; y > 0; y--) {
     for (int x = 0; x < width; x++) {
       if (board.CellExists({x, y})){
         board.SetCell({x, y + 1}, board.GetCellColor({x, y}));
