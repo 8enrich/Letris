@@ -229,6 +229,11 @@ int Shape::GetLowestYCell(){
   return 0;
 }
 
+void Shape::ResetShape(){
+  ResetBoardPos();
+  ResetRotation();
+}
+
 void Shape::ResetBoardPos(){ boardPos = Vec2<int>{(board.GetWidth() - dimension)/2, 0}; }
 
 void Shape::ResetRotation(){ currentRotation = Rotation(0); }

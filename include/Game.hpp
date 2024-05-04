@@ -23,6 +23,11 @@ class Game{
     int cleanedLines[4] = {0,0,0,0};
     Board board;
     Shape *shape;
+    void Hold();
+    int hold;
+    bool canHold;
+    int IndexOfShape();
+    void SwapShapeAndHold(int);
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),

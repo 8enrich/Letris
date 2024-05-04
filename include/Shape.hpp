@@ -35,6 +35,7 @@ public:
   void ResetRotation();
   void MoveIfCollided();
   bool HasSpaceToRotate();
+  void ResetShape();
   private:
   Vec2<int> boardPos;
   Rotation currentRotation;
@@ -132,5 +133,3 @@ class Z_Shape : public Shape {
     static constexpr int dimension = 3;
     static constexpr Color color = RED;
 };
-
-
