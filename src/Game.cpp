@@ -13,6 +13,8 @@ Game::Game(int width, int height, int fps, std::string title, Board board) :
   InitWindow(width, height, title.c_str());
   SetExitKey(KEY_ESCAPE);
   shape = NextShape();
+  hold = -1;
+  canHold = true;
 }
 
 Game::~Game() noexcept{
@@ -40,8 +42,7 @@ Shape *Game::NewShape(){
 
 Shape *Game::NextShape(){
   shape = NewShape();
-  shape->ResetBoardPos();
-  shape->ResetRotation();
+  shape->ResetShape();
   return shape;
 }
 
@@ -94,6 +95,7 @@ void Game::UpdateShape(){
       }
     }
     shape = NextShape();
+    canHold = true;
   }
 }
 
@@ -115,9 +117,35 @@ void Game::Update(){
     shape->Rotate();
     shape->MoveIfCollided();
   }
+  if(IsKeyPressed(KEY_C)){ Hold(); }
   if (!(tickCount%3)){
     if (!shape->WillCollideRight() && IsKeyDown(KEY_D)){shape->MoveRight();}
     if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
     if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
   }
+}
+
+void Game::Hold(){
+  if(canHold){
+    canHold = false;
+    int index = IndexOfShape();
+    if(hold >= 0){
+      SwapShapeAndHold(index);
+      shape->ResetShape();
+      return;
+    }
+    hold = index;
+    shape = NewShape();
+  }
+}
+
+int Game::IndexOfShape(){
+  int i;
+  for(i = 0; i < 7; i++){ if(&shapes[i] == shape){ break; }}
+  return i;
+}
+
+void Game::SwapShapeAndHold(int index){
+  shape = &shapes[hold];
+  hold = index;
 }
