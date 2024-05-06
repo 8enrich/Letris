@@ -9,11 +9,10 @@ Game::Game(int width, int height, int fps, std::string title, Board board) :
   board(board) 
 {
   assert(!GetWindowHandle());
-  shape = NextShape();
-  cleanedCount = 0;
   SetTargetFPS(fps);
   InitWindow(width, height, title.c_str());
   SetExitKey(KEY_ESCAPE);
+  shape = NextShape();
 }
 
 Game::~Game() noexcept{
@@ -28,9 +27,8 @@ void Game::Tick(){
   BeginDrawing();
   Game::Update();
   Game::UpdateShape();
-  Game::CleanLines();
+  Game::ClearLines();
   Game::Draw();
-  Game::DropLines();
   Game::DropLines();
   EndDrawing();
   tickCount++;
@@ -46,44 +44,42 @@ Shape *Game::NextShape(){
   shape->ResetRotation();
   return shape;
 }
-void Game::CleanLines(){
-  int count = 0;
-  for (int y = board.GetHeight(); y >= 0; y--){
-    for (int x = board.GetWidth()-1; x >= 0; x--){
-      if(board.CellExists({x, y})){ count++; }
-    }
-    if (count == board.GetWidth()){
-      cleanedCount++;
-      for (int x = board.GetWidth()-1; x >= 0; x--){ board.RemoveCell({x, y}); }
-    }
-    count = 0;
-  }
-}
-void Game::DropLines() {
-    if (cleanedCount) {
-      for (int y = board.GetHeight() - 1; y >= 0; y--) {
-        bool lineClean = true;
-        for (int x = 0; x < board.GetWidth(); x++) {
-          if (board.CellExists({x, y})) {
-            lineClean = false;
-            break;
-          }
-      }
 
-        if (lineClean) {
-          for (int i = y - cleanedCount; i >= 0; i--) {
-            for (int x = 0; x < board.GetWidth(); x++) {
-              if (board.CellExists({x, i})) {
-                board.SetCell({x, i + cleanedCount}, board.GetCellColor({x, i}));
-                board.RemoveCell({x, i});
-              }
-            }
-          }
-        }
+void Game::ClearLines(){
+  int width = board.GetWidth(), height = board.GetHeight(), index = 0;
+  for (int y = 0; y < height; y++){
+    for (int x = 0; x < width; x++){
+      if(!board.CellExists({x, y})){ break; }
+      if(x + 1 != width){ continue; }
+      for (int i = 0; i < width; i++){ board.RemoveCell({i, y}); }
+      cleanedLines[index++] = y;
     }
-    cleanedCount = 0;
   }
 }
+
+void Game::DropLines(){
+  for(int i = 0; i < 4; i++){
+    DropLine(cleanedLines[i]);
+    cleanedLines[i] = 0;
+  }
+}
+
+void Game::DropLine(int line) {
+  int width = board.GetWidth();
+  bool haveCell;
+  for (int y = line - 1; y > 0; y--) {
+    haveCell = false;
+    for (int x = 0; x < width; x++) {
+      if (board.CellExists({x, y})){
+        haveCell = true;
+        board.SetCell({x, y + 1}, board.GetCellColor({x, y}));
+        board.RemoveCell({x, y});
+      }
+    }
+    if(!haveCell){ return; }
+  }
+}
+
 void Game::UpdateShape(){
   if (shape->WillCollideDown()){
     Vec2<int> cellPosition;
@@ -124,5 +120,4 @@ void Game::Update(){
     if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
     if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
   }
-
 }
