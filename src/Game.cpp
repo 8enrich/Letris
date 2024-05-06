@@ -12,9 +12,14 @@ Game::Game(int width, int height, int fps, std::string title, Board board) :
   SetTargetFPS(fps);
   InitWindow(width, height, title.c_str());
   SetExitKey(KEY_ESCAPE);
-  shape = NextShape();
+  shape = NewShape();
+  SetNextShapes();
   hold = -1;
   canHold = true;
+  score = 0;
+  level = 0;
+  speed = 14;
+  cleanedLinesCount = 0;
 }
 
 Game::~Game() noexcept{
@@ -31,6 +36,8 @@ void Game::Tick(){
   Game::UpdateShape();
   Game::ClearLines();
   Game::Draw();
+  Game::UpdateLevel();
+  Game::Score();
   Game::DropLines();
   EndDrawing();
   tickCount++;
@@ -41,7 +48,8 @@ Shape *Game::NewShape(){
 }
 
 Shape *Game::NextShape(){
-  shape = NewShape();
+  shape = &shapes[nextShapes[0]];
+  MoveNextShapes();
   shape->ResetShape();
   return shape;
 }
@@ -106,13 +114,11 @@ void Game::Draw(){
 }
 
 void Game::Update(){
-  if(!shape->WillCollideDown() && !(tickCount % 15)){/*Esse 15 é um número mágico por enquanto(só coloquei num valor razoável),
-                      ele define a velocidade que a peça vai cair, com os níveis é suposto pra ela ir aumentando.
-                      Acho que esse número pode até ficar em settings, mas ele não é constante justamente por causa
-                      da dificudalde aumentar*/
-    shape->Fall();
+  if(!shape->WillCollideDown() && !(tickCount % speed)){ shape->Fall(); }
+  if(IsKeyPressed(KEY_SPACE)){
+    int fallen = shape->InstantFall();
+    UpdateScore(fallen);
   }
-  if(IsKeyPressed(KEY_SPACE)){ shape->InstantFall(); }
   if(shape->HasSpaceToRotate() && IsKeyPressed(KEY_W)) {
     shape->Rotate();
     shape->MoveIfCollided();
@@ -121,31 +127,78 @@ void Game::Update(){
   if (!(tickCount%3)){
     if (!shape->WillCollideRight() && IsKeyDown(KEY_D)){shape->MoveRight();}
     if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
-    if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){shape->MoveDown();}
+    if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){
+      shape->MoveDown();
+      UpdateScore(1);
+    }
   }
 }
 
 void Game::Hold(){
   if(canHold){
     canHold = false;
-    int index = IndexOfShape();
+    int index = IndexOf(shape);
     if(hold >= 0){
       SwapShapeAndHold(index);
       shape->ResetShape();
       return;
     }
     hold = index;
-    shape = NewShape();
+    shape = NextShape();
   }
 }
 
-int Game::IndexOfShape(){
+int Game::IndexOf(Shape *shapeToFind){
   int i;
-  for(i = 0; i < 7; i++){ if(&shapes[i] == shape){ break; }}
+  for(i = 0; i < 7; i++){ if(&shapes[i] == shapeToFind){ break; }}
   return i;
 }
 
 void Game::SwapShapeAndHold(int index){
   shape = &shapes[hold];
   hold = index;
+}
+
+void Game::SetNextShapes(){
+  for(int i = 0; i < 3; i++){ nextShapes[i] = IndexOf(NewShape()); }
+}
+
+void Game::MoveNextShapes(){
+  for(int i = 0; i < 3; i++){
+    if(i + 1 == 3){
+      nextShapes[i] = IndexOf(NewShape());
+      break;
+    }
+    nextShapes[i] = nextShapes[i + 1];
+  }
+}
+
+void Game::UpdateScore(int points){
+  score += points;
+}
+
+void Game::Score(){
+  int lines = QuantityOfLines(), points;
+  if(lines){
+    int scores[4] = {40, 100, 300, 1200};
+    points = scores[lines - 1];
+    cleanedLinesCount += lines;
+    UpdateScore(points * (level + 1));
+  }
+}
+
+int Game::QuantityOfLines(){
+  int lines = 0;
+  for(int i = 0; i < 4; i++){
+    if(cleanedLines[i] == 0){ break; }
+    lines++;
+  }
+  return lines;
+}
+
+void Game::UpdateLevel(){
+  if(cleanedLinesCount >= 10 * (level + 1)){
+    level++;
+    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){ speed--;}
+  }
 }
