@@ -49,6 +49,7 @@ void Board::Draw() const {
     }
   }
   DrawBorder();
+  DrawHold();
 
 }
 
@@ -56,6 +57,14 @@ void Board::DrawBorder() const {
   ray_wrapper::DrawRectangleLinesEx(screenPos - (cellSize/2), 
       Vec2{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }
+
+void Board::DrawHold() const{
+  ray_wrapper::DrawText("Hold", screenPos - Vec2{cellSize*4, cellSize*2}, 20, RAYWHITE);
+  ray_wrapper::DrawRectangleLinesEx(screenPos - Vec2{cellSize*4, 0}, 
+      Vec2{cellSize*2, cellSize*2} + cellSize*2, cellSize/2, RAYWHITE);
+
+}
+
 
 Color Board::GetCellColor(Vec2<int> pos){
   return GetCell(pos)->GetColor();

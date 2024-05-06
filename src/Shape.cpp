@@ -26,6 +26,7 @@ Color Shape::GetColor(){
 int Shape::GetDimension(){
   return dimension;
 }
+
 void Shape::Draw() const {
   Color offColor = Color{color.r, color.g, color.b, 100};
   int distanceFromTheGround;
