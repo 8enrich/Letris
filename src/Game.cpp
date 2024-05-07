@@ -3,28 +3,22 @@
 #include <raylib.h>
 #include <assert.h>
 #include <cstdlib>
-#include <time.h>
 
-Game::Game(int width, int height, int fps, std::string title, Board board) :
+Game::Game(Board board) :
   board(board) 
 {
-  assert(!GetWindowHandle());
-  SetTargetFPS(fps);
-  InitWindow(width, height, title.c_str());
-  SetExitKey(KEY_ESCAPE);
   shape = NextShape();
   hold = -1;
   canHold = true;
 }
 
-Game::~Game() noexcept{
-  assert(GetWindowHandle()); // Impede que feche uma janela que não existe. caso ocorra, o programa fecha.
-  CloseWindow();
-}
 bool Game::GameShouldClose() const{
-  return WindowShouldClose();
+  return shouldClose;
 }
 
+void Game::OpenCloseGame(){
+  shouldClose = !shouldClose;
+}
 void Game::Tick(){
   BeginDrawing();
   Game::Update();
@@ -118,6 +112,7 @@ void Game::Update(){
     shape->MoveIfCollided();
   }
   if(IsKeyPressed(KEY_C)){ Hold(); }
+  if(IsKeyPressed(KEY_ESCAPE)) {shouldClose = true;}
   if (!(tickCount%3)){
     if (!shape->WillCollideRight() && IsKeyDown(KEY_D)){shape->MoveRight();}
     if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
