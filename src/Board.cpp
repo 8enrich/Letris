@@ -41,6 +41,18 @@ void Board::DrawCell(Vec2<int> pos, Color color) const {
     return;
   } 
 }
+
+void Board::DrawOffCell(Vec2<int> pos, Color color) const {
+  const int x = pos.GetX();
+  const int y = pos.GetY();
+
+  if(x >= 0 && x < width && y >= 0 && y < height){
+    Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
+    ray_wrapper::DrawRectangleLinesEx(topLeft, {cellSize - padding}, padding, color);
+    return;
+  }
+}
+
 void Board::Draw() const {
   for (int iY = 0; iY < height; ++iY){
     for (int iX = 0; iX < width; ++iX){

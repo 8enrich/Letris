@@ -27,7 +27,7 @@ int Shape::GetDimension(){
   return dimension;
 }
 void Shape::Draw() const {
-  Color offColor = Color{color.r, color.g, color.b, 100};
+  Color offColor = Color{color.r, color.g, color.b, 150};
   int distanceFromTheGround;
   for (int y = 0; y < dimension; ++y){
     for (int x = 0; x < dimension; ++x) {
@@ -35,7 +35,7 @@ void Shape::Draw() const {
       distanceFromTheGround = GetShortestDistanceFromTheGround();
       if (cell) {
         board.DrawCell(boardPos + Vec2{x, y}, color);
-        board.DrawCell(boardPos + Vec2{x, y + distanceFromTheGround}, offColor);
+        board.DrawOffCell(boardPos + Vec2{x, y + distanceFromTheGround}, offColor);
       }
     }
   }
@@ -75,8 +75,10 @@ void Shape::MoveDown(){
   UpdatePosition(downAddVector);
 }
 
-void Shape::InstantFall(){
-  UpdatePosition(Vec2<int>{0, GetShortestDistanceFromTheGround()});
+int Shape::InstantFall(){
+  int shortestDistance = GetShortestDistanceFromTheGround();
+  UpdatePosition(Vec2<int>{0, shortestDistance});
+  return shortestDistance;
 }
 
 bool Shape::WillEscapeRight(){
