@@ -10,7 +10,16 @@ public:
     LEFT,
     RIGHT
   };
-  Shape(const bool* shape_matrix, int dimension, Color color, const Board& board);
+  enum indexes{
+    I_Shape,
+    O_Shape,
+    T_Shape,
+    J_Shape,
+    L_Shape,
+    S_Shape,
+    Z_Shape
+  };
+  Shape(const bool* shape_matrix, int dimension, Color color, const Board& board, const int index);
   Shape(const Shape& other);
 	Shape& operator=(const Shape &other){return *this = Shape(other);}
   void Draw() const;
@@ -24,6 +33,7 @@ public:
   Vec2<int> GetBoardPos();
   int GetDimension();
   Color GetColor();
+  int GetIndex();
   bool WillCollideDown();
   bool WillCollideRight();
   bool WillCollideLeft();
@@ -43,6 +53,7 @@ public:
   const int dimension;
   const Color color;
   const Board& board;
+  const int index;
   const Vec2<int> downAddVector = {0, 1};
   const Vec2<int> rightAddVector = {1, 0};
   const Vec2<int> leftAddVector = {-1, 0};
@@ -68,6 +79,7 @@ class I_Shape : public Shape{
                                             0, 0, 0, 0};
     static constexpr int dimension = 4;
     static constexpr Color color = SKYBLUE;
+    static constexpr int index = indexes::I_Shape;
 };
   
 class O_Shape : public Shape{
@@ -78,6 +90,7 @@ class O_Shape : public Shape{
                                             1, 1};
     static constexpr int dimension = 2;
     static constexpr Color color = YELLOW;
+    static constexpr int index = indexes::O_Shape;
 };
 
 class T_Shape : public Shape{
@@ -89,6 +102,7 @@ class T_Shape : public Shape{
                                             0, 0, 0};
     static constexpr int dimension = 3;
     static constexpr Color color = MAGENTA;
+    static constexpr int index = indexes::T_Shape;
 };
 
 class J_Shape : public Shape{
@@ -100,6 +114,7 @@ class J_Shape : public Shape{
                                             0, 0, 0};
     static constexpr int dimension = 3;
     static constexpr Color color = DARKBLUE;
+    static constexpr int index = indexes::J_Shape;
 };
 
 class L_Shape : public Shape{
@@ -111,6 +126,7 @@ class L_Shape : public Shape{
                                             0, 0, 0};
     static constexpr int dimension = 3;
     static constexpr Color color = ORANGE;
+    static constexpr int index = indexes::L_Shape;
 };
 class S_Shape : public Shape{
   public:
@@ -121,6 +137,7 @@ class S_Shape : public Shape{
                                             0, 0, 0};
     static constexpr int dimension = 3;
     static constexpr Color color = GREEN;
+    static constexpr int index = indexes::S_Shape;
 };
 
 class Z_Shape : public Shape {
@@ -132,4 +149,5 @@ class Z_Shape : public Shape {
                                             0, 0, 0};
     static constexpr int dimension = 3;
     static constexpr Color color = RED;
+    static constexpr int index = indexes::Z_Shape;
 };

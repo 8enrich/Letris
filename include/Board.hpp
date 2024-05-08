@@ -1,5 +1,5 @@
 #pragma once
-#include "raylibWrapper.hpp"
+#include "raylibFunctions.hpp"
 #include <vector>
 #include "Vec2.hpp"
 class Board{
