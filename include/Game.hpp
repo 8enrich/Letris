@@ -26,8 +26,19 @@ class Game{
     int hold;
     bool canHold;
     bool shouldClose = true;
-    int IndexOfShape();
+    int IndexOf(Shape*);
     void SwapShapeAndHold(int);
+    int nextShapes[3];
+    void SetNextShapes();
+    void MoveNextShapes();
+    int score;
+    void UpdateScore(int);
+    void Score();
+    int QuantityOfLines();
+    int level;
+    int speed;
+    int cleanedLinesCount;
+    void UpdateLevel();
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),

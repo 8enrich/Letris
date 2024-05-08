@@ -20,7 +20,7 @@ public:
   void MoveRight();
   void MoveLeft();
   void MoveDown();
-  void InstantFall();
+  int InstantFall();
   Vec2<int> GetBoardPos();
   int GetDimension();
   Color GetColor();

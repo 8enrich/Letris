@@ -41,6 +41,18 @@ void Board::DrawCell(Vec2<int> pos, Color color) const {
     return;
   } 
 }
+
+void Board::DrawOffCell(Vec2<int> pos, Color color) const {
+  const int x = pos.GetX();
+  const int y = pos.GetY();
+
+  if(x >= 0 && x < width && y >= 0 && y < height){
+    Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
+    ray_wrapper::DrawRectangleLinesEx(topLeft, {cellSize - padding}, padding, color);
+    return;
+  }
+}
+
 void Board::Draw() const {
   for (int iY = 0; iY < height; ++iY){
     for (int iX = 0; iX < width; ++iX){
@@ -49,6 +61,7 @@ void Board::Draw() const {
     }
   }
   DrawBorder();
+  DrawHold();
 
 }
 
@@ -56,6 +69,14 @@ void Board::DrawBorder() const {
   ray_wrapper::DrawRectangleLinesEx(screenPos - (cellSize/2), 
       Vec2{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }
+
+void Board::DrawHold() const{
+  ray_wrapper::DrawText("Hold", screenPos - Vec2{cellSize*4, cellSize*2}, 20, RAYWHITE);
+  ray_wrapper::DrawRectangleLinesEx(screenPos - Vec2{cellSize*4, 0}, 
+      Vec2{cellSize*2, cellSize*2} + cellSize*2, cellSize/2, RAYWHITE);
+
+}
+
 
 Color Board::GetCellColor(Vec2<int> pos){
   return GetCell(pos)->GetColor();
