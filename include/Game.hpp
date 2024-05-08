@@ -13,6 +13,7 @@ class Game{
     int tickCount;
     void Draw();
     void Update();
+    void UpdateBoard();
     void UpdateShape();
     Shape *NewShape();
     Shape *NextShape();

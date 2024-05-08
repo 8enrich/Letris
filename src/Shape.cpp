@@ -1,18 +1,20 @@
 #include "../include/Shape.hpp"
 
-Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& board) :
+Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& board, int index) :
   shape_matrix(shape_matrix), 
   dimension(dimension), 
   color(color), 
   boardPos((board.GetWidth() - dimension)/2,0),
-  board(board)
+  board(board),
+  index(index)
 {}
 Shape::Shape(const Shape &other):
   shape_matrix(other.shape_matrix), 
   dimension(other.dimension), 
   color(other.color), 
   boardPos(other.boardPos), 
-  board(other.board)
+  board(other.board),
+  index(other.index)
 {}
 
 Vec2<int> Shape::GetBoardPos(){
@@ -25,6 +27,10 @@ Color Shape::GetColor(){
 
 int Shape::GetDimension(){
   return dimension;
+}
+
+int Shape::GetIndex(){
+  return index;
 }
 
 void Shape::Draw() const {
@@ -245,37 +251,37 @@ void Shape::Rotate(){
   currentRotation = Rotation((int(currentRotation) + 1) % 4);
 }
 I_Shape::I_Shape(const Board& board) : 
-  Shape(shape_matrix, dimension, color, board)
+  Shape(shape_matrix, dimension, color, board, index)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
 O_Shape::O_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board)
+  Shape(shape_matrix, dimension, color, board, index)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
 T_Shape::T_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board)
+  Shape(shape_matrix, dimension, color, board, index)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
 L_Shape::L_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board)
+  Shape(shape_matrix, dimension, color, board, index)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
 J_Shape::J_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board)
+  Shape(shape_matrix, dimension, color, board, index)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
 S_Shape::S_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board)
+  Shape(shape_matrix, dimension, color, board, index)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
 Z_Shape::Z_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board)
+  Shape(shape_matrix, dimension, color, board, index)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }

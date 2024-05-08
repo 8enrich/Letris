@@ -1,11 +1,12 @@
 #include "../include/Game.hpp"
+#include "../include/raylibFunctions.hpp"
 #include <cstdio>
 #include <raylib.h>
 #include <assert.h>
 #include <cstdlib>
 
 Game::Game(Board board) :
-  board(board) 
+  board(board)
 {
   shape = NewShape();
   SetNextShapes();
@@ -27,10 +28,8 @@ void Game::OpenCloseGame(){
 void Game::Tick(){
   BeginDrawing();
   Game::Update();
-  Game::UpdateShape();
   Game::ClearLines();
   Game::Draw();
-  Game::UpdateLevel();
   Game::Score();
   Game::DropLines();
   EndDrawing();
@@ -108,45 +107,64 @@ void Game::Draw(){
 }
 
 void Game::Update(){
+  UpdateBoard();
+  UpdateShape();
+  UpdateLevel();
+}
+
+void Game::UpdateBoard(){
   if(!shape->WillCollideDown() && !(tickCount % speed)){ shape->Fall(); }
-  if(IsKeyPressed(KEY_SPACE)){
-    int fallen = shape->InstantFall();
-    UpdateScore(fallen);
+  auto keyPressed = GetKeyPressed();
+  int fallen;
+  switch(keyPressed){
+    case KEY_SPACE:
+      fallen = shape->InstantFall();
+      UpdateScore(fallen);
+      break;
+    case KEY_W:
+      if(shape->HasSpaceToRotate()){
+        shape->Rotate();
+        shape->MoveIfCollided();
+      }
+      break;
+    case KEY_C:
+      if(canHold){ Hold(); }
+      break;
+    case KEY_ESCAPE:
+      shouldClose = true;
+    default:
+      break;
   }
-  if(shape->HasSpaceToRotate() && IsKeyPressed(KEY_W)) {
-    shape->Rotate();
-    shape->MoveIfCollided();
-  }
-  if(IsKeyPressed(KEY_C)){ Hold(); }
-  if(IsKeyPressed(KEY_ESCAPE)) {shouldClose = true;}
   if (!(tickCount%3)){
-    if (!shape->WillCollideRight() && IsKeyDown(KEY_D)){shape->MoveRight();}
-    if (!shape->WillCollideLeft() && IsKeyDown(KEY_A)){shape->MoveLeft();}
-    if (!shape->WillCollideDown() && IsKeyDown(KEY_S)){
-      shape->MoveDown();
-      UpdateScore(1);
+    auto keyDown = ray_functions::GetKeyDown();
+    switch(keyDown){
+      case KEY_D:
+        if (!shape->WillCollideRight()){shape->MoveRight();}
+        break;
+      case KEY_A:
+        if (!shape->WillCollideLeft()) {shape->MoveLeft();}
+        break;
+      case KEY_S:
+        if (!shape->WillCollideDown()){
+          shape->MoveDown();
+          UpdateScore(1);
+        }
+      default:
+        break;
     }
   }
 }
 
 void Game::Hold(){
-  if(canHold){
-    canHold = false;
-    int index = IndexOf(shape);
-    if(hold >= 0){
-      SwapShapeAndHold(index);
-      shape->ResetShape();
-      return;
-    }
-    hold = index;
-    shape = NextShape();
+  canHold = false;
+  int index = shape->GetIndex();
+  if(hold >= 0){
+    SwapShapeAndHold(index);
+    shape->ResetShape();
+    return;
   }
-}
-
-int Game::IndexOf(Shape *shapeToFind){
-  int i;
-  for(i = 0; i < 7; i++){ if(&shapes[i] == shapeToFind){ break; }}
-  return i;
+  hold = index;
+  shape = NextShape();
 }
 
 void Game::SwapShapeAndHold(int index){
@@ -155,16 +173,16 @@ void Game::SwapShapeAndHold(int index){
 }
 
 void Game::SetNextShapes(){
-  for(int i = 0; i < 3; i++){ nextShapes[i] = IndexOf(NewShape()); }
+  for(int i = 0; i < 3; i++){ nextShapes[i] = NewShape()->GetIndex(); }
 }
 
 void Game::MoveNextShapes(){
   for(int i = 0; i < 3; i++){
-    if(i + 1 == 3){
-      nextShapes[i] = IndexOf(NewShape());
-      break;
+    if(i + 1 != 3){
+      nextShapes[i] = nextShapes[i + 1];
+      continue;
     }
-    nextShapes[i] = nextShapes[i + 1];
+    nextShapes[i] = NewShape()->GetIndex();
   }
 }
 
