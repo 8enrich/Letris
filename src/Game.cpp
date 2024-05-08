@@ -4,15 +4,10 @@
 #include <raylib.h>
 #include <assert.h>
 #include <cstdlib>
-#include <time.h>
 
-Game::Game(int width, int height, int fps, std::string title, Board board) :
-  board(board) 
+Game::Game(Board board) :
+  board(board)
 {
-  assert(!GetWindowHandle());
-  SetTargetFPS(fps);
-  InitWindow(width, height, title.c_str());
-  SetExitKey(KEY_ESCAPE);
   shape = NewShape();
   SetNextShapes();
   hold = -1;
@@ -23,14 +18,13 @@ Game::Game(int width, int height, int fps, std::string title, Board board) :
   cleanedLinesCount = 0;
 }
 
-Game::~Game() noexcept{
-  assert(GetWindowHandle()); // Impede que feche uma janela que não existe. caso ocorra, o programa fecha.
-  CloseWindow();
-}
 bool Game::GameShouldClose() const{
-  return WindowShouldClose();
+  return shouldClose;
 }
 
+void Game::OpenCloseGame(){
+  shouldClose = !shouldClose;
+}
 void Game::Tick(){
   BeginDrawing();
   Game::Update();
@@ -136,11 +130,13 @@ void Game::UpdateBoard(){
     case KEY_C:
       if(canHold){ Hold(); }
       break;
+    case KEY_ESCAPE:
+      shouldClose = true;
     default:
       break;
   }
   if (!(tickCount%3)){
-    auto keyDown = ray_wrapper::GetKeyDown();
+    auto keyDown = ray_functions::GetKeyDown();
     switch(keyDown){
       case KEY_D:
         if (!shape->WillCollideRight()){shape->MoveRight();}

@@ -1,14 +1,13 @@
 #pragma once
-#include <string>
 #include "Board.hpp"
 #include "Shape.hpp"
 class Game{
   public:
-    Game(int width , int height,int fps, std::string title, Board board);
+    Game(Board board);
     Game(const Game& other) = delete;
 	  Game& operator=(const Game& other) = delete;
-    ~Game() noexcept;
     bool GameShouldClose() const;
+    void OpenCloseGame();
     void Tick();
   private:
     int tickCount;
@@ -27,6 +26,7 @@ class Game{
     void Hold();
     int hold;
     bool canHold;
+    bool shouldClose = true;
     int IndexOf(Shape*);
     void SwapShapeAndHold(int);
     int nextShapes[3];
