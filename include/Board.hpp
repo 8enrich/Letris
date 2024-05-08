@@ -23,6 +23,7 @@ public:
   void DrawOffCell(Vec2<int> pos, Color color) const;
   void Draw() const;
   void DrawBorder() const;
+  void DrawHold() const;
   bool CellExists(Vec2<int> pos) const;
   int GetWidth() const;
   int GetHeight() const; 
