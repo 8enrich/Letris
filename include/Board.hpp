@@ -6,7 +6,7 @@ class Board{
 private:
   class Cell{
     public:
-      Cell();  
+      Cell();
       void SetColor(Color color);
       void Remove();
       bool Exists() const;
@@ -21,9 +21,12 @@ public:
   void DrawCell(Vec2<int> pos) const;
   void DrawCell(Vec2<int> pos, Color color) const;
   void DrawOffCell(Vec2<int> pos, Color color) const;
+  void DrawCellAnyLocal(Vec2<double> pos, Color color) const;
   void Draw() const;
   void DrawBorder() const;
   void DrawHold() const;
+  void DrawNext() const;
+  void DrawStats(int, int, int) const;
   bool CellExists(Vec2<int> pos) const;
   int GetWidth() const;
   int GetHeight() const; 
