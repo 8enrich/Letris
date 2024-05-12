@@ -39,8 +39,8 @@ void Shape::Draw() const {
   for (int y = 0; y < dimension; ++y){
     for (int x = 0; x < dimension; ++x) {
       bool cell = GetShapeRotation(x, y);
-      distanceFromTheGround = GetShortestDistanceFromTheGround();
       if (cell) {
+        distanceFromTheGround = GetShortestDistanceFromTheGround();
         board.DrawCell(boardPos + Vec2{x, y}, color);
         board.DrawOffCell(boardPos + Vec2{x, y + distanceFromTheGround}, offColor);
       }
@@ -48,8 +48,17 @@ void Shape::Draw() const {
   }
 }
 
-bool Shape::GetShapeRotation(int x, int y) const{
-  switch (currentRotation) {
+void Shape::DrawOutOfBoard(Vec2<double> pos){
+  for(int y = 0; y < dimension; ++y){
+    for(int x = 0; x < dimension; ++x){
+      bool cell = GetShapeRotation(x, y, Rotation::UP);
+      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2{x, y}) - pos, color);
+    }
+  }
+}
+
+bool Shape::GetShapeRotation(int x, int y, Rotation rotation) const{
+  switch (rotation) {
     case Shape::Rotation::UP:
       break;
     case Shape::Rotation::DOWN:
@@ -60,6 +69,10 @@ bool Shape::GetShapeRotation(int x, int y) const{
       return shape_matrix[dimension-1 + dimension * x - y];
   }
   return shape_matrix[y * dimension + x];
+}
+
+bool Shape::GetShapeRotation(int x, int y) const{
+  return GetShapeRotation(x, y, currentRotation);
 }
 
 void Shape::UpdatePosition(Vec2<int> addVector){

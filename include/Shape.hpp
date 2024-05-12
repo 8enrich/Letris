@@ -23,6 +23,7 @@ public:
   Shape(const Shape& other);
 	Shape& operator=(const Shape &other){return *this = Shape(other);}
   void Draw() const;
+  void DrawOutOfBoard(Vec2<double>);
   void Rotate();
   void UpdatePosition(Vec2<int>);
   void Fall();
@@ -38,6 +39,7 @@ public:
   bool WillCollideRight();
   bool WillCollideLeft();
   bool GetShapeRotation(int,int) const;
+  bool GetShapeRotation(int, int, Rotation) const;
   bool WillEscapeRight();
   bool WillEscapeLeft();
   bool WillEscapeDown();

@@ -37,6 +37,8 @@ public:
 
   Vec2& operator*=(const Vec2& rhs){ *this = *this * rhs; }
 
+  explicit operator Vec2<double>() const { return Vec2<double>{static_cast<double>(x), static_cast<double>(y)}; }
+
 private:
   T x;
   T y;
