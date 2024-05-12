@@ -41,8 +41,8 @@ void Shape::Draw() const {
       bool cell = GetShapeRotation(x, y);
       if (cell) {
         distanceFromTheGround = GetShortestDistanceFromTheGround();
-        board.DrawCell(boardPos + Vec2{x, y}, color);
-        board.DrawOffCell(boardPos + Vec2{x, y + distanceFromTheGround}, offColor);
+        board.DrawCell(boardPos + Vec2<int>{x, y}, color);
+        board.DrawOffCell(boardPos + Vec2<int>{x, y + distanceFromTheGround}, offColor);
       }
     }
   }
@@ -52,7 +52,7 @@ void Shape::DrawOutOfBoard(Vec2<double> pos){
   for(int y = 0; y < dimension; ++y){
     for(int x = 0; x < dimension; ++x){
       bool cell = GetShapeRotation(x, y, Rotation::UP);
-      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2{x, y}) - pos, color);
+      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2<int>{x, y}) - pos, color);
     }
   }
 }

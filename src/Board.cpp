@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <string>
 #include <unordered_map>
+#include <iostream>
 Board::Cell::Cell() : doExists(false), c(WHITE) {}
 void Board::Cell::Remove() { doExists = false; }
 bool Board::Cell::Exists() const { return doExists;}
@@ -19,7 +20,12 @@ Board::Board (Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padd
   {
     assert(width > 0 && height > 0);
     assert(cellSize > 0);
-    cells.resize(width*height);
+    try {
+        cells.resize(static_cast<size_t>(width) * static_cast<size_t>(height)); // Tenta redimensionar o vetor cells
+    }
+    catch (const std::bad_alloc& e) {
+        std::cerr << "Erro ao redimensionar o vetor cells: " << e.what() << std::endl;
+    }
   }
   
 void Board::SetCell(Vec2<int> pos, Color c){
@@ -76,19 +82,19 @@ void Board::Draw() const {
 
 void Board::DrawBorder() const {
   ray_functions::DrawRectangleLinesEx(screenPos - (cellSize/2),
-      Vec2{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
+      Vec2<int>{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }
 
 void Board::DrawHold() const{
-  ray_functions::DrawText("Hold", screenPos - Vec2{cellSize*4, cellSize*2}, 20, RAYWHITE);
-  ray_functions::DrawRectangleLinesEx(screenPos - Vec2{cellSize*6, cellSize/2},
-      Vec2{cellSize*6, cellSize*4}, cellSize/2, RAYWHITE);
+  ray_functions::DrawText("Hold", screenPos - Vec2<int>{cellSize*4, cellSize*2}, 20, RAYWHITE);
+  ray_functions::DrawRectangleLinesEx(screenPos - Vec2<int>{cellSize*6, cellSize/2},
+      Vec2<int>{cellSize*6, cellSize*4}, cellSize/2, RAYWHITE);
 }
 
 void Board::DrawNext() const{
-  ray_functions::DrawText("Next",screenPos + Vec2{cellSize*12, -cellSize*2}, 20, RAYWHITE);
-  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2{cellSize*10.1, (double)(-cellSize/2)},
-      Vec2{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
+  ray_functions::DrawText("Next",screenPos + Vec2<int>{cellSize*12, -cellSize*2}, 20, RAYWHITE);
+  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)(-cellSize/2)},
+      Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
 }
 
 void Board::DrawStats(int score, int level, int lines) const{
@@ -105,8 +111,8 @@ void Board::DrawStats(int score, int level, int lines) const{
     int textWidth = MeasureText(numStr, 20);
     double xPos = screenPos.GetX() - cellSize*3.5 + cellSize - (textWidth / 2);
     double yPos = screenPos.GetY() + (cellSize*(y + 1));
-    ray_functions::DrawText((item->first).c_str(), screenPos - Vec2{cellSize*4, -(cellSize*y)}, 20, RAYWHITE);
-    ray_functions::DrawText(numStr, Vec2{xPos,yPos}, 20, RAYWHITE);
+    ray_functions::DrawText((item->first).c_str(), screenPos - Vec2<int>{cellSize*4, -(cellSize*y)}, 20, RAYWHITE);
+    ray_functions::DrawText(numStr, Vec2<double>{xPos,yPos}, 20, RAYWHITE);
   }
 }
 
