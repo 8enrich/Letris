@@ -40,6 +40,8 @@ class Game{
     int speed;
     int cleanedLinesCount;
     void UpdateLevel();
+    void DrawHoldShape();
+    void DrawNextShapes();
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),

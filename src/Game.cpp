@@ -14,7 +14,7 @@ Game::Game(Board board) :
   canHold = true;
   score = 0;
   level = 0;
-  speed = 14;
+  speed = 15;
   cleanedLinesCount = 0;
 }
 
@@ -103,6 +103,9 @@ void Game::UpdateShape(){
 void Game::Draw(){
   ClearBackground(BLACK);
   board.Draw();
+  board.DrawStats(score, level, cleanedLinesCount);
+  if(hold >= 0) DrawHoldShape();
+  DrawNextShapes();
   shape->Draw();
 }
 
@@ -213,5 +216,19 @@ void Game::UpdateLevel(){
   if(cleanedLinesCount >= 10 * (level + 1)){
     level++;
     if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){ speed--;}
+  }
+}
+
+void Game::DrawHoldShape(){
+  int dimension = shapes[hold].GetDimension();
+  shapes[hold].DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
+      (dimension * dimension) - ((double)5/4) * dimension + 1});
+}
+
+void Game::DrawNextShapes(){
+  for(int i = 0; i < 3; i++){
+    int dimension = shapes[nextShapes[i]].GetDimension();
+    shapes[nextShapes[i]].DrawOutOfBoard(Vec2<double>{-((16.1 + 10.1 - dimension)/2), i * -4 + (((double)1/4) *
+          (dimension * dimension) - ((double)5/4) * dimension + 1)});
   }
 }
