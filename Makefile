@@ -1,2 +1,2 @@
 build:
-	g++ ./src/*.cpp -o ./bin/tetris -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+	g++ ./src/*.cpp -o ./bin/letris -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
