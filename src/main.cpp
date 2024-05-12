@@ -2,6 +2,11 @@
 #include "../include/Menu.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
+
+#ifndef _DEBUG
+#pragma comment(linker, "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+#endif
+
 int main(){
   Menu menu {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
   Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
