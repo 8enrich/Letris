@@ -6,7 +6,8 @@ Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& 
   color(color), 
   boardPos((board.GetWidth() - dimension)/2,0),
   board(board),
-  index(index)
+  index(index),
+  currentRotation(Rotation::UP)
 {}
 Shape::Shape(const Shape &other):
   shape_matrix(other.shape_matrix), 
@@ -14,7 +15,8 @@ Shape::Shape(const Shape &other):
   color(other.color), 
   boardPos(other.boardPos), 
   board(other.board),
-  index(other.index)
+  index(other.index),
+  currentRotation(other.currentRotation)
 {}
 
 Vec2<int> Shape::GetBoardPos(){
@@ -258,7 +260,7 @@ void Shape::ResetShape(){
 
 void Shape::ResetBoardPos(){ boardPos = Vec2<int>{(board.GetWidth() - dimension)/2, 0}; }
 
-void Shape::ResetRotation(){ currentRotation = Rotation(0); }
+void Shape::ResetRotation(){ currentRotation = Rotation(Rotation::UP); }
 
 void Shape::Rotate(){
   currentRotation = Rotation((int(currentRotation) + 1) % 4);

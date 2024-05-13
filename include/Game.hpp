@@ -42,6 +42,7 @@ class Game{
     void UpdateLevel();
     void DrawHoldShape();
     void DrawNextShapes();
+    bool HasLost();
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),
