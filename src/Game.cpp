@@ -25,15 +25,25 @@ bool Game::GameShouldClose() const{
 void Game::OpenCloseGame(){
   shouldClose = !shouldClose;
 }
+
 void Game::Tick(){
   BeginDrawing();
   Game::Update();
-  Game::ClearLines();
-  Game::Draw();
-  Game::Score();
-  Game::DropLines();
+  if(!HasLost()){
+    Game::ClearLines();
+    Game::Draw();
+    Game::Score();
+    Game::DropLines();
+  }
   EndDrawing();
   tickCount++;
+}
+
+bool Game::HasLost(){
+  for(int x = 0, width = board.GetWidth(); x < width; x++){
+    if(board.CellExists({x, 0})){ return true; }
+  }
+  return false;
 }
 
 Shape *Game::NewShape(){
@@ -122,7 +132,7 @@ void Game::UpdateBoard(){
   switch(keyPressed){
     case KEY_SPACE:
       fallen = shape->InstantFall();
-      UpdateScore(fallen);
+      UpdateScore(2 * fallen);
       break;
     case KEY_W:
       if(shape->HasSpaceToRotate()){
@@ -213,7 +223,7 @@ int Game::QuantityOfLines(){
 }
 
 void Game::UpdateLevel(){
-  if(cleanedLinesCount >= 10 * (level + 1)){
+  if(cleanedLinesCount >= 10 * (level + 1) && level < 29){
     level++;
     if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){ speed--;}
   }
