@@ -128,9 +128,9 @@ bool Shape::WillCollideDown(){
 }
 
 bool Shape::HasSpaceToRotate(){
-  Vec2<int> pos = {GetLeftestXCell(), GetLowestYCell()};
-  int rightFirstCollision = GetFirstRightCollisionX(pos);
-  int leftFirstCollision = GetFirstLeftCollisionX(pos);
+  int highestCell = GetHighestYCell();
+  int rightFirstCollision = GetFirstRightCollisionX(Vec2<int>{GetRightestXCell(), highestCell});
+  int leftFirstCollision = GetFirstLeftCollisionX(Vec2<int>{GetLeftestXCell(), highestCell});
   return rightFirstCollision - leftFirstCollision > dimension;
 }
 
@@ -146,7 +146,7 @@ int Shape::GetFirstRightCollisionX(Vec2<int> pos){
   int factor = 1, width = board.GetWidth();
   Vec2<int> rightCollision;
   do{ rightCollision = pos + (rightAddVector * factor++);}
-  while(!(board.CellExists(rightCollision)) && rightCollision.GetX() <= width);
+  while(!(board.CellExists(rightCollision)) && rightCollision.GetX() < width);
   return rightCollision.GetX();
 }
 
@@ -174,20 +174,40 @@ int Shape::GetShortestDistanceFromTheGround() const{
 }
 
 void Shape::MoveIfCollided(){
-  if(WillCollideRight()){
-    do{boardPos += leftAddVector;} while(WillCollideRight());
-    boardPos += rightAddVector;
-  }
-  if(WillCollideLeft()){
-    do{ boardPos += rightAddVector;} while(WillCollideLeft());
-    boardPos += leftAddVector;
-  }
+  bool cell, collided;
+  Vec2<int> pos;
+  do{
+    collided = false;
+    for(int x = 0; x < dimension; x++){
+      for(int y = 0; y < dimension; y++){
+        cell = GetShapeRotation(x, y);
+        pos = boardPos + Vec2<int>{x, y};
+        if (cell && HasCollided(pos)){
+          Move(x, y);
+          collided = true;
+        }
+      }
+    }
+  } while(collided);
+}
+
+void Shape::Move(int x, int y){
+  Vec2<int> addVector = {0, 0};
+  if(x < dimension/2) addVector += rightAddVector;
+  if(x > dimension/2) addVector += leftAddVector;
+  if(y >= dimension/2 || x == dimension/2) addVector += upAddVector;
+  boardPos += addVector;
+}
+
+bool Shape::HasCollided(Vec2<int> pos){
+  return board.CellExists(pos) || pos.GetX() >= board.GetWidth() ||
+      pos.GetX() < 0 || pos.GetY() >= board.GetHeight();
 }
 
 bool Shape::HasCellRight(){
   bool cell;
   Vec2<int> pos;
-  for(int x = dimension - 1; x >= dimension/2; --x){
+  for(int x = dimension - 1; x >= 0; --x){
     for(int y = dimension - 1; y >= 0; --y){
       cell = GetShapeRotation(x, y);
       pos = boardPos + Vec2<int>{x, y} + rightAddVector;
@@ -246,6 +266,16 @@ int Shape::GetLeftestXCell(){
 int Shape::GetLowestYCell(){
   for (int y = dimension - 1; y >= 0; --y){
     for (int x = dimension - 1; x >= 0; --x){
+      bool cell = GetShapeRotation(x, y);
+      if (cell) { return (boardPos + Vec2<int>{x, y}).GetY(); }
+    }
+  }
+  return 0;
+}
+
+int Shape::GetHighestYCell(){
+  for (int y = 0; y < dimension; ++y){
+    for (int x = 0; x < dimension; ++x){
       bool cell = GetShapeRotation(x, y);
       if (cell) { return (boardPos + Vec2<int>{x, y}).GetY(); }
     }
