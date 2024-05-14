@@ -97,7 +97,7 @@ void Game::DropLine(int line) {
 void Game::UpdateShape(){
   if (shape->WillCollideDown()){
     tickToFix--;
-    if(tickToFix) return;
+    if(tickToFix > 0) return;
     Vec2<int> cellPosition;
     int dimension = shape->GetDimension();
     for (int x = 0; x < dimension; ++x){
@@ -112,7 +112,7 @@ void Game::UpdateShape(){
     shape = NextShape();
     canHold = true;
   }
-  if(tickToFix > maxTickToFix || !tickToFix) tickToFix = maxTickToFix;
+  if(tickToFix > maxTickToFix || tickToFix <= 0) tickToFix = maxTickToFix;
   if(tickToFix < maxTickToFix) tickToFix--;
 }
 
