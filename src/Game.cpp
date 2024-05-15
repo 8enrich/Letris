@@ -16,6 +16,8 @@ Game::Game(Board board) :
   level = 0;
   speed = 15;
   cleanedLinesCount = 0;
+  maxTickToFix = 30;
+  tickToFix = maxTickToFix;
 }
 
 bool Game::GameShouldClose() const{
@@ -94,6 +96,8 @@ void Game::DropLine(int line) {
 
 void Game::UpdateShape(){
   if (shape->WillCollideDown()){
+    tickToFix--;
+    if(tickToFix > 0) return;
     Vec2<int> cellPosition;
     int dimension = shape->GetDimension();
     for (int x = 0; x < dimension; ++x){
@@ -108,6 +112,8 @@ void Game::UpdateShape(){
     shape = NextShape();
     canHold = true;
   }
+  if(tickToFix > maxTickToFix || tickToFix <= 0) tickToFix = maxTickToFix;
+  if(tickToFix < maxTickToFix) tickToFix--;
 }
 
 void Game::Draw(){
@@ -133,11 +139,13 @@ void Game::UpdateBoard(){
     case KEY_SPACE:
       fallen = shape->InstantFall();
       UpdateScore(2 * fallen);
-      break;
+      tickToFix = 1;
+      return;
     case KEY_W:
       if(shape->HasSpaceToRotate()){
         shape->Rotate();
         shape->MoveIfCollided();
+        tickToFix++;
       }
       break;
     case KEY_C:
@@ -152,14 +160,23 @@ void Game::UpdateBoard(){
     auto keyDown = ray_functions::GetKeyDown();
     switch(keyDown){
       case KEY_D:
-        if (!shape->WillCollideRight()){shape->MoveRight();}
+        if (!shape->WillCollideRight()){
+          shape->MoveRight();
+          shape->MoveIfCollided();
+          tickToFix++;
+        }
         break;
       case KEY_A:
-        if (!shape->WillCollideLeft()) {shape->MoveLeft();}
+        if (!shape->WillCollideLeft()) {
+          shape->MoveLeft();
+          shape->MoveIfCollided();
+          tickToFix++;
+        }
         break;
       case KEY_S:
         if (!shape->WillCollideDown()){
           shape->MoveDown();
+          shape->MoveIfCollided();
           UpdateScore(1);
         }
       default:
@@ -225,7 +242,10 @@ int Game::QuantityOfLines(){
 void Game::UpdateLevel(){
   if(cleanedLinesCount >= 10 * (level + 1) && level < 29){
     level++;
-    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){ speed--;}
+    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){
+      speed--;
+      maxTickToFix -= 2;
+    }
   }
 }
 

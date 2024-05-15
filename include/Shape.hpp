@@ -57,11 +57,13 @@ public:
   const Board& board;
   const int index;
   const Vec2<int> downAddVector = {0, 1};
+  const Vec2<int> upAddVector = {0, -1};
   const Vec2<int> rightAddVector = {1, 0};
   const Vec2<int> leftAddVector = {-1, 0};
   int GetRightestXCell();
   int GetLeftestXCell();
   int GetLowestYCell();
+  int GetHighestYCell();
   bool HasCellRight();
   bool HasCellLeft();
   bool HasCellDown();
@@ -69,6 +71,8 @@ public:
   int GetFirstRightCollisionX(Vec2<int>);
   int GetDistanceFromTheGround(Vec2<int>) const;
   int GetShortestDistanceFromTheGround() const;
+  void Move(int, int);
+  bool HasCollided(Vec2<int>);
 };
 
 class I_Shape : public Shape{

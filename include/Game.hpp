@@ -43,6 +43,8 @@ class Game{
     void DrawHoldShape();
     void DrawNextShapes();
     bool HasLost();
+    int tickToFix;
+    int maxTickToFix;
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),
