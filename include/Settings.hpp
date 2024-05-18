@@ -12,3 +12,10 @@ namespace settings {
   constexpr Vec2<int> boardWidthHeight {10, 20};
   
 }
+
+enum Screens {
+    MENU,
+    GAME,
+    PAUSE,
+    GAMEOVER,
+};

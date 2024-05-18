@@ -3,9 +3,9 @@
 
 #define OPT_QTD 2
 
-class Menu : public Screen {
+class GameOver : public Screen {
 public:
-  Menu();
+  GameOver();
   void Tick() override;
 private:
   void OptionsHandling();

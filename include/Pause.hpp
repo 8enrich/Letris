@@ -3,9 +3,9 @@
 
 #define OPT_QTD 2
 
-class Menu : public Screen {
+class Pause : public Screen {
 public:
-  Menu();
+  Pause();
   void Tick() override;
 private:
   void OptionsHandling();
