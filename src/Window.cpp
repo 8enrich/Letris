@@ -1,5 +1,3 @@
-#include "../include/Menu.hpp"
-#include "../include/Settings.hpp"
 #include "../include/Window.hpp"
 #include <raylib.h>
 #include <assert.h>
