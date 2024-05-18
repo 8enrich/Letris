@@ -1,9 +1,9 @@
-#include "../include/Game.hpp"
+#include "../include/Window.hpp"
+#include "../include/Settings.hpp"
 #include "../include/Menu.hpp"
+#include "../include/Game.hpp"
 #include "../include/Pause.hpp"
 #include "../include/GameOver.hpp"
-#include "../include/Settings.hpp"
-#include "../include/Window.hpp"
 #include <raylib.h>
 #include <memory>
 
@@ -13,70 +13,32 @@
 
 int main(){
   Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-  Menu menu;
-  Pause pause;
-  GameOver gameOver;
   Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
-  std::unique_ptr<Game> game;
 
-  int actualScreen = Screens::MENU;
+  std::unique_ptr<Screen> screens[] = {
+    std::make_unique<Menu>(),
+    std::make_unique<Game>(board),
+    std::make_unique<Pause>(),
+    std::make_unique<GameOver>(),
+  };
+
+  int actualScreen = MENU;
   bool entered = false;
 
   while (!WindowShouldClose()) {
-    switch(actualScreen){
-      case MENU:
-        if(!entered){
-          menu.OpenClose();
-          entered = true;
-        }
-        if(menu.ShouldClose()){
-          actualScreen = menu.GetScreen();
-          game = std::make_unique<Game>(board);
-          entered = false;
-          break;
-        }
-        menu.Tick();
-        break;
-      case GAME:
-        if(!entered){
-          game->OpenClose();
-          entered = true;
-        }
-        if(game->ShouldClose()){
-          actualScreen = game->GetScreen();
-          entered = false;
-          break;
-        }
-        game->Tick();
-        break;
-      case PAUSE:
-        if(!entered){
-          pause.OpenClose();
-          entered = true;
-        }
-        if(pause.ShouldClose()){
-          actualScreen = pause.GetScreen();
-          entered = false;
-          break;
-        }
-        pause.Tick();
-        break;
-      case GAMEOVER:
-        if(!entered){
-          gameOver.OpenClose();
-          entered = true;
-        }
-        if(gameOver.ShouldClose()){
-          actualScreen = gameOver.GetScreen();
-          game = std::make_unique<Game>(board);
-          entered = false;
-          break;
-        }
-        gameOver.Tick();
-        break;
-      default:
-        return 0;
+    if(actualScreen == EXIT) break;
+    if(actualScreen == MENU || actualScreen == GAMEOVER)
+      screens[GAME] = std::make_unique<Game>(board);
+    if(!entered){
+      screens[actualScreen]->OpenClose();
+      entered = true;
     }
+    if(screens[actualScreen]->ShouldClose()){
+      actualScreen = screens[actualScreen]->GetScreen();
+      entered = false;
+      continue;
+    }
+    screens[actualScreen]->Tick();
   }
 
   return 0;

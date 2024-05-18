@@ -41,7 +41,7 @@ void Pause::OptionsHandling(){
         screenToReturn = previousScreen;
         break;
     }
-    shouldClose = true;
+    OpenClose();
     currentSelected = 0;
   }
 }

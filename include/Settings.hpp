@@ -14,8 +14,9 @@ namespace settings {
 }
 
 enum Screens {
-    MENU,
-    GAME,
-    PAUSE,
-    GAMEOVER,
+  EXIT = -1,
+  MENU,
+  GAME,
+  PAUSE,
+  GAMEOVER,
 };
