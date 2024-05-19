@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 Game::Game(Board board) :
-  Screen(Screens::PAUSE, Screens::GAMEOVER),
+  Screen(),
   board(board)
 {
   shape = NewShape();
@@ -24,8 +24,8 @@ Game::Game(Board board) :
 
 void Game::Tick(){
   if(HasLost()){
-    screenToReturn = nextScreen;
-    shouldClose = true;
+    nextScreen = GAMEOVER;
+    OpenClose();
     return;
   }
   BeginDrawing();
@@ -158,8 +158,8 @@ void Game::UpdateBoard(){
       if(canHold){ Hold(); }
       break;
     case KEY_ESCAPE:
-      screenToReturn = previousScreen;
-      shouldClose = true;
+      nextScreen = PAUSE;
+      OpenClose();
     default:
       break;
   }

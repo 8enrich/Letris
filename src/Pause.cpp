@@ -2,7 +2,7 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
-Pause::Pause() : Screen(Screens::MENU, Screens::GAME) {}
+Pause::Pause() : Screen() {}
 
 void Pause::Tick(){
   OptionsHandling();
@@ -35,10 +35,10 @@ void Pause::OptionsHandling(){
   if (IsKeyPressed(KEY_ENTER)) {
     switch (currentSelected) {
       case 0:
-        screenToReturn = nextScreen;
+        nextScreen = GAME;
         break;
       case 1:
-        screenToReturn = previousScreen;
+        nextScreen = MENU;
         break;
     }
     OpenClose();

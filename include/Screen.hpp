@@ -3,7 +3,7 @@
 
 class Screen {
 public:
-  Screen(int, int);
+  Screen();
   Screen(const Screen& other) = delete;
 	Screen& operator=(const Screen& other) = delete;
   bool ShouldClose();
@@ -11,11 +11,9 @@ public:
   virtual void Tick();
   int GetScreen();
 protected:
-  int nextScreen;
-  int previousScreen;
   bool shouldClose = true;
   virtual void Draw();
-  int screenToReturn;
+  int nextScreen;
 };
 
 #endif

@@ -1,9 +1,6 @@
 #include "../include/Screen.hpp"
 
-Screen::Screen(int previousScreen, int nextScreen) :
-  previousScreen(previousScreen),
-  nextScreen(nextScreen)
-{};
+Screen::Screen() {};
 
 void Screen::OpenClose() {
   shouldClose = !shouldClose;
@@ -17,4 +14,4 @@ void Screen::Draw(){}
 
 void Screen::Tick(){}
 
-int Screen::GetScreen(){ return screenToReturn;}
+int Screen::GetScreen(){ return nextScreen;}

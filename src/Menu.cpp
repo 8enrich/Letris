@@ -2,7 +2,7 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
-Menu::Menu() : Screen(-1, Screens::GAME) {}
+Menu::Menu() : Screen() {}
 
 void Menu::Tick(){
   OptionsHandling();
@@ -28,14 +28,14 @@ void Menu::OptionsHandling(){
       currentSelected > 0 ? currentSelected-- : currentSelected = OPT_QTD-1;
       break;
   }
-  for (int i = 0; i < OPT_QTD; i++) { optionsColor[i] = i == currentSelected ? RAYWHITE : GRAY; }
+  for (int i = 0; i < OPT_QTD; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
   if (IsKeyPressed(KEY_ENTER)) {
     switch (currentSelected) {
       case 0:
-        screenToReturn = nextScreen;
+        nextScreen = GAME;
         break;
       case 1:
-        screenToReturn = previousScreen;
+        nextScreen = EXIT;
         break;
     }
     OpenClose();
