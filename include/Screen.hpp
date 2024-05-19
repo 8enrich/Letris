@@ -1,5 +1,4 @@
-#ifndef SCREEN_HPP
-#define SCREEN_HPP
+#pragma once
 
 class Screen {
 public:
@@ -15,5 +14,3 @@ protected:
   virtual void Draw();
   int nextScreen;
 };
-
-#endif
