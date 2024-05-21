@@ -1,6 +1,9 @@
-#include "../include/Game.hpp"
-#include "../include/Menu.hpp"
+#include "../include/Window.hpp"
 #include "../include/Settings.hpp"
+#include "../include/Menu.hpp"
+#include "../include/Game.hpp"
+#include "../include/Pause.hpp"
+#include "../include/GameOver.hpp"
 #include <raylib.h>
 #include <memory>
 
@@ -9,38 +12,33 @@
 #endif
 
 int main(){
-  Menu menu {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
+  Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
   Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
-  std::unique_ptr<Game> game;
 
-  enum screens{
-    MENU,
-    GAME,
+  std::unique_ptr<Screen> screens[] = {
+    std::make_unique<Menu>(),
+    std::make_unique<Game>(board),
+    std::make_unique<Pause>(),
+    std::make_unique<GameOver>(),
   };
 
-  int actualScreen = screens::MENU;
+  int actualScreen = MENU;
+  bool entered = false;
 
   while (!WindowShouldClose()) {
-    switch(actualScreen){
-      case MENU:
-        if(menu.MenuShouldClose()){
-          actualScreen = screens::GAME;
-          game = std::make_unique<Game>(board);
-          game->OpenCloseGame();
-          break;
-        }
-        menu.Draw();
-        break;
-      case GAME:
-        if(game->GameShouldClose()){
-          actualScreen = screens::MENU;
-          game.reset();
-          menu.OpenCloseMenu();
-          break;
-        }
-        game->Tick();
-        break;
+    if(actualScreen == EXIT) break;
+    if(actualScreen == MENU || actualScreen == GAMEOVER)
+      screens[GAME] = std::make_unique<Game>(board);
+    if(!entered){
+      screens[actualScreen]->OpenClose();
+      entered = true;
     }
+    if(screens[actualScreen]->ShouldClose()){
+      actualScreen = screens[actualScreen]->GetScreen();
+      entered = false;
+      continue;
+    }
+    screens[actualScreen]->Tick();
   }
 
   return 0;

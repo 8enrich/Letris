@@ -1,11 +1,13 @@
 #include "../include/Game.hpp"
 #include "../include/raylibFunctions.hpp"
+#include "../include/Settings.hpp"
 #include <cstdio>
 #include <raylib.h>
 #include <assert.h>
 #include <cstdlib>
 
 Game::Game(Board board) :
+  Screen(),
   board(board)
 {
   shape = NewShape();
@@ -20,15 +22,12 @@ Game::Game(Board board) :
   tickToFix = maxTickToFix;
 }
 
-bool Game::GameShouldClose() const{
-  return shouldClose;
-}
-
-void Game::OpenCloseGame(){
-  shouldClose = !shouldClose;
-}
-
 void Game::Tick(){
+  if(HasLost()){
+    nextScreen = GAMEOVER;
+    OpenClose();
+    return;
+  }
   BeginDrawing();
   Game::Update();
   if(!HasLost()){
@@ -159,7 +158,8 @@ void Game::UpdateBoard(){
       if(canHold){ Hold(); }
       break;
     case KEY_ESCAPE:
-      shouldClose = true;
+      nextScreen = PAUSE;
+      OpenClose();
     default:
       break;
   }

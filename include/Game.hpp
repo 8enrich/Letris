@@ -1,17 +1,15 @@
 #pragma once
 #include "Board.hpp"
 #include "Shape.hpp"
-class Game{
+#include "Screen.hpp"
+
+class Game : public Screen {
   public:
     Game(Board board);
-    Game(const Game& other) = delete;
-	  Game& operator=(const Game& other) = delete;
-    bool GameShouldClose() const;
-    void OpenCloseGame();
-    void Tick();
+    void Tick() override;
   private:
     int tickCount;
-    void Draw();
+    void Draw() override;
     void Update();
     void UpdateBoard();
     void UpdateShape();
@@ -26,7 +24,6 @@ class Game{
     void Hold();
     int hold;
     bool canHold;
-    bool shouldClose = true;
     int IndexOf(Shape*);
     void SwapShapeAndHold(int);
     int nextShapes[3];
