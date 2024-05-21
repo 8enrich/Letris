@@ -148,6 +148,13 @@ void Game::UpdateBoard(){
         tickToFix++;
       }
       break;
+    case KEY_Z:
+      if(shape->HasSpaceToRotate()){
+        shape->RotateAntiClockWise();
+        shape->MoveIfCollided();
+        tickToFix++;
+      }
+      break;
     case KEY_C:
       if(canHold){ Hold(); }
       break;
@@ -162,21 +169,18 @@ void Game::UpdateBoard(){
       case KEY_D:
         if (!shape->WillCollideRight()){
           shape->MoveRight();
-          shape->MoveIfCollided();
           tickToFix++;
         }
         break;
       case KEY_A:
         if (!shape->WillCollideLeft()) {
           shape->MoveLeft();
-          shape->MoveIfCollided();
           tickToFix++;
         }
         break;
       case KEY_S:
         if (!shape->WillCollideDown()){
           shape->MoveDown();
-          shape->MoveIfCollided();
           UpdateScore(1);
         }
       default:

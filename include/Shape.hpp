@@ -25,6 +25,7 @@ public:
   void Draw() const;
   void DrawOutOfBoard(Vec2<double>);
   void Rotate();
+  void RotateAntiClockWise();
   void UpdatePosition(Vec2<int>);
   void Fall();
   void MoveRight();
@@ -67,12 +68,17 @@ public:
   bool HasCellRight();
   bool HasCellLeft();
   bool HasCellDown();
+  bool HasCellUp();
   int GetFirstLeftCollisionX(Vec2<int>);
   int GetFirstRightCollisionX(Vec2<int>);
   int GetDistanceFromTheGround(Vec2<int>) const;
   int GetShortestDistanceFromTheGround() const;
-  void Move(int, int);
-  bool HasCollided(Vec2<int>);
+  int GetDistanceFromTheCeiling(Vec2<int>) const;
+  int GetShortestDistanceFromTheCeiling() const;
+  bool CheckIfCollided();
+  bool CollidedHorizontal(Vec2<int>);
+  bool CollidedVertical(Vec2<int>);
+  bool Move(int,int);
 };
 
 class I_Shape : public Shape{
