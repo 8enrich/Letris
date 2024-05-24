@@ -2,6 +2,7 @@
 #include "../include/Settings.hpp"
 #include <assert.h>
 #include <raylib.h>
+
 void ray_functions::DrawRectangle(Vec2<int> pos, Vec2<int> widthHeight, Color color){
   assert((pos >= 0 && pos < Vec2<int>{GetScreenWidth(), GetScreenHeight()}));
   DrawRectangle(pos.GetX(), pos.GetY(), widthHeight.GetX(), widthHeight.GetY(), color);
@@ -35,10 +36,16 @@ void ray_functions::DrawText(const char * text, Vec2<double> pos, int fontSize, 
   DrawText(text, pos.GetX(), pos.GetY(), fontSize, Color);
 }
 
-KeyboardKey ray_functions::GetKeyDown(){
-  if(IsKeyDown(KEY_D)){ return KEY_D; }
-  if(IsKeyDown(KEY_A)){ return KEY_A; }
-  if(IsKeyDown(KEY_S)){ return KEY_S; }
+int ray_functions::GetKeyDown(int control){
+  for(int i = 1; i < 4; i++) if(IsKeyDown(settings::controls[control][i])) return KeySequence[i];
+  return KEY_NULL;
+}
+
+int ray_functions::GetAction(int control){
+  auto keyPressed = GetKeyPressed();
+  for(int i = 0; i < 6; i++) if(keyPressed == settings::controls[control][i]) return KeySequence[i];
+  if(keyPressed == KEY_C) return KEY_C;
+  if(keyPressed == KEY_ESCAPE) return KEY_ESCAPE;
   return KEY_NULL;
 }
 

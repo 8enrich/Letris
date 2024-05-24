@@ -16,11 +16,12 @@ void Options::Draw(){
     {"W", "A", "S", "D", "SPACE", "Z", ""},
     {"^", "<", ">", "v", "SPACE", "Z", ""},
     {"I", "J", "K", "L", "SPACE", "Z", ""},
-    {"K", "H", "H", "L", "SPACE", "Z", ""},
+    {"K", "H", "L", "J", "SPACE", "Z", ""},
   };
   int width = settings::screenWidth/14, height = settings::screenHeight/5;
   int fontSize = 20, lastSize = 0, distance = 0;
   const char *selected = "";
+  ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/20}, (float)1/fontSize, RAYWHITE);
   for(int j = 0; j < NUM_COLS; j++){
     if(j) distance = lastSize + MeasureText(columns[j - 1], fontSize) - MeasureText("     ", fontSize);
     lastSize = distance + width;

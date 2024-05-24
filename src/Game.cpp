@@ -133,22 +133,22 @@ void Game::Update(){
 
 void Game::UpdateBoard(){
   if(!shape->WillCollideDown() && !(tickCount % speed)){ shape->Fall(); }
-  auto keyPressed = GetKeyPressed();
+  auto keyPressed = ray_functions::GetAction(control);
   int fallen;
   switch(keyPressed){
-    case KEY_SPACE:
+    case Keys::INSTANTFALL:
       fallen = shape->InstantFall();
       UpdateScore(2 * fallen);
       tickToFix = 1;
       return;
-    case KEY_W:
+    case Keys::ROTATECW:
       if(shape->HasSpaceToRotate()){
         shape->Rotate();
         shape->MoveIfCollided();
         tickToFix++;
       }
       break;
-    case KEY_Z:
+    case ROTATEACW:
       if(shape->HasSpaceToRotate()){
         shape->RotateAntiClockWise();
         shape->MoveIfCollided();
@@ -165,21 +165,21 @@ void Game::UpdateBoard(){
       break;
   }
   if (!(tickCount%3)){
-    auto keyDown = ray_functions::GetKeyDown();
+    auto keyDown = ray_functions::GetKeyDown(control);
     switch(keyDown){
-      case KEY_D:
+      case RIGHT:
         if (!shape->WillCollideRight()){
           shape->MoveRight();
           tickToFix++;
         }
         break;
-      case KEY_A:
+      case LEFT:
         if (!shape->WillCollideLeft()) {
           shape->MoveLeft();
           tickToFix++;
         }
         break;
-      case KEY_S:
+      case DOWN:
         if (!shape->WillCollideDown()){
           shape->MoveDown();
           UpdateScore(1);

@@ -24,7 +24,7 @@ int main(){
     std::make_unique<GameOver>(),
   };
 
-  int actualScreen = OPTIONS;
+  int actualScreen = MENU;
   bool entered = false;
 
   while (!WindowShouldClose()) {
