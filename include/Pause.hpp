@@ -5,7 +5,6 @@
 
 class Pause : public Screen {
 public:
-  Pause();
   void Tick() override;
 private:
   void OptionsHandling();

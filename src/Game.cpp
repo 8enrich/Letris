@@ -6,8 +6,9 @@
 #include <assert.h>
 #include <cstdlib>
 
+int Game::control = 0;
+
 Game::Game(Board board) :
-  Screen(),
   board(board)
 {
   shape = NewShape();

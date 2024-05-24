@@ -1,6 +1,7 @@
 #include "../include/Window.hpp"
 #include "../include/Settings.hpp"
 #include "../include/Menu.hpp"
+#include "../include/Options.hpp"
 #include "../include/Game.hpp"
 #include "../include/Pause.hpp"
 #include "../include/GameOver.hpp"
@@ -17,12 +18,13 @@ int main(){
 
   std::unique_ptr<Screen> screens[] = {
     std::make_unique<Menu>(),
+    std::make_unique<Options>(),
     std::make_unique<Game>(board),
     std::make_unique<Pause>(),
     std::make_unique<GameOver>(),
   };
 
-  int actualScreen = MENU;
+  int actualScreen = OPTIONS;
   bool entered = false;
 
   while (!WindowShouldClose()) {

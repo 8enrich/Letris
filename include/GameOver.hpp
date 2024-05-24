@@ -5,7 +5,6 @@
 
 class GameOver : public Screen {
 public:
-  GameOver();
   void Tick() override;
 private:
   void OptionsHandling();

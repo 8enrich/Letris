@@ -1,4 +1,5 @@
 #pragma once
+#include "raylibFunctions.hpp"
 
 class Screen {
 public:

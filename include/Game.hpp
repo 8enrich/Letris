@@ -7,6 +7,7 @@ class Game : public Screen {
   public:
     Game(Board board);
     void Tick() override;
+    static int control;
   private:
     int tickCount;
     void Draw() override;

@@ -1,4 +1,5 @@
 #include "../include/raylibFunctions.hpp"
+#include "../include/Settings.hpp"
 #include <assert.h>
 #include <raylib.h>
 void ray_functions::DrawRectangle(Vec2<int> pos, Vec2<int> widthHeight, Color color){
@@ -41,4 +42,7 @@ KeyboardKey ray_functions::GetKeyDown(){
   return KEY_NULL;
 }
 
-
+void ray_functions::DrawFormatedText(const char *text, Vec2<double> pos, float fontSize, Color color){
+  int width = settings::screenWidth, height = settings::screenHeight;
+  DrawText(text, width * pos.GetX() - (MeasureText(text, height * fontSize))/2, height * pos.GetY(), height * fontSize, color);
+}

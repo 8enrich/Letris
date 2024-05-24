@@ -9,4 +9,5 @@ namespace ray_functions {
   void DrawText(const char * text, Vec2<int> pos, int fontSize, Color Color);
   void DrawText(const char * text, Vec2<double> pos, int fontSize, Color Color);
   KeyboardKey GetKeyDown();
+  void DrawFormatedText(const char * text, Vec2<double> pos, float fontSize, Color color);
 }
