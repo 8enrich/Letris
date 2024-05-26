@@ -2,8 +2,11 @@
 #include "Screen.hpp"
 #include "Game.hpp"
 
-#define OPT_QTD_OPTIONS 5
+#define CONTROLS_QTD 4
+#define OPT_QTD_OPTIONS 2
 #define NUM_COLS 7
+#define LINE_DISTANCE 40
+#define ANIMATION_SPEED 200
 
 class Options : public Screen {
 public:
@@ -11,8 +14,23 @@ public:
 private:
   void OptionsHandling();
   int currentSelected = 0;
-  Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY, GRAY, GRAY};
-  void Draw() override;
   int controlSelected = 0;
+  Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY};
+  Color controlsColor[CONTROLS_QTD] = {RAYWHITE, GRAY, GRAY, GRAY};
+  void Draw() override;
+  void SlideAnimation();
+  int move = 0;
+  int speed = 0;
+  const char *columns[NUM_COLS] = {"Rotate CW", "Left", "Down", "Right", "Instant Fall", "Rotate ACW", "Selected"};
+  const char *controls[CONTROLS_QTD][NUM_COLS] = {
+    {"W", "A", "S", "D", "SPACE", "Z", ""},
+    {"^", "<", ">", "v", "SPACE", "Z", ""},
+    {"I", "J", "K", "L", "SPACE", "Z", ""},
+    {"K", "H", "L", "J", "SPACE", "Z", ""},
+  };
+  int x0 = settings::screenWidth/14, y0 = settings::screenHeight/5;
+  int fontSize = 20;
+  int GetNextControlSelected();
+  int GetPreviousControlSelected();
 };
 
