@@ -9,6 +9,6 @@ public:
 private:
   void OptionsHandling();
   int currentSelected = 0;
-  Color optionsColor[OPT_QTD] = {RAYWHITE, GRAY};
+  Color optionsColor[OPT_QTD] = {RAYWHITE, GRAY, GRAY};
   void Draw() override;
 };
