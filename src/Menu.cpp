@@ -24,7 +24,7 @@ void Menu::OptionsHandling(){
       currentSelected = (currentSelected + 1)%OPT_QTD_MENU;
       break;
     case KEY_LEFT:
-      currentSelected = (currentSelected + 5)%OPT_QTD_MENU;
+      currentSelected = (currentSelected + (OPT_QTD_MENU * 2 - 1))%OPT_QTD_MENU;
       break;
   }
   for (int i = 0; i < OPT_QTD_MENU; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }

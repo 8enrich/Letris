@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include "Screen.hpp"
 
-#define OPT_QTD 2
+#define OPT_QTD 3
 
 class GameOver : public Screen {
 public:
