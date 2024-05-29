@@ -82,7 +82,7 @@ void Shape::UpdatePosition(Vec2<int> addVector){
 }
 
 void Shape::Fall(){
-  MoveDown();
+  //MoveDown();
 }
 
 void Shape::MoveRight(){
@@ -142,8 +142,7 @@ bool Shape::WillCollideDown() const{
 
 bool Shape::HasSpaceToRotate() const{
   Vec2<int> highestCell = GetHighestCell();
-  return GetDistanceUntilCollisionCell(rightAddVector, highestCell) +
-    GetDistanceUntilCollisionCell(leftAddVector, highestCell) > dimension;
+  return GetCollidedCellX(rightAddVector, highestCell) - GetCollidedCellX(leftAddVector, highestCell) > dimension;
 }
 
 int Shape::GetDistanceUntilCollision(Vec2<int> addVector) const{
@@ -154,12 +153,12 @@ int Shape::GetDistanceUntilCollision(Vec2<int> addVector) const{
   return factor - 2;
 }
 
-int Shape::GetDistanceUntilCollisionCell(Vec2<int> addVector, Vec2<int> cellPos) const{
+int Shape::GetCollidedCellX(Vec2<int> addVector, Vec2<int> cellPos) const{
   int factor = 1;
   Vec2<int> pos;
   do{ pos = cellPos + (addVector * factor++);}
   while(!CheckCollisionCell(pos));
-  return factor - 2;
+  return pos.GetX();
 }
 
 int Shape::GetQuantityOfMovimentsToStopCollided(Vec2<int> addVector) const{
@@ -174,14 +173,14 @@ int Shape::GetQuantityOfMovimentsToStopCollided(Vec2<int> addVector) const{
 }
 
 void Shape::MoveIfCollided(){
-  const Vec2<int> addVectors[5] = {upAddVector, rightAddVector, leftAddVector,
-    upAddVector + rightAddVector, upAddVector + leftAddVector};
-  int lowest = 4, quantityOfMoviments[5];
-  for(int i = 0; i < 5; i++){
+  const Vec2<int> addVectors[6] = {upAddVector, rightAddVector, leftAddVector,
+    upAddVector + rightAddVector, upAddVector + leftAddVector, upAddVector * 2 + rightAddVector};
+  int lowest = 4, quantityOfMoviments[6];
+  for(int i = 0; i < 6; i++){
     quantityOfMoviments[i] = GetQuantityOfMovimentsToStopCollided(addVectors[i]);
     if(quantityOfMoviments[i] && quantityOfMoviments[i] < lowest) lowest = quantityOfMoviments[i];
   }
-  for(int i = 0; i < 5; i++){
+  for(int i = 0; i < 6; i++){
     if(quantityOfMoviments[i] == lowest){
       UpdatePosition(addVectors[i] * lowest);
       return;

@@ -60,7 +60,7 @@ public:
   bool EscapeBoard(Vec2<int>) const;
   bool CheckCollisionCell(Vec2<int>) const;
   int GetDistanceUntilCollision(Vec2<int>) const;
-  int GetDistanceUntilCollisionCell(Vec2<int>, Vec2<int>) const;
+  int GetCollidedCellX(Vec2<int>, Vec2<int>) const;
   int GetQuantityOfMovimentsToStopCollided(Vec2<int>) const;
   void ResetRotation();
   void ResetBoardPos();
