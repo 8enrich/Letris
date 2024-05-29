@@ -176,13 +176,13 @@ int Shape::GetQuantityOfMovimentsToStopCollided(Vec2<int> addVector) const{
 void Shape::MoveIfCollided(){
   const Vec2<int> addVectors[5] = {upAddVector, rightAddVector, leftAddVector,
     upAddVector + rightAddVector, upAddVector + leftAddVector};
-  int lowest = 4, distances[5];
+  int lowest = 4, quantityOfMoviments[5];
   for(int i = 0; i < 5; i++){
-    distances[i] = GetQuantityOfMovimentsToStopCollided(addVectors[i]);
-    if(distances[i] && distances[i] < lowest) lowest = distances[i];
+    quantityOfMoviments[i] = GetQuantityOfMovimentsToStopCollided(addVectors[i]);
+    if(quantityOfMoviments[i] && quantityOfMoviments[i] < lowest) lowest = quantityOfMoviments[i];
   }
   for(int i = 0; i < 5; i++){
-    if(distances[i] == lowest){
+    if(quantityOfMoviments[i] == lowest){
       UpdatePosition(addVectors[i] * lowest);
       return;
     }
