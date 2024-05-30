@@ -82,7 +82,7 @@ void Shape::UpdatePosition(Vec2<int> addVector){
 }
 
 void Shape::Fall(){
-  //MoveDown();
+  MoveDown();
 }
 
 void Shape::MoveRight(){
@@ -173,14 +173,15 @@ int Shape::GetQuantityOfMovimentsToStopCollided(Vec2<int> addVector) const{
 }
 
 void Shape::MoveIfCollided(){
-  const Vec2<int> addVectors[6] = {upAddVector, rightAddVector, leftAddVector,
-    upAddVector + rightAddVector, upAddVector + leftAddVector, upAddVector * 2 + rightAddVector};
-  int lowest = 4, quantityOfMoviments[6];
-  for(int i = 0; i < 6; i++){
+  const Vec2<int> addVectors[7] = {upAddVector, rightAddVector, leftAddVector,
+    upAddVector + rightAddVector, upAddVector + leftAddVector,
+    upAddVector * 2 + rightAddVector, upAddVector * 2 + leftAddVector};
+  int lowest = 4, quantityOfMoviments[7];
+  for(int i = 0; i < 7; i++){
     quantityOfMoviments[i] = GetQuantityOfMovimentsToStopCollided(addVectors[i]);
     if(quantityOfMoviments[i] && quantityOfMoviments[i] < lowest) lowest = quantityOfMoviments[i];
   }
-  for(int i = 0; i < 6; i++){
+  for(int i = 0; i < 7; i++){
     if(quantityOfMoviments[i] == lowest){
       UpdatePosition(addVectors[i] * lowest);
       return;
