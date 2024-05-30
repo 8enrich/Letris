@@ -120,7 +120,7 @@ bool Shape::CheckCollision(Vec2<int> addVector) const{
 
 bool Shape::EscapeBoard(Vec2<int> pos) const{
   int posX = pos.GetX(), posY = pos.GetY();
-  return posX < 0 || posX >= board.GetWidth() || posY < 0 || posY >= board.GetHeight();
+  return posX < 0 || posX >= board.GetWidth() || posY >= board.GetHeight();
 }
 
 bool Shape::CheckCollisionCell(Vec2<int> pos) const{
@@ -138,6 +138,10 @@ bool Shape::WillCollideLeft() const{
 
 bool Shape::WillCollideDown() const{
   return CheckCollision(downAddVector);
+}
+
+bool Shape::HasCollision() const{
+  return CheckCollision({0, 0});
 }
 
 bool Shape::HasSpaceToRotate() const{
@@ -161,31 +165,21 @@ int Shape::GetCollidedCellX(Vec2<int> addVector, Vec2<int> cellPos) const{
   return pos.GetX();
 }
 
-int Shape::GetQuantityOfMovimentsToStopCollided(Vec2<int> addVector) const{
-  int factor = 0, size = board.GetHeight();
-  Vec2<int> pos;
-  do{
-    pos = addVector * factor++;
-    if(factor > size) return 0;
-  }
-  while(CheckCollision(pos));
-  return factor - 1;
-}
-
 void Shape::MoveIfCollided(){
-  const Vec2<int> addVectors[7] = {upAddVector, rightAddVector, leftAddVector,
-    upAddVector + rightAddVector, upAddVector + leftAddVector,
-    upAddVector * 2 + rightAddVector, upAddVector * 2 + leftAddVector};
-  int lowest = 4, quantityOfMoviments[7];
-  for(int i = 0; i < 7; i++){
-    quantityOfMoviments[i] = GetQuantityOfMovimentsToStopCollided(addVectors[i]);
-    if(quantityOfMoviments[i] && quantityOfMoviments[i] < lowest) lowest = quantityOfMoviments[i];
-  }
-  for(int i = 0; i < 7; i++){
-    if(quantityOfMoviments[i] == lowest){
-      UpdatePosition(addVectors[i] * lowest);
-      return;
+  const Vec2<int> addVectors[2] = {rightAddVector, leftAddVector};
+  int count = 0, height = board.GetHeight();
+  while(HasCollision()){
+    for(int i = 0; i < 2; i++){
+      for(int j = 1; j <= 2; j++){
+        if(!CheckCollision(addVectors[i] * j)){
+          UpdatePosition(addVectors[i] * j);
+          return;
+        }
+      }
     }
+    UpdatePosition(upAddVector);
+    if(count == height) break;
+    count++;
   }
 }
 
