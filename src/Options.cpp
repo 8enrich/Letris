@@ -40,8 +40,8 @@ void Options::Draw(){
     int previous = (move > 0)? GetPreviousControlSelected() : GetNextControlSelected();
     ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[controlSelected][i], x, LINE_DISTANCE + y0, speed,
         fontSize, controlsColor[previous]);
-    if((x - speed < 0 && i == NUM_COLS - 1) ||
-        x0 - speed > settings::screenWidth) move = 0;
+    if((x - speed + settings::screenWidth < x && i == NUM_COLS - 1) ||
+        x - speed - settings::screenWidth > x) move = 0;
     speed += ANIMATION_SPEED * move;
   }
 }
