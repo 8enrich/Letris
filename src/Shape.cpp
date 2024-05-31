@@ -166,10 +166,10 @@ int Shape::GetCollidedCellX(Vec2<int> addVector, Vec2<int> cellPos) const{
 }
 
 void Shape::MoveIfCollided(){
-  const Vec2<int> addVectors[2] = {rightAddVector, leftAddVector};
+  const Vec2<int> addVectors[3] = {upAddVector, rightAddVector, leftAddVector};
   int count = 0, height = board.GetHeight();
   while(HasCollision()){
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 3; i++){
       for(int j = 1; j <= 2; j++){
         if(!CheckCollision(addVectors[i] * j)){
           UpdatePosition(addVectors[i] * j);
