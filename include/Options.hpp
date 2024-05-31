@@ -6,7 +6,7 @@
 #define OPT_QTD_OPTIONS 2
 #define NUM_COLS 7
 #define LINE_DISTANCE 40
-#define ANIMATION_SPEED 200
+#define ANIMATION_SPEED 25
 
 class Options : public Screen {
 public:
@@ -18,7 +18,6 @@ private:
   Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY};
   Color controlsColor[CONTROLS_QTD] = {RAYWHITE, GRAY, GRAY, GRAY};
   void Draw() override;
-  void SlideAnimation();
   int move = 0;
   int speed = 0;
   const char *columns[NUM_COLS] = {"Rotate CW", "Left", "Down", "Right", "Instant Fall", "Rotate ACW", "Selected"};
@@ -28,8 +27,6 @@ private:
     {"I", "J", "K", "L", "SPACE", "Z", ""},
     {"K", "H", "L", "J", "SPACE", "Z", ""},
   };
-  int x0 = settings::screenWidth/14, y0 = settings::screenHeight/5;
-  int fontSize = 20;
   int GetNextControlSelected();
   int GetPreviousControlSelected();
 };
