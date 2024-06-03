@@ -15,9 +15,9 @@ void Options::Tick(){
 
 void Options::Draw(){
   ClearBackground(BLACK);
+  int lastSize = 0, distance = 0, x0 = settings::screenWidth/14, y0 = settings::screenHeight/5, fontSize = 20;
   ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/20}, (float)1/fontSize, RAYWHITE);
   ray_functions::DrawFormatedText("Voltar", Vec2<double>{(float)1/2, (float)1/1.2}, (float)1/fontSize, optionsColor[1]);
-  int lastSize = 0, distance = 0;
   for(int i = 0; i < NUM_COLS; i++){
     if(i) distance = lastSize + MeasureText(columns[i - 1], fontSize) - MeasureText("     ", fontSize);
     lastSize = distance + x0;
@@ -28,36 +28,22 @@ void Options::Draw(){
     if(i == Game::control) selected = "Y";
     controls[i][6] = selected;
   }
-  if(!move){
-    lastSize = 0, distance = 0;
-    for (int i = 0; i < NUM_COLS; i++) {
-      if(i) distance = lastSize + MeasureText(columns[i - 1], fontSize) - MeasureText("     ", fontSize);
-      lastSize = distance + x0;
-      DrawText(controls[controlSelected][i], lastSize + (MeasureText(columns[i], fontSize) -
-        MeasureText(controls[controlSelected][i], fontSize))/2 - speed, LINE_DISTANCE + y0,
-          fontSize, controlsColor[controlSelected]);
-    }
-    return;
-  }
-  SlideAnimation();
-}
-
-void Options::SlideAnimation(){
-  int lastSize = 0, distance = 0;
-  int previous, selected = controlSelected;
-  previous = (move > 0)? GetPreviousControlSelected() : GetNextControlSelected();
-  for (int i = 0; i < NUM_COLS; i++) {
+  lastSize = 0, distance = 0;
+  for (int i = 0, x; i < NUM_COLS; i++) {
     if(i) distance = lastSize + MeasureText(columns[i - 1], fontSize) - MeasureText("     ", fontSize);
     lastSize = distance + x0;
-    DrawText(controls[previous][i], lastSize + (MeasureText(columns[i], fontSize) -
-          MeasureText(controls[previous][i], fontSize))/2 - speed, LINE_DISTANCE + y0, fontSize, controlsColor[previous]);
-    if(lastSize - speed < 0 || lastSize - speed > settings::screenWidth)
-      DrawText(controls[selected][i], lastSize + (move * settings::screenWidth) + (MeasureText(columns[i], fontSize) -
-          MeasureText(controls[selected][i], fontSize))/2 - speed, LINE_DISTANCE + y0, fontSize, controlsColor[selected]);
-    if((lastSize - speed < 0 && i == NUM_COLS - 1) ||
-        x0 - speed > settings::screenWidth) move = 0;
+    x = lastSize + (MeasureText(columns[i], fontSize) - MeasureText(controls[controlSelected][i], fontSize))/2;
+    if(!move){
+      DrawText(controls[controlSelected][i], x, LINE_DISTANCE + y0, fontSize, controlsColor[controlSelected]);
+      continue;
+    }
+    int previous = (move > 0)? GetPreviousControlSelected() : GetNextControlSelected();
+    ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[controlSelected][i], x, LINE_DISTANCE + y0, speed,
+        fontSize, controlsColor[previous]);
+    if((x - speed + settings::screenWidth < x && i == NUM_COLS - 1) ||
+        x - speed - settings::screenWidth > x) move = 0;
+    speed += ANIMATION_SPEED * move;
   }
-  speed += ANIMATION_SPEED * move;
 }
 
 int Options::GetNextControlSelected(){

@@ -136,12 +136,12 @@ void Game::UpdateBoard(){
   auto keyPressed = ray_functions::GetAction(control);
   int fallen;
   switch(keyPressed){
-    case Keys::INSTANTFALL:
+    case INSTANTFALL:
       fallen = shape->InstantFall();
       UpdateScore(2 * fallen);
       tickToFix = 1;
       return;
-    case Keys::ROTATECW:
+    case ROTATECW:
       if(shape->HasSpaceToRotate()){
         shape->Rotate();
         shape->MoveIfCollided();

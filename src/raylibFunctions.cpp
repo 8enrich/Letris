@@ -46,10 +46,17 @@ int ray_functions::GetAction(int control){
   for(int i = 0; i < 6; i++) if(keyPressed == settings::controls[control][i]) return KeySequence[i];
   if(keyPressed == KEY_C) return KEY_C;
   if(keyPressed == KEY_ESCAPE) return KEY_ESCAPE;
-  return KEY_NULL;
+  return keyPressed;
 }
 
 void ray_functions::DrawFormatedText(const char *text, Vec2<double> pos, float fontSize, Color color){
   int width = settings::screenWidth, height = settings::screenHeight;
   DrawText(text, width * pos.GetX() - (MeasureText(text, height * fontSize))/2, height * pos.GetY(), height * fontSize, color);
+}
+
+void ray_functions::HorizontalSlideAnimation(const char *textOut, const char *textIn, int x, int y, int speed, int fontSize, Color color){
+  int signal = (speed > 0)? 1: -1, newX = x - speed;
+  DrawText(textOut, newX, y, fontSize, color);
+  if(newX < 0 || newX > settings::screenWidth)
+    DrawText(textIn, newX + (signal * settings::screenWidth), y, fontSize, color);
 }
