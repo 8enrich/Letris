@@ -2,8 +2,6 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
-Menu::Menu() : Screen() {}
-
 void Menu::Tick(){
   OptionsHandling();
   BeginDrawing();
@@ -13,28 +11,32 @@ void Menu::Tick(){
 
 void Menu::Draw(){
   ClearBackground(BLACK);
-  DrawText("LETRIS", settings::screenWidth/3, settings::screenHeight/3, settings::screenHeight/10, RED);
-  DrawText("Jogar", settings::screenWidth/4, settings::screenHeight/1.5, settings::screenHeight/15, optionsColor[0]);
-  DrawText("Sair", settings::screenWidth/1.75, settings::screenHeight/1.5, settings::screenHeight/15, optionsColor[1]);
+  ray_functions::DrawFormatedText("LETRIS", Vec2<double>{(float)1/2, (float)1/3}, (float)1/10, RED);
+  ray_functions::DrawFormatedText("Jogar", Vec2<double>{(float)1/4, (float)1/1.5}, (float)1/15, optionsColor[0]);
+  ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/1.5}, (float)1/15, optionsColor[1]);
+  ray_functions::DrawFormatedText("Sair", Vec2<double>{(float)3/4, (float)1/1.5}, (float) 1/15, optionsColor[2]);
 }
 
 void Menu::OptionsHandling(){
   auto keypressed = GetKeyPressed();
   switch (keypressed) {
     case KEY_RIGHT:
-      currentSelected < OPT_QTD - 1 ? ++currentSelected : currentSelected = 0;
+      currentSelected = (currentSelected + 1)%OPT_QTD_MENU;
       break;
     case KEY_LEFT:
-      currentSelected > 0 ? currentSelected-- : currentSelected = OPT_QTD-1;
+      currentSelected = (currentSelected + (OPT_QTD_MENU * 2 - 1))%OPT_QTD_MENU;
       break;
   }
-  for (int i = 0; i < OPT_QTD; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
+  for (int i = 0; i < OPT_QTD_MENU; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
   if (IsKeyPressed(KEY_ENTER)) {
     switch (currentSelected) {
       case 0:
         nextScreen = GAME;
         break;
       case 1:
+        nextScreen = OPTIONS;
+        break;
+      case 2:
         nextScreen = EXIT;
         break;
     }

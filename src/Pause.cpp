@@ -2,8 +2,6 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
-Pause::Pause() : Screen() {}
-
 void Pause::Tick(){
   OptionsHandling();
   BeginDrawing();
@@ -13,22 +11,20 @@ void Pause::Tick(){
 
 void Pause::Draw(){
   ClearBackground(BLACK);
-  DrawText("Pause", (settings::screenWidth - MeasureText("Pause", settings::screenHeight/13))/2,
-      settings::screenHeight/5, settings::screenHeight/13, RAYWHITE);
-  DrawText("Continuar", (settings::screenWidth - MeasureText("Continuar", settings::screenHeight/20))/2,
-      settings::screenHeight/2.5, settings::screenHeight/20, optionsColor[0]);
-  DrawText("Voltar ao menu", (settings::screenWidth - MeasureText("Voltar ao menu", settings::screenHeight/20))/2,
-      settings::screenHeight/1.8, settings::screenHeight/20, optionsColor[1]);
+  ray_functions::DrawFormatedText("Pause", Vec2<double>{(float)1/2, (float)1/5}, (float)1/13, RAYWHITE);
+  ray_functions::DrawFormatedText("Continuar", Vec2<double>{(float)1/2, (float)1/2.5}, (float)1/20, optionsColor[0]);
+  ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/1.8}, (float)1/20, optionsColor[1]);
+  ray_functions::DrawFormatedText("Voltar ao Menu", Vec2<double>{(float)1/2, (float)32/45}, (float)1/20, optionsColor[2]);
 }
 
 void Pause::OptionsHandling(){
   auto keypressed = GetKeyPressed();
   switch (keypressed) {
     case KEY_DOWN:
-      currentSelected < OPT_QTD - 1 ? ++currentSelected : currentSelected = 0;
+      currentSelected = (currentSelected + 1)%OPT_QTD;
       break;
     case KEY_UP:
-      currentSelected > 0 ? currentSelected-- : currentSelected = OPT_QTD-1;
+      currentSelected = (currentSelected + (OPT_QTD * 2 - 1))%OPT_QTD;
       break;
   }
   for (int i = 0; i < OPT_QTD; i++) optionsColor[i] = (i == currentSelected)? RAYWHITE : GRAY;
@@ -38,6 +34,9 @@ void Pause::OptionsHandling(){
         nextScreen = GAME;
         break;
       case 1:
+        nextScreen = OPTIONS;
+        break;
+      case 2:
         nextScreen = MENU;
         break;
     }
