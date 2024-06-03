@@ -1,43 +1,53 @@
-#include "../include/Game.hpp"
-#include "../include/Menu.hpp"
+#include "../include/Window.hpp"
 #include "../include/Settings.hpp"
+#include "../include/Menu.hpp"
+#include "../include/Options.hpp"
+#include "../include/Game.hpp"
+#include "../include/Pause.hpp"
+#include "../include/GameOver.hpp"
 #include <raylib.h>
-int main(){
-  Menu menu {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-  Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
-  Game *game = nullptr;
+#include <memory>
 
-  enum screens{
-    MENU,
-    GAME,
+#ifndef _DEBUG
+#pragma comment(linker, "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+#endif
+
+int main(){
+  Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
+  Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
+
+  std::unique_ptr<Screen> screens[] = {
+    std::make_unique<Menu>(),
+    std::make_unique<Options>(),
+    std::make_unique<Game>(board),
+    std::make_unique<Pause>(),
+    std::make_unique<GameOver>(),
   };
 
-  int actualScreen = screens::MENU;
+  int actualScreen = MENU, lastScreen;
+  bool entered = false;
 
   while (!WindowShouldClose()) {
-    switch(actualScreen){
-      case MENU:
-        if(menu.MenuShouldClose()){
-          actualScreen = screens::GAME;
-          game = new Game{board};
-          game->OpenCloseGame();
-          break;
-        }
-        menu.Draw();
-        break;
-      case GAME:
-        if(game->GameShouldClose()){
-          actualScreen = screens::MENU;
-          delete game;
-          menu.OpenCloseMenu();
-          break;
-        }
-        game->Tick();
-        break;
+    if(actualScreen == EXIT) break;
+    if(actualScreen == MENU || actualScreen == GAMEOVER)
+      screens[GAME] = std::make_unique<Game>(board);
+    if(!entered){
+      screens[actualScreen]->OpenClose();
+      entered = true;
     }
+    if(screens[actualScreen]->ShouldClose()){
+      entered = false;
+      if(actualScreen == OPTIONS){
+        actualScreen = lastScreen;
+        continue;
+      }
+      lastScreen = actualScreen;
+      actualScreen = screens[actualScreen]->GetScreen();
+      continue;
+    }
+    screens[actualScreen]->Tick();
   }
 
-  if(game) delete game;
   return 0;
 }
 

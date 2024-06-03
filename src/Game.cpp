@@ -1,9 +1,12 @@
 #include "../include/Game.hpp"
 #include "../include/raylibFunctions.hpp"
+#include "../include/Settings.hpp"
 #include <cstdio>
 #include <raylib.h>
 #include <assert.h>
 #include <cstdlib>
+
+int Game::control = 0;
 
 Game::Game(Board board) :
   board(board)
@@ -16,24 +19,33 @@ Game::Game(Board board) :
   level = 0;
   speed = 15;
   cleanedLinesCount = 0;
+  maxTickToFix = 30;
+  tickToFix = maxTickToFix;
 }
 
-bool Game::GameShouldClose() const{
-  return shouldClose;
-}
-
-void Game::OpenCloseGame(){
-  shouldClose = !shouldClose;
-}
 void Game::Tick(){
+  if(HasLost()){
+    nextScreen = GAMEOVER;
+    OpenClose();
+    return;
+  }
   BeginDrawing();
   Game::Update();
-  Game::ClearLines();
-  Game::Draw();
-  Game::Score();
-  Game::DropLines();
+  if(!HasLost()){
+    Game::ClearLines();
+    Game::Draw();
+    Game::Score();
+    Game::DropLines();
+  }
   EndDrawing();
   tickCount++;
+}
+
+bool Game::HasLost(){
+  for(int x = 0, width = board.GetWidth(); x < width; x++){
+    if(board.CellExists({x, 0})){ return true; }
+  }
+  return false;
 }
 
 Shape *Game::NewShape(){
@@ -84,6 +96,8 @@ void Game::DropLine(int line) {
 
 void Game::UpdateShape(){
   if (shape->WillCollideDown()){
+    tickToFix--;
+    if(tickToFix > 0) return;
     Vec2<int> cellPosition;
     int dimension = shape->GetDimension();
     for (int x = 0; x < dimension; ++x){
@@ -98,6 +112,8 @@ void Game::UpdateShape(){
     shape = NextShape();
     canHold = true;
   }
+  if(tickToFix > maxTickToFix || tickToFix <= 0) tickToFix = maxTickToFix;
+  if(tickToFix < maxTickToFix) tickToFix--;
 }
 
 void Game::Draw(){
@@ -117,37 +133,53 @@ void Game::Update(){
 
 void Game::UpdateBoard(){
   if(!shape->WillCollideDown() && !(tickCount % speed)){ shape->Fall(); }
-  auto keyPressed = GetKeyPressed();
+  auto keyPressed = ray_functions::GetAction(control);
   int fallen;
   switch(keyPressed){
-    case KEY_SPACE:
+    case INSTANTFALL:
       fallen = shape->InstantFall();
-      UpdateScore(fallen);
-      break;
-    case KEY_W:
+      UpdateScore(2 * fallen);
+      tickToFix = 1;
+      return;
+    case ROTATECW:
       if(shape->HasSpaceToRotate()){
         shape->Rotate();
         shape->MoveIfCollided();
+        tickToFix++;
+      }
+      break;
+    case ROTATEACW:
+      if(shape->HasSpaceToRotate()){
+        shape->RotateAntiClockWise();
+        shape->MoveIfCollided();
+        tickToFix++;
       }
       break;
     case KEY_C:
       if(canHold){ Hold(); }
       break;
     case KEY_ESCAPE:
-      shouldClose = true;
+      nextScreen = PAUSE;
+      OpenClose();
     default:
       break;
   }
   if (!(tickCount%3)){
-    auto keyDown = ray_functions::GetKeyDown();
+    auto keyDown = ray_functions::GetKeyDown(control);
     switch(keyDown){
-      case KEY_D:
-        if (!shape->WillCollideRight()){shape->MoveRight();}
+      case RIGHT:
+        if (!shape->WillCollideRight()){
+          shape->MoveRight();
+          tickToFix++;
+        }
         break;
-      case KEY_A:
-        if (!shape->WillCollideLeft()) {shape->MoveLeft();}
+      case LEFT:
+        if (!shape->WillCollideLeft()) {
+          shape->MoveLeft();
+          tickToFix++;
+        }
         break;
-      case KEY_S:
+      case DOWN:
         if (!shape->WillCollideDown()){
           shape->MoveDown();
           UpdateScore(1);
@@ -213,9 +245,12 @@ int Game::QuantityOfLines(){
 }
 
 void Game::UpdateLevel(){
-  if(cleanedLinesCount >= 10 * (level + 1)){
+  if(cleanedLinesCount >= 10 * (level + 1) && level < 29){
     level++;
-    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){ speed--;}
+    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){
+      speed--;
+      maxTickToFix -= 2;
+    }
   }
 }
 

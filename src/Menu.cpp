@@ -1,59 +1,46 @@
 #include "../include/Menu.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
-#include <assert.h>
-void Menu::Draw(){
+
+void Menu::Tick(){
   OptionsHandling();
   BeginDrawing();
-  ClearBackground(BLACK);
-  DrawText("LETRIS", settings::screenWidth/3, settings::screenHeight/3, settings::screenHeight/10, RED);
-  DrawText("Jogar", settings::screenWidth/4, settings::screenHeight/1.5, settings::screenHeight/15, optionsColor[0]);
-  DrawText("Sair", settings::screenWidth/1.75, settings::screenHeight/1.5, settings::screenHeight/15, optionsColor[1]);
+  Draw();
   EndDrawing();
 }
-Menu::Menu(int width, int height, int fps, std::string title)
-{
-  assert(!GetWindowHandle());
-  SetTargetFPS(fps);
-  InitWindow(width, height, title.c_str());
-  SetExitKey(KEY_Q);
+
+void Menu::Draw(){
+  ClearBackground(BLACK);
+  ray_functions::DrawFormatedText("LETRIS", Vec2<double>{(float)1/2, (float)1/3}, (float)1/10, RED);
+  ray_functions::DrawFormatedText("Jogar", Vec2<double>{(float)1/4, (float)1/1.5}, (float)1/15, optionsColor[0]);
+  ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/1.5}, (float)1/15, optionsColor[1]);
+  ray_functions::DrawFormatedText("Sair", Vec2<double>{(float)3/4, (float)1/1.5}, (float) 1/15, optionsColor[2]);
 }
 
 void Menu::OptionsHandling(){
   auto keypressed = GetKeyPressed();
-  bool entered = false;
   switch (keypressed) {
     case KEY_RIGHT:
-      currentSelected < OPT_QTD - 1 ? ++currentSelected : currentSelected = 0;
-      entered = true;
+      currentSelected = (currentSelected + 1)%OPT_QTD_MENU;
       break;
     case KEY_LEFT:
-      entered = true;
-      currentSelected > 0 ? currentSelected-- : currentSelected = OPT_QTD-1;
+      currentSelected = (currentSelected + (OPT_QTD_MENU * 2 - 1))%OPT_QTD_MENU;
       break;
   }
-  if (entered) {
-    for (int i = 0; i < OPT_QTD; i++) { optionsColor[i] = i == currentSelected ? RAYWHITE : GRAY; }
-  }
+  for (int i = 0; i < OPT_QTD_MENU; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
   if (IsKeyPressed(KEY_ENTER)) {
     switch (currentSelected) {
       case 0:
-        shouldClose = true;
+        nextScreen = GAME;
         break;
       case 1:
-        CloseWindow();
+        nextScreen = OPTIONS;
+        break;
+      case 2:
+        nextScreen = EXIT;
         break;
     }
+    OpenClose();
+    currentSelected = 0;
   }
-}
-void Menu::OpenCloseMenu() {
-  shouldClose = !shouldClose;
-}
-Menu::~Menu() noexcept{
-  assert(GetWindowHandle());
-  CloseWindow();
-}
-
-bool Menu::MenuShouldClose(){
-  return shouldClose;
 }
