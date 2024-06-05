@@ -2,10 +2,12 @@
 #include "Board.hpp"
 #include "Shape.hpp"
 #include "Screen.hpp"
+#include <raylib.h>
 
 class Game : public Screen {
   public:
     Game(Board board);
+    ~Game();
     void Tick() override;
   private:
     int tickCount;
@@ -42,6 +44,7 @@ class Game : public Screen {
     bool HasLost();
     int tickToFix;
     int maxTickToFix;
+    Music music;
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),

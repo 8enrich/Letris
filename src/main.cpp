@@ -12,6 +12,14 @@
 #endif
 
 int main(){
+  
+  InitAudioDevice();
+  Music music;
+  if(IsAudioDeviceReady()){
+    music = LoadMusicStream("assets/tetris.mp3");
+    SetMusicVolume(music, 1);
+    PlayMusicStream(music);
+  }
   Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
   Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
 
@@ -39,8 +47,11 @@ int main(){
       continue;
     }
     screens[actualScreen]->Tick();
+    UpdateMusicStream(music);
   }
 
+  if(IsMusicStreamPlaying(music)){StopMusicStream(music);}
+  CloseAudioDevice();
   return 0;
 }
 

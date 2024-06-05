@@ -20,8 +20,10 @@ Game::Game(Board board) :
   cleanedLinesCount = 0;
   maxTickToFix = 30;
   tickToFix = maxTickToFix;
-}
+  }
+Game::~Game() {
 
+}
 void Game::Tick(){
   if(HasLost()){
     nextScreen = GAMEOVER;
