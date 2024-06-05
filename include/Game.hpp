@@ -2,7 +2,6 @@
 #include "Board.hpp"
 #include "Shape.hpp"
 #include "Screen.hpp"
-#include <raylib.h>
 
 class Game : public Screen {
   public:
@@ -43,7 +42,6 @@ class Game : public Screen {
     bool HasLost();
     int tickToFix;
     int maxTickToFix;
-    Music music;
     Shape shapes[7] = {I_Shape(board),
                        O_Shape(board),
                        T_Shape(board),

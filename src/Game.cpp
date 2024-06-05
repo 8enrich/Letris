@@ -19,7 +19,7 @@ Game::Game(Board board) :
   cleanedLinesCount = 0;
   maxTickToFix = 30;
   tickToFix = maxTickToFix;
-  }
+}
 
 void Game::Tick(){
   if(HasLost()){
