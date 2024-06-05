@@ -2,7 +2,6 @@
 #include "../include/raylibFunctions.hpp"
 #include "../include/Settings.hpp"
 #include <cstdio>
-#include <raylib.h>
 #include <assert.h>
 #include <cstdlib>
 
@@ -21,9 +20,7 @@ Game::Game(Board board) :
   maxTickToFix = 30;
   tickToFix = maxTickToFix;
   }
-Game::~Game() {
 
-}
 void Game::Tick(){
   if(HasLost()){
     nextScreen = GAMEOVER;
