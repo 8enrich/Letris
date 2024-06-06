@@ -4,6 +4,7 @@
 #include <cstdio>
 
 void Options::Tick(){
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
   do{
     BeginDrawing();

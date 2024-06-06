@@ -5,9 +5,8 @@
 #include <assert.h>
 
 int Game::control = 0;
-
 Game::Game(Board board) :
-  board(board)
+  board(board), Screen("assets/tetris.mp3")
 {
   shape = NewShape();
   SetNextShapes();
@@ -27,6 +26,7 @@ void Game::Tick(){
     OpenClose();
     return;
   }
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   BeginDrawing();
   Game::Update();
   if(!HasLost()){
