@@ -7,6 +7,7 @@ void Menu::Tick(){
   BeginDrawing();
   Draw();
   EndDrawing();
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
 }
 
 void Menu::Draw(){
