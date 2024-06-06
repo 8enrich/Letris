@@ -1,10 +1,8 @@
 #include "../include/Game.hpp"
 #include "../include/raylibFunctions.hpp"
 #include "../include/Settings.hpp"
-#include <cstdio>
 #include <raylib.h>
 #include <assert.h>
-#include <cstdlib>
 
 int Game::control = 0;
 
