@@ -11,9 +11,10 @@ void Pause::Tick(){
 
 void Pause::Draw(){
   ClearBackground(BLACK);
-  ray_functions::DrawFormatedText("Pause", Vec2<double>{(float)1/2, (float)1/5}, (float)1/13, RAYWHITE);
-  ray_functions::DrawFormatedText("Continuar", Vec2<double>{(float)1/2, (float)1/2.2}, (float)1/20, optionsColor[0]);
-  ray_functions::DrawFormatedText("Voltar ao Menu", Vec2<double>{(float)1/2, (float)1/1.5}, (float)1/20, optionsColor[1]);
+  ray_functions::DrawFormatedText("PAUSE", Vec2<double>{(float)1/2, (float)1/5}, (float)1/13, RAYWHITE);
+  float x = (float)1/2, y = (float)1/2.2, fontSize = (float)1/20, lineDistance = (float)7/33;
+  ray_functions::DrawFormatedText("Continuar", Vec2<double>{x, y}, fontSize, optionsColor[0]);
+  ray_functions::DrawFormatedText("Voltar ao Menu", Vec2<double>{x, y + lineDistance}, fontSize, optionsColor[1]);
 }
 
 void Pause::OptionsHandling(){

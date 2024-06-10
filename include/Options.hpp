@@ -21,6 +21,7 @@ private:
   void Draw() override;
   void DrawControls();
   void DrawScreenSize();
+  void DrawArrows(float, Color);
   int move[2] = {0, 0};
   int speed = 0;
   int GetNextItemSelected(int);

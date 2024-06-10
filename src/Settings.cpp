@@ -10,8 +10,8 @@ void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenHeight = newSize.GetY();
   int centerX = GetMonitorWidth(0) / 2 - screenWidth / 2;
   int centerY = GetMonitorHeight(0) / 2 - screenHeight / 2;
-  SetWindowSize(screenWidth, screenHeight);
   SetWindowPosition(centerX, centerY);
+  SetWindowSize(screenWidth, screenHeight);
   UpdateBoardPosition();
 }
 

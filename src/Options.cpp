@@ -16,23 +16,24 @@ void Options::Tick(){
 
 void Options::Draw(){
   ClearBackground(BLACK);
-  ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/20}, fontSizes[0], RAYWHITE);
+  ray_functions::DrawFormatedText("OPÇÕES", Vec2<double>{(float)1/2, (float)1/20}, fontSizes[0], RAYWHITE);
   DrawControls();
   DrawScreenSize();
-  ray_functions::DrawFormatedText("Aplicar", Vec2<double>{(float)1/2, (float)1/1.4}, fontSizes[0], optionsColor[2]);
-  ray_functions::DrawFormatedText("Voltar", Vec2<double>{(float)1/2, (float)1/1.2}, fontSizes[0], optionsColor[3]);
+  float x = (float)1/2, y = (float)1/1.4, lineDistance = (float)5/42;
+  ray_functions::DrawFormatedText("Aplicar", Vec2<double>{x, y}, fontSizes[0], optionsColor[2]);
+  ray_functions::DrawFormatedText("Voltar", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[3]);
 }
 
 void Options::DrawControls(){
   ray_functions::DrawFormatedText("Controles", Vec2<double>{(float)1/2, (float)1/5}, fontSizes[0], RAYWHITE);
-  int width = settings::screenWidth, height = settings::screenHeight, y0 = height/5, line_distance = height/20;
+  int width = settings::screenWidth, height = settings::screenHeight, y0 = height/4.6, lineDistance = height/20;
   int totalTextWidth = 0;
   for (int i = 0; i < NUM_COLS; i++) totalTextWidth += MeasureText(columns[i], height * fontSizes[1]);
   int margin = (width - totalTextWidth) / (NUM_COLS  + 1);
   int x0 = margin, textSize;
   for (int i = 0, x = x0; i < NUM_COLS; i++) {
     textSize = MeasureText(columns[i], height * fontSizes[1]);
-    DrawText(columns[i], x, line_distance + y0, height * fontSizes[1], RAYWHITE);
+    DrawText(columns[i], x, lineDistance + y0, height * fontSizes[1], RAYWHITE);
     x += textSize + margin;
   }
   bool stop;
@@ -40,34 +41,41 @@ void Options::DrawControls(){
     textSize = MeasureText(columns[i], height * fontSizes[1]);
     posX = x + (textSize - MeasureText(controls[itemSelected[CONTROL]][i], height * fontSizes[1]))/2;
     if(!move[0]){
-      DrawText(controls[itemSelected[CONTROL]][i], posX, 2 * line_distance + y0, height * fontSizes[1],
-          controlsColor[itemSelected[CONTROL]]);
+      DrawArrows((float)73/230, optionsColor[0]);
+      DrawText(controls[itemSelected[CONTROL]][i], posX, 2 * lineDistance + y0, height * fontSizes[1], optionsColor[0]);
       x += textSize + margin;
       continue;
     }
     int previous = (move[0] > 0)? GetPreviousItemSelected(CONTROLS_QTD) : GetNextItemSelected(CONTROLS_QTD);
-    speed += 25 * move[0];
+    speed += 30 * move[0];
     stop = ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[itemSelected[CONTROL]][i], posX,
-        2 * line_distance + y0, speed, height * fontSizes[1], GRAY);
+        2 * lineDistance + y0, speed, height * fontSizes[1], GRAY);
     x += textSize + margin;
     if(stop) move[0] = 0;
   }
 }
 
 void Options::DrawScreenSize(){
+  ray_functions::DrawFormatedText("Tamanho da tela", Vec2<double>{(float)1/2, (float)1/2.7}, fontSizes[0], RAYWHITE);
   int width = settings::screenWidth, height = settings::screenHeight;
-  ray_functions::DrawFormatedText("Tamanho da tela", Vec2<double>{(float)1/2, (float)1/2.8}, fontSizes[0], RAYWHITE);
   const char *text = screenSizes[itemSelected[SCREENSIZE]];
+  float x = (float)1/2, y = (float)1/2.3;
   if(!move[1]){
-    ray_functions::DrawFormatedText(text, Vec2<double>{(float)1/2, (float)1/2.4}, (float)1/25, optionsColor[1]);
+    DrawArrows(y, optionsColor[1]);
+    ray_functions::DrawFormatedText(text, Vec2<double>{x, y}, fontSizes[1], optionsColor[1]);
     return;
   }
   bool stop;
   int previous = (move[1] > 0)? GetPreviousItemSelected(SCREEN_SIZE_QTD) : GetNextItemSelected(SCREEN_SIZE_QTD);
   speed += 100 * move[1];
-  stop = ray_functions::HorizontalSlideAnimation(screenSizes[previous], text, (float)1/2, (float)1/2.4,
-      speed, (float)1/25, GRAY);
+  stop = ray_functions::HorizontalSlideAnimation(screenSizes[previous], text, x, y,
+      speed, fontSizes[1], GRAY);
   if(stop) move[1] = 0;
+}
+
+void Options::DrawArrows(float y, Color color){
+  ray_functions::DrawFormatedText("<", Vec2<double>{(float)1/36, y}, fontSizes[1], color);
+  ray_functions::DrawFormatedText(">", Vec2<double>{(float)1/1.03, y}, fontSizes[1], color);
 }
 
 int Options::GetNextItemSelected(int quantity){
