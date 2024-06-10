@@ -14,23 +14,22 @@
 
 int main(){
   Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-  Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
+  std::unique_ptr<Board> board = std::make_unique<Board> (settings::boardPosition, settings::boardWidthHeight,
+      settings::cellSize, settings::padding);
 
   std::unique_ptr<Screen> screens[] = {
     std::make_unique<Menu>(),
     std::make_unique<Options>(),
-    std::make_unique<Game>(board),
+    NULL,
     std::make_unique<Pause>(),
     std::make_unique<GameOver>(),
   };
 
-  int actualScreen = MENU, lastScreen;
+  int actualScreen = MENU, lastScreen = EXIT;
   bool entered = false;
 
   while (!WindowShouldClose()) {
     if(actualScreen == EXIT) break;
-    if(actualScreen == MENU || actualScreen == GAMEOVER)
-      screens[GAME] = std::make_unique<Game>(board);
     if(!entered){
       screens[actualScreen]->OpenClose();
       entered = true;
@@ -43,6 +42,11 @@ int main(){
       }
       lastScreen = actualScreen;
       actualScreen = screens[actualScreen]->GetScreen();
+      if(actualScreen == GAME && (lastScreen == MENU || lastScreen == GAMEOVER)){
+        board = std::make_unique<Board>(settings::boardPosition, settings::boardWidthHeight,
+      settings::cellSize, settings::padding);
+        screens[GAME] = std::make_unique<Game>(*board);
+      }
       continue;
     }
     screens[actualScreen]->Tick();
@@ -50,4 +54,3 @@ int main(){
 
   return 0;
 }
-
