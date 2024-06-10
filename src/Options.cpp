@@ -105,8 +105,9 @@ void Options::OptionsHandling(){
   if (IsKeyPressed(KEY_ENTER)) {
     switch(currentSelected){
       case 2:
-        Game::control = itemSelected[CONTROL];
-        settings::UpdateWindowSize(settings::screenSizes[itemSelected[SCREENSIZE]]);
+        if(itemSelected[CONTROL] != Game::control) Game::control = itemSelected[CONTROL];
+        if(itemSelected[SCREENSIZE] != GetScreenSizeIndex())
+          settings::UpdateWindowSize(settings::screenSizes[itemSelected[SCREENSIZE]]);
         return;
       case 3:
         OpenClose();

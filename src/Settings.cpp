@@ -17,6 +17,6 @@ void settings::UpdateWindowSize(Vec2<int> newSize) {
 
 void settings::UpdateBoardPosition(){
   boardPosition = {(int)((float)screenWidth/3.2), (int)(screenHeight/((float)60/7))};
-  int x = boardPosition.GetX()/10, y = boardPosition.GetY();
+  int y = boardPosition.GetY();
   cellSize = (int)(y * 0.33);
 }

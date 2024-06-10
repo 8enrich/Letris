@@ -14,8 +14,7 @@
 
 int main(){
   Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-  std::unique_ptr<Board> board = std::make_unique<Board> (settings::boardPosition, settings::boardWidthHeight,
-      settings::cellSize, settings::padding);
+  std::unique_ptr<Board> board = NULL;
 
   std::unique_ptr<Screen> screens[] = {
     std::make_unique<Menu>(),
