@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 void Pause::Tick(){
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
   BeginDrawing();
   Draw();

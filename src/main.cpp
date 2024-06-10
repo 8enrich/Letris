@@ -13,6 +13,7 @@
 #endif
 
 int main(){
+  InitAudioDevice();
   Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
   std::unique_ptr<Board> board = NULL;
 
@@ -50,6 +51,6 @@ int main(){
     }
     screens[actualScreen]->Tick();
   }
-
+  CloseAudioDevice();
   return 0;
 }

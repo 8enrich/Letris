@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 void Options::Tick(){
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
   int hasMoviment;
   do{

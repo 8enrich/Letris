@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 void GameOver::Tick(){
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
   BeginDrawing();
   Draw();
