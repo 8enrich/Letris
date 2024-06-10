@@ -15,8 +15,8 @@
 int main(){
   InitAudioDevice();
   Window window {settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-  Board board {settings::boardPosition, settings::boardWidthHeight, settings::cellSize, settings::padding};
-  
+  std::unique_ptr<Board> board = NULL;
+
   std::unique_ptr<Screen> screens[] = {
     std::make_unique<Menu>(),
     std::make_unique<Options>(),
@@ -42,8 +42,11 @@ int main(){
       }
       lastScreen = actualScreen;
       actualScreen = screens[actualScreen]->GetScreen();
-      if(actualScreen == GAME && (lastScreen == MENU || lastScreen == GAMEOVER))
-        screens[GAME] = std::make_unique<Game>(board);
+      if(actualScreen == GAME && (lastScreen == MENU || lastScreen == GAMEOVER)){
+        board = std::make_unique<Board>(settings::boardPosition, settings::boardWidthHeight,
+      settings::cellSize, settings::padding);
+        screens[GAME] = std::make_unique<Game>(*board);
+      }
       continue;
     }
     screens[actualScreen]->Tick();
@@ -51,4 +54,3 @@ int main(){
   CloseAudioDevice();
   return 0;
 }
-

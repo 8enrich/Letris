@@ -14,5 +14,6 @@ namespace ray_functions {
   int GetKeyDown(int);
   int GetAction(int);
   void DrawFormatedText(const char * text, Vec2<double> pos, float fontSize, Color color);
-  void HorizontalSlideAnimation(const char*,const char*,int,int,int,int,Color);
+  bool HorizontalSlideAnimation(const char*,const char*,int,int,int,float,Color);
+  bool HorizontalSlideAnimation(const char*,const char*,float,float,int,float,Color);
 }
