@@ -37,7 +37,6 @@ void Options::DrawControls(){
     DrawText(columns[i], x, lineDistance + y0, height * fontSizes[1], RAYWHITE);
     x += textSize + margin;
   }
-  bool stop;
   for (int i = 0, posX, x = x0; i < NUM_COLS; i++) {
     textSize = MeasureText(columns[i], height * fontSizes[1]);
     posX = x + (textSize - MeasureText(controls[itemSelected[CONTROL]][i], height * fontSizes[1]))/2;
@@ -49,7 +48,7 @@ void Options::DrawControls(){
     }
     int previous = (move[0] > 0)? GetPreviousItemSelected(CONTROLS_QTD) : GetNextItemSelected(CONTROLS_QTD);
     speed += 30 * move[0];
-    stop = ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[itemSelected[CONTROL]][i], posX,
+    bool stop = ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[itemSelected[CONTROL]][i], posX,
         2 * lineDistance + y0, speed, height * fontSizes[1], GRAY);
     x += textSize + margin;
     if(stop) move[0] = 0;

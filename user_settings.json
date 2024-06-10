@@ -1,0 +1,15 @@
+{
+  "WINDOW_WIDTH": 800,
+  "WINDOW_HEIGHT": 600,
+  "CONTROL": 0,
+  "I_SHAPE_COLOR":
+  "unsafe": {
+    "comment": "here lies data you shouldn't change",
+    "FPS": 30,
+    "CELLSIZE": 23,
+    "PADDING": 2,
+    "BOARD_POSITION": [250, 70],
+    "BOARD_RESOLUTION": [10, 20],
+    "SCREEN_SIZES": [[800, 600], [1280, 720], [1366, 768]],
+  }
+}
