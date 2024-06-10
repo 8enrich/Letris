@@ -29,4 +29,4 @@ void Screen::Draw(){}
 
 void Screen::Tick(){}
 
-int Screen::GetScreen(){ return nextScreen;}
+Screens Screen::GetScreen(){ return nextScreen;}

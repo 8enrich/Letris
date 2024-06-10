@@ -1,8 +1,7 @@
 #include "../include/Menu.hpp"
 #include "../include/Settings.hpp"
-#include <iterator>
 #include <raylib.h>
-
+#include <iostream>
 void Menu::Tick(){
   OptionsHandling();
   BeginDrawing();
@@ -31,7 +30,8 @@ void Menu::OptionsHandling(){
   }
   for (int i = 0; i < OPT_QTD_MENU; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
   if (IsKeyPressed(KEY_ENTER)) {
-    nextScreen = currentSelected;
+    printf("entrou");
+    nextScreen = static_cast<Screens>(currentSelected);
     OpenClose();
     currentSelected = 0;
   }
