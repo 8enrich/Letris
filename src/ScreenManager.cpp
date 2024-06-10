@@ -11,31 +11,24 @@ void ScreenManager::AddScreen(Screens type, std::unique_ptr<Screen> screen) {
 }
 
 void ScreenManager::SetScreen(Screens type) {
-    if (actualScreen != EXIT) {
-        lastScreen = actualScreen;
-        actualScreen = type;
-        entered = false; // Ensure that the new screen gets properly opened
-    }
+    lastScreen = actualScreen;
+    actualScreen = type;
 }
 
 void ScreenManager::UpdateScreen() {
+    if (!screens[actualScreen]) return;
     if (!entered) {
         screens[actualScreen]->OpenClose();
         entered = true;
     }
 
     if (screens[actualScreen]->ShouldClose()) {
-        screens[actualScreen]->OpenClose(); // Close current screen
-
-        if (actualScreen == OPTIONS) {
-            actualScreen = lastScreen;
-        } else {
-            lastScreen = actualScreen;
-            actualScreen = screens[actualScreen]->GetScreen();
-        }
+        entered = false;
+        if (actualScreen == OPTIONS) actualScreen = lastScreen; 
+        else SetScreen(screens[actualScreen]->GetScreen());
     }
 
-    if(screens[actualScreen]) screens[actualScreen]->Tick();
+    if (screens[actualScreen]) screens[actualScreen]->Tick();
 }
 
 bool ScreenManager::ShouldClose() {
