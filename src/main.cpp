@@ -18,9 +18,10 @@ int main(){
   std::unique_ptr<Board> board = NULL;
 
   std::unique_ptr<Screen> screens[] = {
-    std::make_unique<Menu>(),
+    NULL,
     std::make_unique<Options>(),
     NULL,
+    std::make_unique<Menu>(),
     std::make_unique<Pause>(),
     std::make_unique<GameOver>(),
   };

@@ -1,5 +1,6 @@
 #include "../include/Menu.hpp"
 #include "../include/Settings.hpp"
+#include <iterator>
 #include <raylib.h>
 
 void Menu::Tick(){
@@ -30,17 +31,7 @@ void Menu::OptionsHandling(){
   }
   for (int i = 0; i < OPT_QTD_MENU; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
   if (IsKeyPressed(KEY_ENTER)) {
-    switch (currentSelected) {
-      case 0:
-        nextScreen = GAME;
-        break;
-      case 1:
-        nextScreen = OPTIONS;
-        break;
-      case 2:
-        nextScreen = EXIT;
-        break;
-    }
+    nextScreen = currentSelected;
     OpenClose();
     currentSelected = 0;
   }
