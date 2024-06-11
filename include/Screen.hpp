@@ -12,11 +12,11 @@ public:
   bool ShouldClose();
   void OpenClose();
   virtual void Tick();
-  int GetScreen();
+  Screens GetScreen();
 protected:
   bool shouldClose = true;
   virtual void Draw();
-  int nextScreen;
+  Screens nextScreen;
   Music music;
   std::string musicPath;
 };

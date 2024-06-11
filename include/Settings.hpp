@@ -1,15 +1,25 @@
 #pragma once
 #include "Vec2.hpp"
 #include <raylib.h>
+#include <fstream>
+#include <unordered_map>
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
+#ifndef ASSETS_PATH
+#define ASSETS_PATH "./assets/"
+#endif
+
 namespace settings {
+  extern std::ifstream f; 
+  extern json db; 
   extern int screenWidth;
   extern int screenHeight;
   constexpr int fps = 30;
-
   extern int cellSize;
   constexpr int padding = 2;
   extern Vec2<int> boardPosition;
-  constexpr Vec2<int> boardWidthHeight {10, 20};
+  extern Vec2<int> boardWidthHeight;
   constexpr KeyboardKey controls[4][6] = {
     {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z},
     {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z},
@@ -22,10 +32,10 @@ namespace settings {
 }
 
 enum Screens {
-  EXIT = -1,
-  MENU,
-  OPTIONS,
   GAME,
+  OPTIONS,
+  EXIT,
+  MENU,
   PAUSE,
   GAMEOVER,
 };
