@@ -172,8 +172,12 @@ void Options::HandleEnterKey() {
 }
 
 int Options::GetScreenSizeIndex() {
-  for (int i = 0; i < SCREEN_SIZE_QTD; i++) {
-    if (settings::screenSizes[i].GetX() == GetScreenWidth()) {
+  return GetScreenSizeIndex(GetScreenWidth());
+}
+
+int Options::GetScreenSizeIndex(int x){
+  for (int i = 0; i < SCREEN_SIZE_QTD; i++){
+    if(settings::screenSizes[i].GetX() == x){
       return i;
     }
   }

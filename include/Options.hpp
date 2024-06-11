@@ -13,7 +13,7 @@ public:
 private:
   void OptionsHandling();
   int currentSelected = 0;
-  int itemSelected[2] = {settings::db["CONTROL"], 0};
+  int itemSelected[2] = {settings::db["CONTROL"], GetScreenSizeIndex(settings::db["WINDOW_WIDTH"])};
   int itemQuantity[2] = {CONTROLS_QTD, SCREEN_SIZE_QTD};
   Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY};
   Color controlsColor[CONTROLS_QTD] = {RAYWHITE, GRAY, GRAY, GRAY};
@@ -33,6 +33,7 @@ private:
   int GetNextItemSelected(int);
   int GetPreviousItemSelected(int);
   int GetScreenSizeIndex();
+  int GetScreenSizeIndex(int);
   void HandleEnterKey();
   void UpdateColors();
   void HandleArrowKey(int);
