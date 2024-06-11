@@ -113,14 +113,16 @@ void Options::OptionsHandling(){
   if (IsKeyPressed(KEY_ENTER)) {
     switch(currentSelected){
       case 2:
-        if(itemSelected[CONTROL] != Game::control) Game::control = itemSelected[CONTROL];
+        if(itemSelected[CONTROL] != settings::db["CONTROL"]) {
+          settings::db["CONTROL"] = itemSelected[CONTROL];
+        }
         if(itemSelected[SCREENSIZE] != GetScreenSizeIndex())
           settings::UpdateWindowSize(settings::screenSizes[itemSelected[SCREENSIZE]]);
         return;
       case 3:
         OpenClose();
         currentSelected = 0;
-        itemSelected[CONTROL] = Game::control;
+        itemSelected[CONTROL] = settings::db["CONTROL"];
         itemSelected[SCREENSIZE] = GetScreenSizeIndex();
         break;
       default:

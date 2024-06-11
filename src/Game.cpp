@@ -2,11 +2,7 @@
 #include "../include/raylibFunctions.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
-#include <assert.h>
-#ifndef ASSETS_PATH
-#define ASSETS_PATH "./assets/"
-#endif // !ASSETS_PATH
-int Game::control = 0;
+
 Game::Game(Board board) :
   board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3")
 {
@@ -133,7 +129,7 @@ void Game::Update(){
 
 void Game::UpdateBoard(){
   if(!shape->WillCollideDown() && !(tickCount % speed)){ shape->Fall(); }
-  auto keyPressed = ray_functions::GetAction(control);
+  auto keyPressed = ray_functions::GetAction(settings::db["CONTROL"]);
   int fallen;
   switch(keyPressed){
     case INSTANTFALL:
@@ -165,7 +161,7 @@ void Game::UpdateBoard(){
       break;
   }
   if (!(tickCount%3)){
-    auto keyDown = ray_functions::GetKeyDown(control);
+    auto keyDown = ray_functions::GetKeyDown(settings::db["CONTROL"]);
     switch(keyDown){
       case RIGHT:
         if (!shape->WillCollideRight()){

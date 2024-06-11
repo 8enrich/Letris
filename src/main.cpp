@@ -30,7 +30,9 @@ int main() {
         screenManager.ResetGameScreenIfNeeded(board);
         screenManager.UpdateScreen();
     }
-
+    std::ofstream o(std::string(ASSETS_PATH)+ "user_settings.json");
+    o << std::setw(4) << settings::db << std::endl;
+    
     CloseAudioDevice();
     return 0;
 }
