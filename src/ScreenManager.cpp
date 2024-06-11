@@ -26,9 +26,10 @@ void ScreenManager::UpdateScreen() {
         entered = false;
         if (actualScreen == OPTIONS) actualScreen = lastScreen; 
         else SetScreen(screens[actualScreen]->GetScreen());
+        return;
     }
 
-    if (screens[actualScreen]) screens[actualScreen]->Tick();
+    screens[actualScreen]->Tick();
 }
 
 bool ScreenManager::ShouldClose() {
@@ -44,6 +45,7 @@ void ScreenManager::ResetGameScreenIfNeeded(std::unique_ptr<Board>& board) {
         board = std::make_unique<Board>(settings::boardPosition, settings::boardWidthHeight,
                                         settings::cellSize, settings::padding);
         screens[GAME] = std::make_unique<Game>(*board);
+        lastScreen = GAME;
     }
 }
 

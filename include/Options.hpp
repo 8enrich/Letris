@@ -13,13 +13,19 @@ public:
 private:
   void OptionsHandling();
   int currentSelected = 0;
-  int itemSelected[2] = {0, 0};
+  int itemSelected[2] = {settings::db["CONTROL"], 0};
   int itemQuantity[2] = {CONTROLS_QTD, SCREEN_SIZE_QTD};
   Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY};
   Color controlsColor[CONTROLS_QTD] = {RAYWHITE, GRAY, GRAY, GRAY};
   Color screenSizesColor[SCREEN_SIZE_QTD] = {RAYWHITE, GRAY, GRAY};
   void Draw() override;
+  void DrawHeader();
+  void DrawButtons();
   void DrawControls();
+  void DrawSectionHeader(const char *, float);
+  int CalculateTotalTextWidth();
+  void DrawColumns(int, int, int);
+  void DrawControlOptions(int, int, int);
   void DrawScreenSize();
   void DrawArrows(float, Color);
   int move[2] = {0, 0};
@@ -27,6 +33,9 @@ private:
   int GetNextItemSelected(int);
   int GetPreviousItemSelected(int);
   int GetScreenSizeIndex();
+  void HandleEnterKey();
+  void UpdateColors();
+  void HandleArrowKey(int);
   float fontSizes[2] = {(float)1/20, (float)1/25};
   const char *columns[NUM_COLS] = {"Rotate CW", "Left", "Down", "Right", "Instant Fall", "Rotate ACW"};
   const char *controls[CONTROLS_QTD][NUM_COLS] = {
