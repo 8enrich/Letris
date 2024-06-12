@@ -111,8 +111,8 @@ void Board::DrawStats(int score, int level, int lines) const{
   for(auto item = mapa.begin(); item != mapa.end(); i++, ++item){
     int y = 10 + i * 3;
     const char *numStr = TextFormat("%d", item->second);
-    int textWidth = MeasureText(numStr, 20);
-    double xPos = screenPos.GetX() - cellSize*3.5 + cellSize - (textWidth / 2);
+    int textWidth = MeasureText(numStr, screenHeight * 1/25);
+    double xPos = screenPos.GetX() - cellSize*4 + (MeasureText(item->first.c_str(), screenHeight * 1/30) - textWidth)/2;
     double yPos = screenPos.GetY() + (cellSize*(y + 1));
     ray_functions::DrawText((item->first).c_str(), screenPos - Vec2<int>{cellSize*4, -(cellSize*y)},
         screenHeight * 1/30, RAYWHITE);

@@ -4,7 +4,7 @@
 
 #define CONTROLS_QTD 4
 #define SCREEN_SIZE_QTD 3
-#define OPT_QTD_OPTIONS 4
+#define OPT_QTD_OPTIONS 5
 #define NUM_COLS 6
 
 class Options : public Screen {
@@ -13,9 +13,9 @@ public:
 private:
   void OptionsHandling();
   int currentSelected = 0;
-  int itemSelected[2] = {settings::db["CONTROL"], GetScreenSizeIndex(settings::db["WINDOW_WIDTH"])};
+  int itemSelected[2] = {settings::db["CONTROL"], GetScreenSizeIndex()};
   int itemQuantity[2] = {CONTROLS_QTD, SCREEN_SIZE_QTD};
-  Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY};
+  Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY, GRAY};
   Color controlsColor[CONTROLS_QTD] = {RAYWHITE, GRAY, GRAY, GRAY};
   Color screenSizesColor[SCREEN_SIZE_QTD] = {RAYWHITE, GRAY, GRAY};
   void Draw() override;
@@ -28,12 +28,13 @@ private:
   void DrawControlOptions(int, int, int);
   void DrawScreenSize();
   void DrawArrows(float, Color);
+  void DrawVolume();
   int move[2] = {0, 0};
   int speed = 0;
+  int volume = settings::db["VOLUME"];
   int GetNextItemSelected(int);
   int GetPreviousItemSelected(int);
   int GetScreenSizeIndex();
-  int GetScreenSizeIndex(int);
   void HandleEnterKey();
   void UpdateColors();
   void HandleArrowKey(int);

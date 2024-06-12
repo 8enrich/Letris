@@ -20,6 +20,7 @@ void Options::Draw() {
   DrawHeader();
   DrawControls();
   DrawScreenSize();
+  DrawVolume();
   DrawButtons();
 }
 
@@ -29,8 +30,8 @@ void Options::DrawHeader() {
 
 void Options::DrawButtons() {
   float x = (float)1/2, y = (float)1/1.4, lineDistance = (float)5/42;
-  ray_functions::DrawFormatedText("Aplicar", Vec2<double>{x, y}, fontSizes[0], optionsColor[2]);
-  ray_functions::DrawFormatedText("Voltar", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[3]);
+  ray_functions::DrawFormatedText("Aplicar", Vec2<double>{x, y}, fontSizes[0], optionsColor[3]);
+  ray_functions::DrawFormatedText("Voltar", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[4]);
 }
 
 void Options::DrawControls() {
@@ -106,6 +107,18 @@ void Options::DrawScreenSize() {
   if (stop) move[1] = 0;
 }
 
+void Options::DrawVolume(){
+  int width = settings::screenWidth, height = settings::screenHeight;
+  float xBegin = (float)width/2 - (float)width/8, xEnd = (float)width/2 + (float)width/8, y = height/1.8;
+  DrawSectionHeader("Volume", (float)1/2.05);
+  DrawArrows((float)1/1.8, optionsColor[2]);
+  DrawLineEx((Vector2){xBegin, y}, (Vector2){xEnd, y}, 5.0f, optionsColor[2]);
+  DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, y},
+      (float)settings::screenHeight/100, optionsColor[2]);
+  ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{(float)1/2 + (float)1/6, (float)1/1.85},
+      fontSizes[1], optionsColor[2]);
+}
+
 void Options::DrawArrows(float y, Color color) {
   ray_functions::DrawFormatedText("<", Vec2<double>{(float)1/36, y}, fontSizes[1], color);
   ray_functions::DrawFormatedText(">", Vec2<double>{(float)1/1.03, y}, fontSizes[1], color);
@@ -135,6 +148,10 @@ void Options::OptionsHandling() {
     currentSelected = (currentSelected + 1) % OPT_QTD_OPTIONS;
     break;
   }
+  if(currentSelected == 2){
+    if(IsKeyDown(KEY_RIGHT) && volume < 100) volume += 1;
+    if(IsKeyDown(KEY_LEFT) && volume > 0) volume -= 1;
+  }
   UpdateColors();
   HandleEnterKey();
 }
@@ -155,15 +172,24 @@ void Options::HandleEnterKey() {
   if (IsKeyPressed(KEY_ENTER)) {
     switch (currentSelected) {
       case 2:
+        if(volume != 0){
+          volume = 0;
+          break;
+        }
+        volume = settings::db["VOLUME"];
+        break;
+      case 3:
         if (itemSelected[CONTROL] != settings::db["CONTROL"]) settings::db["CONTROL"] = itemSelected[CONTROL];
         if (itemSelected[SCREENSIZE] != GetScreenSizeIndex())
           settings::UpdateWindowSize(settings::screenSizes[itemSelected[SCREENSIZE]]);
+        if(volume != settings::db["VOLUME"]) settings::db["VOLUME"] = volume;
         return;
-      case 3:
+      case 4:
         OpenClose();
         currentSelected = 0;
         itemSelected[CONTROL] = settings::db["CONTROL"];
         itemSelected[SCREENSIZE] = GetScreenSizeIndex();
+        volume = settings::db["VOLUME"];
         break;
       default:
         return;
@@ -172,12 +198,8 @@ void Options::HandleEnterKey() {
 }
 
 int Options::GetScreenSizeIndex() {
-  return GetScreenSizeIndex(GetScreenWidth());
-}
-
-int Options::GetScreenSizeIndex(int x){
   for (int i = 0; i < SCREEN_SIZE_QTD; i++){
-    if(settings::screenSizes[i].GetX() == x){
+    if(settings::screenSizes[i].GetX() == GetScreenWidth()){
       return i;
     }
   }
