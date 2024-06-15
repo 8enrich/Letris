@@ -7,6 +7,7 @@ int settings::screenHeight = db["WINDOW_HEIGHT"];
 Vec2<int> settings::boardPosition = {db["BOARD_POSITION"][0], db["BOARD_POSITION"][1]};
 int settings::cellSize = db["CELLSIZE"];
 Vec2<int> settings::boardWidthHeight {db["BOARD_RESOLUTION"][0], db["BOARD_RESOLUTION"][1]};
+int settings::volume = db["VOLUME"];
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
   screenHeight = newSize.GetY();

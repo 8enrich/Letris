@@ -8,7 +8,7 @@ Screen::Screen(std::string musicPath) : musicPath(musicPath){
     if(musicPath != ""){music = LoadMusicStream(musicPath.c_str());}
     if (IsMusicReady(music)){
       PlayMusicStream(music);
-      SetMusicVolume(music, 0.8);
+      SetMusicVolume(music, (float)settings::db["VOLUME"]/100);
     }
   }
 };

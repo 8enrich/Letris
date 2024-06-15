@@ -20,6 +20,7 @@ namespace settings {
   constexpr int padding = 2;
   extern Vec2<int> boardPosition;
   extern Vec2<int> boardWidthHeight;
+  extern int volume;
   constexpr KeyboardKey controls[4][6] = {
     {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z},
     {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z},
