@@ -13,7 +13,7 @@ public:
     void UpdateScreen();
     bool ShouldClose();
     Screens GetActualScreen() const;
-    void ResetGameScreenIfNeeded(std::unique_ptr<Board>& board);
+    void ResetGameScreenIfNeeded(Board *board);
 private:
     Screens actualScreen;
     Screens lastScreen;

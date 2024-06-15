@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include "Screen.hpp"
 
-#define OPT_QTD_PAUSE 2
+#define OPT_QTD_PAUSE 3
 
 class Pause : public Screen {
 public:
@@ -9,6 +9,6 @@ public:
 private:
   void OptionsHandling();
   int currentSelected = 0;
-  Color optionsColor[OPT_QTD_PAUSE] = {RAYWHITE, GRAY};
+  Color optionsColor[OPT_QTD_PAUSE] = {RAYWHITE, GRAY, GRAY};
   void Draw() override;
 };

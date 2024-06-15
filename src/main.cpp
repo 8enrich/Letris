@@ -17,7 +17,8 @@ int main() {
     InitAudioDevice();
     Window window{settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
 
-    std::unique_ptr<Board> board = nullptr;
+    Board board{settings::boardPosition, settings::boardWidthHeight,
+                                        settings::cellSize, settings::padding};
     ScreenManager screenManager;
     screenManager.AddScreen(GAME, nullptr);
     screenManager.AddScreen(OPTIONS, std::make_unique<Options>());
@@ -27,7 +28,7 @@ int main() {
     screenManager.AddScreen(GAMEOVER, std::make_unique<GameOver>());
     
     while (!screenManager.ShouldClose()) {
-        screenManager.ResetGameScreenIfNeeded(board);
+        screenManager.ResetGameScreenIfNeeded(&board);
         screenManager.UpdateScreen();
     }
     std::ofstream o(std::string(ASSETS_PATH)+ "user_settings.json");
