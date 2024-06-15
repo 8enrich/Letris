@@ -1,94 +1,217 @@
 #include "../include/Options.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
-#include <cstdio>
 
 void Options::Tick(){
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
+  int hasMoviment;
   do{
+    hasMoviment = move[0] || move[1];
     BeginDrawing();
     Draw();
     EndDrawing();
-  } while(move);
+  } while(hasMoviment);
   speed = 0;
 }
 
-void Options::Draw(){
+void Options::Draw() {
   ClearBackground(BLACK);
-  int lastSize = 0, distance = 0, x0 = settings::screenWidth/14, y0 = settings::screenHeight/5, fontSize = 20;
-  ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/20}, (float)1/fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("Voltar", Vec2<double>{(float)1/2, (float)1/1.2}, (float)1/fontSize, optionsColor[1]);
-  for(int i = 0; i < NUM_COLS; i++){
-    if(i) distance = lastSize + MeasureText(columns[i - 1], fontSize) - MeasureText("     ", fontSize);
-    lastSize = distance + x0;
-    DrawText(columns[i], lastSize, y0, fontSize, RAYWHITE);
+  factor = 1;
+  DrawHeader();
+  DrawControls();
+  DrawScreenSize();
+  DrawVolume();
+  DrawButtons();
+}
+
+void Options::DrawHeader() {
+  ray_functions::DrawFormatedText("OPÇÕES", Vec2<double>{(float)1/2, (float)1/20}, fontSizes[0], RAYWHITE);
+}
+
+void Options::DrawButtons() {
+  float x = (float)1/2, y = (float)1/1.4, lineDistance = (float)5/42;
+  ray_functions::DrawFormatedText("Aplicar", Vec2<double>{x, y}, fontSizes[0], optionsColor[3]);
+  ray_functions::DrawFormatedText("Voltar", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[4]);
+}
+
+void Options::DrawControls() {
+  DrawSectionHeader("Controles", y0);
+
+  int width = settings::screenWidth, height = settings::screenHeight;
+  int y = height * y0, distance = height * lineDistance;
+  int totalTextWidth = CalculateTotalTextWidth();
+  int margin = (width - totalTextWidth) / (NUM_COLS + 1);
+  DrawColumns(y + factor++ * distance, margin);
+  DrawControlOptions(y + factor++ * distance, margin);
+}
+
+void Options::DrawSectionHeader(const char* text, float yPos) {
+  ray_functions::DrawFormatedText(text, Vec2<double>{(float)1/2, yPos}, fontSizes[0], RAYWHITE);
+}
+
+int Options::CalculateTotalTextWidth() {
+  int totalTextWidth = 0;
+  int height = settings::screenHeight;
+  for (int i = 0; i < NUM_COLS; i++) {
+      totalTextWidth += MeasureText(columns[i], height * fontSizes[1]);
   }
-  for(int i = 0; i < CONTROLS_QTD; i++){
-    const char *selected = "";
-    if(i == Game::control) selected = "Y";
-    controls[i][6] = selected;
-  }
-  lastSize = 0, distance = 0;
-  for (int i = 0, x; i < NUM_COLS; i++) {
-    if(i) distance = lastSize + MeasureText(columns[i - 1], fontSize) - MeasureText("     ", fontSize);
-    lastSize = distance + x0;
-    x = lastSize + (MeasureText(columns[i], fontSize) - MeasureText(controls[controlSelected][i], fontSize))/2;
-    if(!move){
-      DrawText(controls[controlSelected][i], x, LINE_DISTANCE + y0, fontSize, controlsColor[controlSelected]);
-      continue;
-    }
-    int previous = (move > 0)? GetPreviousControlSelected() : GetNextControlSelected();
-    ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[controlSelected][i], x, LINE_DISTANCE + y0, speed,
-        fontSize, controlsColor[previous]);
-    if((x - speed + settings::screenWidth < x && i == NUM_COLS - 1) ||
-        x - speed - settings::screenWidth > x) move = 0;
-    speed += ANIMATION_SPEED * move;
+  return totalTextWidth;
+}
+
+void Options::DrawColumns(int y, int margin) {
+  int height = settings::screenHeight;
+  int x0 = margin, textSize;
+  for (int i = 0, x = x0; i < NUM_COLS; i++) {
+      textSize = MeasureText(columns[i], height * fontSizes[1]);
+      DrawText(columns[i], x, y, height * fontSizes[1], RAYWHITE);
+      x += textSize + margin;
   }
 }
 
-int Options::GetNextControlSelected(){
-  return (controlSelected + 1)%CONTROLS_QTD;
+void Options::DrawControlOptions(int y, int margin) {
+  int height = settings::screenHeight;
+  int x0 = margin;
+  for (int i = 0, posX, x = x0; i < NUM_COLS; i++) {
+      int textSize = MeasureText(columns[i], height * fontSizes[1]);
+      posX = x + (textSize - MeasureText(controls[itemSelected[CONTROL]][i], height * fontSizes[1])) / 2;
+      if (!move[0]) {
+          DrawArrows(y, optionsColor[0]);
+          DrawText(controls[itemSelected[CONTROL]][i], posX, y, height * fontSizes[1], optionsColor[0]);
+          x += textSize + margin;
+          continue;
+      }
+      int previous = (move[0] > 0) ? GetPreviousItemSelected(CONTROLS_QTD) : GetNextItemSelected(CONTROLS_QTD);
+      speed += 30 * move[0];
+      bool stop = ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[itemSelected[CONTROL]][i], posX,
+          y, speed, height * fontSizes[1], GRAY);
+      x += textSize + margin;
+      if (stop) move[0] = 0;
+  }
 }
 
-int Options::GetPreviousControlSelected(){
-  return (controlSelected + (CONTROLS_QTD * 2 - 1))%CONTROLS_QTD;
+void Options::DrawScreenSize() {
+  DrawSectionHeader("Tamanho da tela", y0 + factor++ * lineDistance);
+
+  const char* text = screenSizes[itemSelected[SCREENSIZE]];
+  float x = (float)1/2, y = y0 + factor++ * lineDistance;
+  if (!move[1]) {
+      DrawArrows(y, optionsColor[1]);
+      ray_functions::DrawFormatedText(text, Vec2<double>{x, y}, fontSizes[1], optionsColor[1]);
+      return;
+  }
+  bool stop;
+  int previous = (move[1] > 0) ? GetPreviousItemSelected(SCREEN_SIZE_QTD) : GetNextItemSelected(SCREEN_SIZE_QTD);
+  speed += 100 * move[1];
+  stop = ray_functions::HorizontalSlideAnimation(screenSizes[previous], text, x, y,
+      speed, fontSizes[1], GRAY);
+  if (stop) move[1] = 0;
 }
 
-void Options::OptionsHandling(){
+void Options::DrawVolume(){
+  DrawSectionHeader("Volume", y0 + factor++ * lineDistance);
+
+  int width = settings::screenWidth, height = settings::screenHeight;
+  float xBegin = (float)width/2 - (float)width/8, xEnd = (float)width/2 + (float)width/8,
+        y = y0 + factor++ * lineDistance, y1 = y + (float)1/50;
+  DrawArrows(y, optionsColor[2]);
+  DrawLineEx((Vector2){xBegin, height * y1}, (Vector2){xEnd, height * y1}, (float)height/200, optionsColor[2]);
+  DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1},
+      (float)height/100, optionsColor[2]);
+  ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{(float)1/2 + (float)1/6, y},
+      fontSizes[1], optionsColor[2]);
+}
+
+void Options::DrawArrows(double y, Color color) {
+  ray_functions::DrawFormatedText("<", Vec2<double>{(float)1/36, y}, fontSizes[1], color);
+  ray_functions::DrawFormatedText(">", Vec2<double>{(float)1/1.03, y}, fontSizes[1], color);
+}
+
+void Options::DrawArrows(int y, Color color){
+  int width = settings::screenWidth, height = settings::screenHeight;
+  int xLeft = width/36, xRight = width/1.03;
+  DrawText("<", xLeft, y, height * fontSizes[1], color);
+  DrawText(">", xRight, y, height * fontSizes[1], color);
+}
+
+int Options::GetNextItemSelected(int quantity) {
+  return (itemSelected[currentSelected] + 1) % quantity;
+}
+
+int Options::GetPreviousItemSelected(int quantity) {
+  return (itemSelected[currentSelected] + quantity - 1) % quantity;
+}
+
+void Options::OptionsHandling() {
   auto keypressed = GetKeyPressed();
   switch (keypressed) {
-    case KEY_RIGHT:
-      if(!currentSelected){
-        controlSelected = GetNextControlSelected();
-        move = 1;
-      }
-      break;
-    case KEY_LEFT:
-      if(!currentSelected){
-        controlSelected = GetPreviousControlSelected();
-        move = -1;
-      }
-      break;
-    case KEY_UP:
-      currentSelected = (currentSelected + 1)%OPT_QTD_OPTIONS;
-      break;
-    case KEY_DOWN:
-      currentSelected = (currentSelected + (OPT_QTD_OPTIONS * 2 - 1))%OPT_QTD_OPTIONS;
-      break;
+  case KEY_RIGHT:
+    HandleArrowKey(1);
+    break;
+  case KEY_LEFT:
+    HandleArrowKey(-1);
+    break;
+  case KEY_UP:
+    currentSelected = (currentSelected + OPT_QTD_OPTIONS - 1) % OPT_QTD_OPTIONS;
+    break;
+  case KEY_DOWN:
+    currentSelected = (currentSelected + 1) % OPT_QTD_OPTIONS;
+    break;
   }
-  for (int i = 0; i < OPT_QTD_OPTIONS; i++) optionsColor[i] = (i == currentSelected)? RAYWHITE : GRAY;
-  for (int i = 0; i < CONTROLS_QTD; i++) controlsColor[i] = (i == controlSelected) ? optionsColor[0] : GRAY;
+  if(currentSelected == 2){
+    if(IsKeyDown(KEY_RIGHT) && volume < 100) volume += 1;
+    if(IsKeyDown(KEY_LEFT) && volume > 0) volume -= 1;
+  }
+  UpdateColors();
+  HandleEnterKey();
+}
+
+void Options::HandleArrowKey(int direction) {
+  if (currentSelected < 2) {
+    itemSelected[currentSelected] = (direction > 0) ? GetNextItemSelected(itemQuantity[currentSelected]) : GetPreviousItemSelected(itemQuantity[currentSelected]);
+    move[currentSelected] = direction;
+  }
+}
+
+void Options::UpdateColors() {
+  for (int i = 0; i < OPT_QTD_OPTIONS; i++) optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY;
+  for (int i = 0; i < CONTROLS_QTD; i++) controlsColor[i] = (i == itemSelected[currentSelected]) ? optionsColor[0] : GRAY;
+}
+
+void Options::HandleEnterKey() {
   if (IsKeyPressed(KEY_ENTER)) {
-    switch(currentSelected){
-      case 0:
-        Game::control = controlSelected;
+    switch (currentSelected) {
+      case 2:
+        if(volume != 0){
+          volume = 0;
+          break;
+        }
+        volume = settings::db["VOLUME"];
         break;
-      case 1:
-        nextScreen = MENU;
+      case 3:
+        if (itemSelected[CONTROL] != settings::db["CONTROL"]) settings::db["CONTROL"] = itemSelected[CONTROL];
+        if (itemSelected[SCREENSIZE] != GetScreenSizeIndex())
+          settings::UpdateWindowSize(settings::screenSizes[itemSelected[SCREENSIZE]]);
+        if(volume != settings::db["VOLUME"]) settings::db["VOLUME"] = volume;
+        return;
+      case 4:
         OpenClose();
         currentSelected = 0;
-        controlSelected = Game::control;
+        itemSelected[CONTROL] = settings::db["CONTROL"];
+        itemSelected[SCREENSIZE] = GetScreenSizeIndex();
+        volume = settings::db["VOLUME"];
         break;
+      default:
+        return;
     }
   }
+}
+
+int Options::GetScreenSizeIndex() {
+  for (int i = 0; i < SCREEN_SIZE_QTD; i++){
+    if(settings::screenSizes[i].GetX() == GetScreenWidth()){
+      return i;
+    }
+  }
+  return 0;
 }

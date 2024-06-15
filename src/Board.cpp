@@ -86,18 +86,21 @@ void Board::DrawBorder() const {
 }
 
 void Board::DrawHold() const{
-  ray_functions::DrawText("Hold", screenPos - Vec2<int>{cellSize*4, cellSize*2}, 20, RAYWHITE);
+  int screenHeight = settings::screenHeight;
+  ray_functions::DrawText("Hold", screenPos - Vec2<int>{cellSize*4, cellSize*2}, screenHeight * 1/30, RAYWHITE);
   ray_functions::DrawRectangleLinesEx(screenPos - Vec2<int>{cellSize*6, cellSize/2},
       Vec2<int>{cellSize*6, cellSize*4}, cellSize/2, RAYWHITE);
 }
 
 void Board::DrawNext() const{
-  ray_functions::DrawText("Next",screenPos + Vec2<int>{cellSize*12, -cellSize*2}, 20, RAYWHITE);
+  int screenHeight = settings::screenHeight;
+  ray_functions::DrawText("Next",screenPos + Vec2<int>{cellSize*12, -cellSize*2}, screenHeight * 1/30, RAYWHITE);
   ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)(-cellSize/2)},
       Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
 }
 
 void Board::DrawStats(int score, int level, int lines) const{
+  int screenHeight = settings::screenHeight;
   std::unordered_map<std::string, int> mapa =
   {
     {"Lines", lines},
@@ -108,11 +111,12 @@ void Board::DrawStats(int score, int level, int lines) const{
   for(auto item = mapa.begin(); item != mapa.end(); i++, ++item){
     int y = 10 + i * 3;
     const char *numStr = TextFormat("%d", item->second);
-    int textWidth = MeasureText(numStr, 20);
-    double xPos = screenPos.GetX() - cellSize*3.5 + cellSize - (textWidth / 2);
+    int textWidth = MeasureText(numStr, screenHeight * 1/25);
+    double xPos = screenPos.GetX() - cellSize*4 + (MeasureText(item->first.c_str(), screenHeight * 1/30) - textWidth)/2;
     double yPos = screenPos.GetY() + (cellSize*(y + 1));
-    ray_functions::DrawText((item->first).c_str(), screenPos - Vec2<int>{cellSize*4, -(cellSize*y)}, 20, RAYWHITE);
-    ray_functions::DrawText(numStr, Vec2<double>{xPos,yPos}, 20, RAYWHITE);
+    ray_functions::DrawText((item->first).c_str(), screenPos - Vec2<int>{cellSize*4, -(cellSize*y)},
+        screenHeight * 1/30, RAYWHITE);
+    ray_functions::DrawText(numStr, Vec2<double>{xPos,yPos}, screenHeight * 1/25, RAYWHITE);
   }
 }
 

@@ -1,12 +1,13 @@
 #include "../include/Menu.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
-
+#include <iostream>
 void Menu::Tick(){
   OptionsHandling();
   BeginDrawing();
   Draw();
   EndDrawing();
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
 }
 
 void Menu::Draw(){
@@ -29,17 +30,8 @@ void Menu::OptionsHandling(){
   }
   for (int i = 0; i < OPT_QTD_MENU; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
   if (IsKeyPressed(KEY_ENTER)) {
-    switch (currentSelected) {
-      case 0:
-        nextScreen = GAME;
-        break;
-      case 1:
-        nextScreen = OPTIONS;
-        break;
-      case 2:
-        nextScreen = EXIT;
-        break;
-    }
+    printf("entrou");
+    nextScreen = static_cast<Screens>(currentSelected);
     OpenClose();
     currentSelected = 0;
   }

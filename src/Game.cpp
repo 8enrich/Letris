@@ -1,15 +1,10 @@
 #include "../include/Game.hpp"
 #include "../include/raylibFunctions.hpp"
 #include "../include/Settings.hpp"
-#include <cstdio>
 #include <raylib.h>
-#include <assert.h>
-#include <cstdlib>
-
-int Game::control = 0;
 
 Game::Game(Board board) :
-  board(board)
+  board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3")
 {
   shape = NewShape();
   SetNextShapes();
@@ -29,6 +24,7 @@ void Game::Tick(){
     OpenClose();
     return;
   }
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   BeginDrawing();
   Game::Update();
   if(!HasLost()){
@@ -133,7 +129,7 @@ void Game::Update(){
 
 void Game::UpdateBoard(){
   if(!shape->WillCollideDown() && !(tickCount % speed)){ shape->Fall(); }
-  auto keyPressed = ray_functions::GetAction(control);
+  auto keyPressed = ray_functions::GetAction(settings::db["CONTROL"]);
   int fallen;
   switch(keyPressed){
     case INSTANTFALL:
@@ -165,7 +161,7 @@ void Game::UpdateBoard(){
       break;
   }
   if (!(tickCount%3)){
-    auto keyDown = ray_functions::GetKeyDown(control);
+    auto keyDown = ray_functions::GetKeyDown(settings::db["CONTROL"]);
     switch(keyDown){
       case RIGHT:
         if (!shape->WillCollideRight()){
