@@ -13,6 +13,7 @@ public:
   void OpenClose();
   virtual void Tick();
   Screens GetScreen();
+  Music GetMusic();
 protected:
   bool shouldClose = true;
   virtual void Draw();

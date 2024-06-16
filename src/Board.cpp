@@ -15,8 +15,8 @@ void Board::Cell::SetColor(Color color) {
 Color Board::Cell::GetColor() const{
   return c;
 }
-Board::Board (Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padding) : 
-    screenPos(screenPos), width(widthHeight.GetX()), height(widthHeight.GetY()), cellSize(cellSize), padding(padding) 
+Board::Board (Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padding) :
+    screenPos(screenPos), width(widthHeight.GetX()), height(widthHeight.GetY()), cellSize(cellSize), padding(padding)
   {
     assert(width > 0 && height > 0);
     assert(cellSize > 0);
@@ -29,7 +29,7 @@ Board::Board (Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padd
   }
   
 void Board::SetCell(Vec2<int> pos, Color c){
-  const int x = pos.GetX(); 
+  const int x = pos.GetX();
   const int y = pos.GetY();
   if(x >= 0 && y >= 0 && x < width && y < height)
     GetCell(pos)->SetColor(c);
@@ -39,7 +39,7 @@ void Board::DrawCell(Vec2<int> pos) const{
   DrawCell(pos, c);
 }
 
-void Board::DrawCell(Vec2<int> pos, Color color) const {
+void Board::DrawCell(Vec2<int> pos, Color color) const{
   const int x = pos.GetX();
   const int y = pos.GetY();
 
@@ -50,7 +50,7 @@ void Board::DrawCell(Vec2<int> pos, Color color) const {
   }
 }
 
-void Board::DrawOffCell(Vec2<int> pos, Color color) const {
+void Board::DrawOffCell(Vec2<int> pos, Color color) const{
   const int x = pos.GetX();
   const int y = pos.GetY();
 
@@ -61,14 +61,14 @@ void Board::DrawOffCell(Vec2<int> pos, Color color) const {
   }
 }
 
-void Board::DrawCellAnyLocal(Vec2<double> pos, Color color) const {
+void Board::DrawCellAnyLocal(Vec2<double> pos, Color color) const{
   double doubleCellSize = (double) cellSize;
   Vec2<double> topLeft = Vec2<double>(screenPos) + padding + (pos * doubleCellSize);
   ray_functions::DrawRectangle(topLeft, Vec2<double>{doubleCellSize - padding}, color);
   return;
 }
 
-void Board::Draw() const {
+void Board::Draw() const{
   for (int iY = 0; iY < height; ++iY){
     for (int iX = 0; iX < width; ++iX){
       if(CellExists({iX, iY}))
@@ -80,7 +80,7 @@ void Board::Draw() const {
   DrawNext();
 }
 
-void Board::DrawBorder() const {
+void Board::DrawBorder() const{
   ray_functions::DrawRectangleLinesEx(screenPos - (cellSize/2),
       Vec2<int>{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }
@@ -147,4 +147,9 @@ Board::Cell *Board::GetCell(Vec2<int> pos){
 
 const Board::Cell *Board::GetCell(Vec2<int> pos) const{
   return &cells[pos.GetY()*width + pos.GetX()];
+}
+
+void Board::ResetBoard(){
+  cellSize = settings::cellSize;
+  screenPos = settings::boardPosition;
 }

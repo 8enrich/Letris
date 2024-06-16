@@ -3,7 +3,7 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
-Game::Game(Board board) :
+Game::Game(Board *board) :
   board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3")
 {
   shape = NewShape();
@@ -38,8 +38,8 @@ void Game::Tick(){
 }
 
 bool Game::HasLost(){
-  for(int x = 0, width = board.GetWidth(); x < width; x++){
-    if(board.CellExists({x, 0})){ return true; }
+  for(int x = 0, width = board->GetWidth(); x < width; x++){
+    if(board->CellExists({x, 0})){ return true; }
   }
   return false;
 }
@@ -56,12 +56,12 @@ Shape *Game::NextShape(){
 }
 
 void Game::ClearLines(){
-  int width = board.GetWidth(), height = board.GetHeight(), index = 0;
+  int width = board->GetWidth(), height = board->GetHeight(), index = 0;
   for (int y = 0; y < height; y++){
     for (int x = 0; x < width; x++){
-      if(!board.CellExists({x, y})){ break; }
+      if(!board->CellExists({x, y})){ break; }
       if(x + 1 != width){ continue; }
-      for (int i = 0; i < width; i++){ board.RemoveCell({i, y}); }
+      for (int i = 0; i < width; i++){ board->RemoveCell({i, y}); }
       cleanedLines[index++] = y;
     }
   }
@@ -75,15 +75,15 @@ void Game::DropLines(){
 }
 
 void Game::DropLine(int line) {
-  int width = board.GetWidth();
+  int width = board->GetWidth();
   bool haveCell;
   for (int y = line - 1; y > 0; y--) {
     haveCell = false;
     for (int x = 0; x < width; x++) {
-      if (board.CellExists({x, y})){
+      if (board->CellExists({x, y})){
         haveCell = true;
-        board.SetCell({x, y + 1}, board.GetCellColor({x, y}));
-        board.RemoveCell({x, y});
+        board->SetCell({x, y + 1}, board->GetCellColor({x, y}));
+        board->RemoveCell({x, y});
       }
     }
     if(!haveCell){ return; }
@@ -101,7 +101,7 @@ void Game::UpdateShape(){
         bool cell = shape->GetShapeRotation(x, y);
         if(cell){
           cellPosition = shape->GetBoardPos() + Vec2<int>{x, y};
-          board.SetCell(cellPosition, shape->GetColor());
+          board->SetCell(cellPosition, shape->GetColor());
         }
       }
     }
@@ -114,8 +114,8 @@ void Game::UpdateShape(){
 
 void Game::Draw(){
   ClearBackground(BLACK);
-  board.Draw();
-  board.DrawStats(score, level, cleanedLinesCount);
+  board->Draw();
+  board->DrawStats(score, level, cleanedLinesCount);
   if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
   shape->Draw();

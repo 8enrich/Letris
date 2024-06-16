@@ -29,4 +29,8 @@ void Screen::Draw(){}
 
 void Screen::Tick(){}
 
+Music Screen::GetMusic(){
+  return music;
+}
+
 Screens Screen::GetScreen(){ return nextScreen;}
