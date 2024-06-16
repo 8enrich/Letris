@@ -5,13 +5,13 @@
 void Options::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
-  int hasMoviment;
+  int hasMovement;
   do{
-    hasMoviment = move[0] || move[1];
+    hasMovement = move[0] || move[1];
     BeginDrawing();
     Draw();
     EndDrawing();
-  } while(hasMoviment);
+  } while(hasMovement);
   speed = 0;
 }
 
@@ -26,17 +26,17 @@ void Options::Draw() {
 }
 
 void Options::DrawHeader() {
-  ray_functions::DrawFormatedText("OPÇÕES", Vec2<double>{(float)1/2, (float)1/20}, fontSizes[0], RAYWHITE);
+  ray_functions::DrawFormatedText("OPTIONS", Vec2<double>{1.0f/2, 1.0f/20}, fontSizes[0], RAYWHITE);
 }
 
 void Options::DrawButtons() {
-  float x = (float)1/2, y = (float)1/1.4, lineDistance = (float)5/42;
-  ray_functions::DrawFormatedText("Aplicar", Vec2<double>{x, y}, fontSizes[0], optionsColor[3]);
-  ray_functions::DrawFormatedText("Voltar", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[4]);
+  float x = 1.0f/2, y = 1.0f/1.4, lineDistance = 5.0f/42;
+  ray_functions::DrawFormatedText("Apply", Vec2<double>{x, y}, fontSizes[0], optionsColor[3]);
+  ray_functions::DrawFormatedText("Back", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[4]);
 }
 
 void Options::DrawControls() {
-  DrawSectionHeader("Controles", y0);
+  DrawSectionHeader("Controls", y0);
 
   int width = settings::screenWidth, height = settings::screenHeight;
   int y = height * y0, distance = height * lineDistance;
@@ -47,7 +47,7 @@ void Options::DrawControls() {
 }
 
 void Options::DrawSectionHeader(const char* text, float yPos) {
-  ray_functions::DrawFormatedText(text, Vec2<double>{(float)1/2, yPos}, fontSizes[0], RAYWHITE);
+  ray_functions::DrawFormatedText(text, Vec2<double>{1.0f/2, yPos}, fontSizes[0], RAYWHITE);
 }
 
 int Options::CalculateTotalTextWidth() {
@@ -91,7 +91,7 @@ void Options::DrawControlOptions(int y, int margin) {
 }
 
 void Options::DrawScreenSize() {
-  DrawSectionHeader("Tamanho da tela", y0 + factor++ * lineDistance);
+  DrawSectionHeader("Screen Resolution", y0 + factor++ * lineDistance);
 
   const char* text = screenSizes[itemSelected[SCREENSIZE]];
   float x = (float)1/2, y = y0 + factor++ * lineDistance;
@@ -118,13 +118,13 @@ void Options::DrawVolume(){
   DrawLineEx((Vector2){xBegin, height * y1}, (Vector2){xEnd, height * y1}, (float)height/200, optionsColor[2]);
   DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1},
       (float)height/100, optionsColor[2]);
-  ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{(float)1/2 + (float)1/6, y},
+  ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{1.0f/2 + 1.0f/6, y},
       fontSizes[1], optionsColor[2]);
 }
 
 void Options::DrawArrows(double y, Color color) {
-  ray_functions::DrawFormatedText("<", Vec2<double>{(float)1/36, y}, fontSizes[1], color);
-  ray_functions::DrawFormatedText(">", Vec2<double>{(float)1/1.03, y}, fontSizes[1], color);
+  ray_functions::DrawFormatedText("<", Vec2<double>{1.0f/36, y}, fontSizes[1], color);
+  ray_functions::DrawFormatedText(">", Vec2<double>{1.0f/1.03, y}, fontSizes[1], color);
 }
 
 void Options::DrawArrows(int y, Color color){
