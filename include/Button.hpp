@@ -3,8 +3,13 @@
 #include "Vec2.hpp"
 #include <string>
 
-class Button {
+enum class ButtonTypes {
+  SCREEN,
+  OPTIONS,
+  APPLY
+};
 
+class Button {
 public:
   Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition);
   void Draw();
@@ -12,9 +17,8 @@ public:
   void Select();
   void Unselect();
   Screens Click();
-  bool ClickBool();
-
-private:
+  ButtonTypes type;
+protected:
   bool isMouseHovering();
   bool isButtonClicked();
   bool isButtonClickedByMouse();
@@ -28,5 +32,4 @@ private:
   float fontSize;
   Vec2<float> buttonWidthHeight;
   Vec2<double> buttonPosition;
-
 };

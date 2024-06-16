@@ -28,7 +28,5 @@
   bool Button::isButtonClicked(){
     return isClicked;
   }
-  bool Button::isButtonClickedByMouse(){
-
-  }
+  bool Button::isButtonClickedByMouse(){}
 
