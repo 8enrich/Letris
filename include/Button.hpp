@@ -4,8 +4,8 @@
 #include <string>
 
 class Button {
+
 public:
-  Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition, Screens screen, bool isSelected=false);
   Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition);
   void Draw();
   void Tick();
@@ -17,8 +17,10 @@ public:
 private:
   bool isMouseHovering();
   bool isButtonClicked();
+  bool isButtonClickedByMouse();
   bool hasBorder;
   bool isSelected;
+  bool isClicked;
   Screens screen;
   Color selectedColor = RAYWHITE;
   Color unselectedColor = GRAY;
@@ -26,4 +28,5 @@ private:
   float fontSize;
   Vec2<float> buttonWidthHeight;
   Vec2<double> buttonPosition;
+
 };
