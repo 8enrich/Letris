@@ -43,12 +43,13 @@ private:
   void UpdateColors();
   void HandleArrowKey(int);
   float fontSizes[2] = {(float)1/20, (float)1/25};
-  const char *columns[NUM_COLS] = {"Rotate CW", "Left", "Down", "Right", "Instant Fall", "Rotate ACW"};
-  const char *controls[CONTROLS_QTD][NUM_COLS] = {
-    {"W", "A", "S", "D", "SPACE", "Z"},
-    {"^", "<", ">", "v", "SPACE", "Z"},
-    {"I", "J", "K", "L", "SPACE", "Z"},
-    {"K", "H", "L", "J", "SPACE", "Z"},
+  std::string GetText(const std::string textTotal, size_t& pos);
+  std::string columns = "Rotate CW,Left,Down,Right,Instant Fall,Rotate ACW";
+  std::string controls[CONTROLS_QTD] = {
+    "W,A,S,D,SPACE,Z",
+    "^,<,>,v,SPACE,Z",
+    "I,J,K,L,SPACE,Z",
+    "K,H,L,J,SPACE,Z",
   };
   const char *screenSizes[SCREEN_SIZE_QTD] = {"800x600", "1080x720", "1366x768"};
   enum itens {

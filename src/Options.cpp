@@ -53,40 +53,61 @@ void Options::DrawSectionHeader(const char* text, float yPos) {
 int Options::CalculateTotalTextWidth() {
   int totalTextWidth = 0;
   int height = settings::screenHeight;
+  std::string column;
+  size_t columnIndex = 0;
   for (int i = 0; i < NUM_COLS; i++) {
-      totalTextWidth += MeasureText(columns[i], height * fontSizes[1]);
+      column = GetText(columns, columnIndex);
+      totalTextWidth += MeasureText(column.c_str(), height * fontSizes[1]);
   }
   return totalTextWidth;
 }
 
 void Options::DrawColumns(int y, int margin) {
   int height = settings::screenHeight;
+  std::string text;
   int x0 = margin, textSize;
+  size_t textIndex = 0;
   for (int i = 0, x = x0; i < NUM_COLS; i++) {
-      textSize = MeasureText(columns[i], height * fontSizes[1]);
-      DrawText(columns[i], x, y, height * fontSizes[1], RAYWHITE);
+      text = GetText(columns, textIndex);
+      textSize = MeasureText(text.c_str(), height * fontSizes[1]);
+      DrawText(text.c_str(), x, y, height * fontSizes[1], RAYWHITE);
       x += textSize + margin;
   }
+}
+
+std::string Options::GetText(const std::string textTotal, size_t& pos){
+  std::string text;
+  size_t startPos = pos;
+  while (pos < textTotal.length() && textTotal[pos] != ',') pos++;
+  text = textTotal.substr(startPos, pos - startPos);
+  if (pos < textTotal.length()) pos++;
+  return text;
 }
 
 void Options::DrawControlOptions(int y, int margin) {
   int height = settings::screenHeight;
   int x0 = margin;
+  std::string column, text;
+  size_t columnIndex = 0, textIndex = 0;
   for (int i = 0, posX, x = x0; i < NUM_COLS; i++) {
-      int textSize = MeasureText(columns[i], height * fontSizes[1]);
-      posX = x + (textSize - MeasureText(controls[itemSelected[CONTROL]][i], height * fontSizes[1])) / 2;
-      if (!move[0]) {
-          DrawArrows(y, optionsColor[0]);
-          DrawText(controls[itemSelected[CONTROL]][i], posX, y, height * fontSizes[1], optionsColor[0]);
-          x += textSize + margin;
-          continue;
-      }
-      int previous = (move[0] > 0) ? GetPreviousItemSelected(CONTROLS_QTD) : GetNextItemSelected(CONTROLS_QTD);
-      speed += 30 * move[0];
-      bool stop = ray_functions::HorizontalSlideAnimation(controls[previous][i], controls[itemSelected[CONTROL]][i], posX,
-          y, speed, height * fontSizes[1], GRAY);
+    column = GetText(columns, columnIndex);
+    text = GetText(controls[itemSelected[CONTROL]], textIndex);
+    int textSize = MeasureText(column.c_str(), height * fontSizes[1]);
+    posX = x + (textSize - MeasureText(text.c_str(), height * fontSizes[1])) / 2;
+    if (!move[0]) {
+      DrawArrows(y, optionsColor[0]);
+      DrawText(text.c_str(), posX, y, height * fontSizes[1], optionsColor[0]);
       x += textSize + margin;
-      if (stop) move[0] = 0;
+      continue;
+    }
+    int previous = (move[0] > 0) ? GetPreviousItemSelected(CONTROLS_QTD) : GetNextItemSelected(CONTROLS_QTD);
+    speed += 30 * move[0];
+    size_t previousIndex = 0;
+    std::string previousStr = GetText(controls[previous], previousIndex);
+    bool stop = ray_functions::HorizontalSlideAnimation(previousStr.c_str(), text.c_str(), posX,
+        y, speed, height * fontSizes[1], GRAY);
+    x += textSize + margin;
+    if (stop) move[0] = 0;
   }
 }
 
