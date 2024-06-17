@@ -5,11 +5,12 @@ class ButtonManager{
 public:
   ButtonManager(std::vector<Button> buttons);
   void Tick();
+  Screens GetScreen();
 private:
   void ButtonTypeHandler();
   void ButtonSelector();
   void InputHandler();
-  Screens GetScreen();
+  void MoveSelection(int num);
   int currentSelectedButtonIndex = 0;
   Screens currentScreen = NOTSCREEN;
   std::vector<Button> buttons;

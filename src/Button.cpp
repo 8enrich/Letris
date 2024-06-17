@@ -1,8 +1,8 @@
 #include "../include/Button.hpp"
 #include "../include/raylibFunctions.hpp"
 #include <raylib.h>
-  Button::Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition):
-    buttonText(buttonText), fontSize(fontSize), buttonPosition(buttonPosition)
+  Button::Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition, ButtonTypes type):
+    buttonText(buttonText), fontSize(fontSize), buttonPosition(buttonPosition), type(type)
   {
     buttonWidthHeight= Vec2<float>{(float) buttonText.size() * fontSize, (float) fontSize}; 
   }

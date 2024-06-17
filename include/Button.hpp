@@ -2,7 +2,7 @@
 #include "Settings.hpp"
 #include "Vec2.hpp"
 #include <string>
-
+#pragma once
 enum class ButtonTypes {
   SCREEN,
   OPTIONS,
@@ -11,8 +11,9 @@ enum class ButtonTypes {
 
 class Button {
 public:
-  Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition);
+  Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition, ButtonTypes type);
   void Draw();
+  virtual void Move(int);
   void Tick();
   void Select();
   void Unselect();
