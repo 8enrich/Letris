@@ -2,7 +2,6 @@
 #include "Screen.hpp"
 #include "ScreenButton.hpp"
 #include "ButtonManager.hpp"
-#define OPT_QTD_PAUSE 3
 
 class Pause : public Screen {
 public:
@@ -17,7 +16,5 @@ private:
   ButtonManager buttonManager = ButtonManager(buttons, true);
 
   void OptionsHandling();
-  int currentSelected = 0;
-  Color optionsColor[OPT_QTD_PAUSE] = {RAYWHITE, GRAY, GRAY};
   void Draw() override;
 };

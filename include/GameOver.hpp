@@ -3,7 +3,6 @@
 #include "Screen.hpp"
 #include "ButtonManager.hpp"
 #include "ScreenButton.hpp"
-#define OPT_QTD 3
 
 class GameOver : public Screen {
 public:
@@ -17,7 +16,5 @@ private:
   };
   ButtonManager buttonManager = ButtonManager(buttons, true);
   void OptionsHandling();
-  int currentSelected = 0;
-  Color optionsColor[OPT_QTD] = {RAYWHITE, GRAY, GRAY};
   void Draw() override;
 };
