@@ -4,6 +4,7 @@
   Button::Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition, ButtonTypes type):
     buttonText(buttonText), fontSize(fontSize), buttonPosition(buttonPosition), type(type)
   {
+    isSelected = false;
     buttonWidthHeight= Vec2<float>{(float) buttonText.size() * fontSize, (float) fontSize}; 
   }
   void Button::Draw(){
@@ -11,15 +12,13 @@
     ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, color);
   }
   void Button::Tick(){
-    BeginDrawing();
     Draw();
-    EndDrawing();
   }
   void Button::Select(){
-    if (!isSelected) isSelected = true;
+    isSelected = true;
   }
   void Button::Unselect(){
-    if (isSelected) isSelected = false;
+    isSelected = false;
   }
   Screens Button::Click(){
     isClicked = true;
@@ -28,5 +27,4 @@
   bool Button::isButtonClicked(){
     return isClicked;
   }
-  bool Button::isButtonClickedByMouse(){}
 

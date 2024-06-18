@@ -13,7 +13,6 @@ class Button {
 public:
   Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition, ButtonTypes type);
   void Draw();
-  virtual void Move(int);
   void Tick();
   void Select();
   void Unselect();

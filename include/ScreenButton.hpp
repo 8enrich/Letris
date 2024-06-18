@@ -1,7 +1,8 @@
+#pragma once
 #include "Button.hpp"
 #include "Settings.hpp"
 
-class ScreenButton : Button {
+class ScreenButton : public Button {
 public:
-  ScreenButton(std::string buttonText, float fontSize, Vec2<double> buttonPosition, Screens screen);
+  ScreenButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize,Screens screen);
 };
