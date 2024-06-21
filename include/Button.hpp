@@ -18,8 +18,9 @@ public:
   void Unselect();
   Screens Click();
   ButtonTypes type;
+  bool isMouseHoveringButton();
+  Vec2<double> GetButtonPosition();
 protected:
-  bool isMouseHovering();
   bool isButtonClicked();
   bool isButtonClickedByMouse();
   bool hasBorder;
@@ -32,4 +33,5 @@ protected:
   float fontSize;
   Vec2<float> buttonWidthHeight;
   Vec2<double> buttonPosition;
+  Vec2<double> realButtonPosition;
 };

@@ -8,7 +8,10 @@ ButtonManager::ButtonManager(std::vector<Button> buttons, bool isVertical): butt
 void ButtonManager::Tick(){
   if (isVertical) VerticalInputHandler();
   else InputHandler();
-  for (Button button : buttons) button.Tick();
+  for (Button button : buttons) {
+    MouseHandling(button);
+    button.Tick();
+  }
 }
 
 void ButtonManager::InputHandler(){
@@ -55,6 +58,25 @@ void ButtonManager::MoveSelection(int num) {
     buttons[currentSelectedButtonIndex].Unselect();
     currentSelectedButtonIndex = (currentSelectedButtonIndex + num + buttons.size()) % buttons.size();
     buttons[currentSelectedButtonIndex].Select();
+}
+
+int ButtonManager::GetButtonIndex(Button button) {
+  int index = 0;
+  for (Button button1 : buttons) {
+    if (button1.GetButtonPosition() == button.GetButtonPosition()) break;
+    index++;
+  }
+  return index;
+}
+void ButtonManager::MouseHandling(Button button){
+  if (!button.isMouseHoveringButton()) return;
+  printf("Teste\n");
+  buttons[currentSelectedButtonIndex].Unselect();
+  currentSelectedButtonIndex = GetButtonIndex(button);
+  buttons[currentSelectedButtonIndex].Select();
+  if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    currentScreen = buttons[currentSelectedButtonIndex].Click();
+  }
 }
 Screens ButtonManager::GetScreen() {
   return currentScreen;

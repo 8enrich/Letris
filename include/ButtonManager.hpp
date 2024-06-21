@@ -9,9 +9,11 @@ public:
   Screens GetScreen();
   void ResetScreen();
 private:
+  int GetButtonIndex(Button button);
   bool isVertical;
   void ButtonTypeHandler();
   void ButtonSelector();
+  void MouseHandling(Button button);
   void VerticalInputHandler();
   void InputHandler();
   void MoveSelection(int num);
