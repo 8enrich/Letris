@@ -21,6 +21,7 @@ public:
   bool isMouseHoveringButton();
   Vec2<double> GetButtonPosition();
 protected:
+  void Update();
   bool isButtonClicked();
   bool isButtonClickedByMouse();
   bool hasBorder;

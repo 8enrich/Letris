@@ -7,8 +7,6 @@ Button::Button(std::string buttonText, float fontSize, Vec2<double> buttonPositi
   buttonText(buttonText), fontSize(fontSize), buttonPosition(buttonPosition), type(type)
 {
   isSelected = false;
-  realButtonPosition ={settings::screenWidth * buttonPosition.GetX() - MeasureText(buttonText.c_str(), settings::screenHeight * fontSize)/2, settings::screenHeight * buttonPosition.GetY()}; 
-  buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
 }
 
 void Button::Draw(){
@@ -17,9 +15,15 @@ void Button::Draw(){
 }
 
 void Button::Tick(){
+  Update();
   Draw();
 }
 
+void Button::Update() {
+  realButtonPosition ={settings::screenWidth * buttonPosition.GetX() - MeasureText(buttonText.c_str(), settings::screenHeight * fontSize)/2, settings::screenHeight * buttonPosition.GetY()}; 
+  buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
+
+}
 void Button::Select(){
   isSelected = true;
 }
@@ -38,7 +42,7 @@ bool Button::isButtonClicked(){
 }
 
 bool Button::isMouseHoveringButton(){
-  float mouseX = (float) GetMouseX(), mouseY = (float) GetMouseY(); 
+  float mouseX = (float) GetMouseX(), mouseY = (float) GetMouseY();
   return mouseX >= realButtonPosition.GetX() && mouseX <= realButtonPosition.GetX() + buttonWidthHeight.GetX() &&
          mouseY >= realButtonPosition.GetY() && mouseY <= realButtonPosition.GetY() + buttonWidthHeight.GetY();
 }

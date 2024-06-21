@@ -9,8 +9,8 @@ void ButtonManager::Tick(){
   if (isVertical) VerticalInputHandler();
   else InputHandler();
   for (Button button : buttons) {
-    MouseHandling(button);
     button.Tick();
+    MouseHandling(button);
   }
 }
 
@@ -70,7 +70,6 @@ int ButtonManager::GetButtonIndex(Button button) {
 }
 void ButtonManager::MouseHandling(Button button){
   if (!button.isMouseHoveringButton()) return;
-  printf("Teste\n");
   buttons[currentSelectedButtonIndex].Unselect();
   currentSelectedButtonIndex = GetButtonIndex(button);
   buttons[currentSelectedButtonIndex].Select();
