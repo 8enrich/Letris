@@ -2,6 +2,10 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
+GameOver::~GameOver(){
+  for (auto button : buttons) delete button;
+}
+GameOver::GameOver(){}
 void GameOver::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();

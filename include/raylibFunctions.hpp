@@ -16,4 +16,5 @@ namespace ray_functions {
   void DrawFormatedText(const char * text, Vec2<double> pos, float fontSize, Color color);
   bool HorizontalSlideAnimation(const char*,const char*,int,int,int,float,Color);
   bool HorizontalSlideAnimation(const char*,const char*,float,float,int,float,Color);
+  Vec2<double> FakePositionToRealPosition(Vec2<double> pos, std::string text, int fontSize);
 }

@@ -1,13 +1,24 @@
 #include "Button.hpp"
+#include "ButtonManager.hpp"
+#include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
-class OptionsButton : Button {
+class OptionsButton : public Button {
 public:
-  OptionsButton(std::string buttonText, float fontSize, Vec2<double> buttonPosition, std::unordered_map<std::string, std::vector<std::string>> optionsMap);
-//  void Move(int) override;
+  OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<std::string> options, std::string optionInSettings);
+  void Move(int);
+  void Tick() override;
+  void OpenMenu();
+  void CloseMenu();
 private:
-  std::unordered_map<std::string, std::vector<std::string>> optionsMap;
-  int GetItemIndex(std::string);
+  void MenuHandling();
+  void Update();
+  ButtonManager* buttonOptions;
+  bool isMenuOpen = false;
+  std::vector<std::string> options;
+  std::string optionInSettings;
+  int currentSelectedOptionIndex = 0;
+  int GetSelectedItemIndex();
+  void DrawMenu();
 };

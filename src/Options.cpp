@@ -4,25 +4,26 @@
 
 void Options::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
-  OptionsHandling();
+  //OptionsHandling();
   int hasMovement;
-  do{
-    hasMovement = move[0] || move[1];
+  //do{
+  //  hasMovement = move[0] || move[1];
     BeginDrawing();
     Draw();
+    buttonManager.Tick();
     EndDrawing();
-  } while(hasMovement);
+  //} while(hasMovement);
   speed = 0;
 }
 
 void Options::Draw() {
   ClearBackground(BLACK);
   factor = 1;
-  DrawHeader();
-  DrawControls();
-  DrawScreenSize();
-  DrawVolume();
-  DrawButtons();
+//  DrawHeader();
+//  DrawControls();
+//  DrawScreenSize();
+//  DrawVolume();
+//  DrawButtons();
 }
 
 void Options::DrawHeader() {
@@ -113,20 +114,19 @@ void Options::DrawControlOptions(int y, int margin) {
 
 void Options::DrawScreenSize() {
   DrawSectionHeader("Screen Resolution", y0 + factor++ * lineDistance);
-
-  const char* text = screenSizes[itemSelected[SCREENSIZE]];
-  float x = (float)1/2, y = y0 + factor++ * lineDistance;
-  if (!move[1]) {
-      DrawArrows(y, optionsColor[1]);
-      ray_functions::DrawFormatedText(text, Vec2<double>{x, y}, fontSizes[1], optionsColor[1]);
-      return;
-  }
-  bool stop;
-  int previous = (move[1] > 0) ? GetPreviousItemSelected(SCREEN_SIZE_QTD) : GetNextItemSelected(SCREEN_SIZE_QTD);
-  speed += 100 * move[1];
-  stop = ray_functions::HorizontalSlideAnimation(screenSizes[previous], text, x, y,
-      speed, fontSizes[1], GRAY);
-  if (stop) move[1] = 0;
+//  const char* text = screenSizes[itemSelected[SCREENSIZE]];
+//  float x = (float)1/2, y = y0 + factor++ * lineDistance;
+//  if (!move[1]) {
+//      DrawArrows(y, optionsColor[1]);
+//      ray_functions::DrawFormatedText(text, Vec2<double>{x, y}, fontSizes[1], optionsColor[1]);
+//      return;
+//  }
+//  bool stop;
+//  int previous = (move[1] > 0) ? GetPreviousItemSelected(SCREEN_SIZE_QTD) : GetNextItemSelected(SCREEN_SIZE_QTD);
+//  speed += 100 * move[1];
+//  stop = ray_functions::HorizontalSlideAnimation(screenSizes[previous], text, x, y,
+//      speed, fontSizes[1], GRAY);
+//  if (stop) move[1] = 0;
 }
 
 void Options::DrawVolume(){

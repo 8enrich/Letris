@@ -11,15 +11,16 @@ enum class ButtonTypes {
 
 class Button {
 public:
-  Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition, ButtonTypes type);
+  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type);
   void Draw();
-  void Tick();
+  virtual void Tick();
   void Select();
   void Unselect();
   Screens Click();
   ButtonTypes type;
   bool isMouseHoveringButton();
   Vec2<double> GetButtonPosition();
+  std::string GetText(); 
 protected:
   void Update();
   bool isButtonClicked();
@@ -27,7 +28,7 @@ protected:
   bool hasBorder;
   bool isSelected;
   bool isClicked;
-  Screens screen;
+  Screens screen = NOTSCREEN;
   Color selectedColor = RAYWHITE;
   Color unselectedColor = GRAY;
   std::string buttonText;

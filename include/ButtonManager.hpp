@@ -4,20 +4,21 @@
 #include <vector>
 class ButtonManager{
 public:
-  ButtonManager(std::vector<Button> buttons, bool isVertical);
+  ButtonManager(std::vector<Button*> buttons, bool isVertical);
   void Tick();
   Screens GetScreen();
   void ResetScreen();
+  int GetSelectedButtonIndex();
 private:
-  int GetButtonIndex(Button button);
+  int GetButtonIndex(Button *button);
   bool isVertical;
   void ButtonTypeHandler();
   void ButtonSelector();
-  void MouseHandling(Button button);
+  void MouseHandling(Button *button);
   void VerticalInputHandler();
   void InputHandler();
   void MoveSelection(int num);
   int currentSelectedButtonIndex = 0;
   Screens currentScreen = NOTSCREEN;
-  std::vector<Button> buttons;
+  std::vector<Button*> buttons;
 };

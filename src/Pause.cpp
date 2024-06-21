@@ -1,7 +1,10 @@
 #include "../include/Pause.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
-
+Pause::Pause(){}
+Pause::~Pause(){ 
+  for (auto button : buttons) delete button;
+}
 void Pause::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();

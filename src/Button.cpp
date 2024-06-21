@@ -1,10 +1,10 @@
 #include "../include/Button.hpp"
 #include "../include/raylibFunctions.hpp"
+#include <cstdio>
 #include <raylib.h>
-#include <iostream>
 
-Button::Button(std::string buttonText, float fontSize, Vec2<double> buttonPosition, ButtonTypes type):
-  buttonText(buttonText), fontSize(fontSize), buttonPosition(buttonPosition), type(type)
+Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type)
 {
   isSelected = false;
 }
@@ -20,9 +20,12 @@ void Button::Tick(){
 }
 
 void Button::Update() {
-  realButtonPosition ={settings::screenWidth * buttonPosition.GetX() - MeasureText(buttonText.c_str(), settings::screenHeight * fontSize)/2, settings::screenHeight * buttonPosition.GetY()}; 
+  realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
   buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
+}
 
+std::string Button::GetText() {
+  return buttonText;
 }
 void Button::Select(){
   isSelected = true;

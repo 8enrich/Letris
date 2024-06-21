@@ -1,7 +1,10 @@
 #include <raylib.h>
+#include <string>
+#include <vector>
+#include "ButtonManager.hpp"
 #include "Screen.hpp"
 #include "Game.hpp"
-
+#include "OptionsButton.hpp"
 #define CONTROLS_QTD 4
 #define SCREEN_SIZE_QTD 3
 #define OPT_QTD_OPTIONS 5
@@ -12,7 +15,7 @@ public:
   void Tick() override;
 private:
   void OptionsHandling();
-  int currentSelected = 0;
+  int currentSelected = 1;
   int itemSelected[2] = {settings::db["CONTROL"], GetScreenSizeIndex()};
   int itemQuantity[2] = {CONTROLS_QTD, SCREEN_SIZE_QTD};
   Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY, GRAY};
@@ -52,6 +55,9 @@ private:
     "K,H,L,J,SPACE,Z",
   };
   const char *screenSizes[SCREEN_SIZE_QTD] = {"800x600", "1080x720", "1366x768"};
+  std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"};
+  float x = (float)1/2, y = y0 + factor++ * lineDistance;
+  ButtonManager buttonManager = ButtonManager({new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double> {x, y}, fontSizes[1], screenSizes2, "TESTE")}, true);
   enum itens {
     CONTROL,
     SCREENSIZE,

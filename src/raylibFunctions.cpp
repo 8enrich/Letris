@@ -12,6 +12,9 @@ void ray_functions::DrawRectangle(Vec2<double> pos, Vec2<double> widthHeight, Co
   DrawRectangle(pos.GetX(), pos.GetY(), widthHeight.GetX(), widthHeight.GetY(), color);
 }
 
+Vec2<double> ray_functions::FakePositionToRealPosition(Vec2<double> pos, std::string text, int fontSize){
+  return {settings::screenWidth * pos.GetX() - MeasureText(text.c_str(), settings::screenHeight * fontSize)/2, settings::screenHeight * pos.GetY()};  
+}
 void ray_functions::DrawRectangleLinesEx(Vec2<int> pos, Vec2<int> widthHeight, int lineThickness, Color color){
   assert((pos >= 0 && pos < Vec2<int>{GetScreenWidth(), GetScreenHeight()}));
   assert(lineThickness > 0);
