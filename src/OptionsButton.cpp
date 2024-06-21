@@ -14,8 +14,7 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
 
     std::vector<Button*> buttons;
     for (int i =0; i < options.size(); i++) {
-      Vec2<double> realPos = ray_functions::FakePositionToRealPosition(buttonPosition, options[i], fontSize);
-      buttons.push_back(new ScreenButton(options[i], {realPos.GetX(), realPos.GetY()}, fontSize, Screens::STRING));
+      buttons.push_back(new ScreenButton(options[i], {buttonPosition.GetX(), buttonPosition.GetY()*(float)(i+3)/2}, fontSize, Screens::STRING));
     }
     buttonOptions = new ButtonManager(buttons, true);
 
