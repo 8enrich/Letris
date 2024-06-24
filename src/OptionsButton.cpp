@@ -22,8 +22,9 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
 void OptionsButton::Move(int n) {}
 
 void OptionsButton::DrawMenu() {
-  Vec2<double> realPos = ray_functions::FakePositionToRealPosition(buttonPosition, options[currentSelectedOptionIndex], fontSize);
-  DrawRectangle(realPos.GetX(), realPos.GetY()+(settings::screenHeight*fontSize), settings::screenWidth/4, settings::screenHeight * fontSize * options.size(), BLUE);
+  int width = settings::screenWidth, height = settings::screenHeight;
+  Vec2<double> realPos = buttonPosition * Vec2<double>{(float)width, (float)height};
+  DrawRectangle(realPos.GetX() - width/8, realPos.GetY(), width/4, height/2.5, BLUE);
 }
 void OptionsButton::Update(){
   buttonText = options[currentSelectedOptionIndex]; 
