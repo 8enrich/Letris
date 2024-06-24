@@ -1,6 +1,7 @@
 #include "../include/Options.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
+#include <string>
 
 void Options::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
@@ -14,6 +15,8 @@ void Options::Tick(){
     EndDrawing();
   //} while(hasMovement);
   speed = 0;
+  std::string resolutionString = buttonManager.GetButtons()[0]->GetText();
+  if (selectedResolution != resolutionString) SetNewResolution(resolutionString);
 }
 
 void Options::Draw() {
@@ -21,11 +24,27 @@ void Options::Draw() {
   factor = 1;
 //  DrawHeader();
 //  DrawControls();
-//  DrawScreenSize();
 //  DrawVolume();
 //  DrawButtons();
 }
 
+void Options::SetNewResolution(std::string resolution){
+  selectedResolution = resolution;
+  std::string width = "";
+  std::string height = "";
+  int Xindex = 0;
+  for (int i = 0;i < resolution.size();i++){
+    if (resolution[i] == 'x') {
+      Xindex = i;
+      break;
+    }
+    width += resolution[i];
+  }
+  for (int i = Xindex + 1; i < resolution.size(); i++){
+    height += resolution[i];
+  }
+  settings::UpdateWindowSize({stoi(width), stoi(height)});
+} 
 void Options::DrawHeader() {
   ray_functions::DrawFormatedText("OPTIONS", Vec2<double>{1.0f/2, 1.0f/20}, fontSizes[0], RAYWHITE);
 }
@@ -35,7 +54,6 @@ void Options::DrawButtons() {
   ray_functions::DrawFormatedText("Apply", Vec2<double>{x, y}, fontSizes[0], optionsColor[3]);
   ray_functions::DrawFormatedText("Back", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[4]);
 }
-
 void Options::DrawControls() {
   DrawSectionHeader("Controls", y0);
 
@@ -113,7 +131,7 @@ void Options::DrawControlOptions(int y, int margin) {
 }
 
 void Options::DrawScreenSize() {
-  DrawSectionHeader("Screen Resolution", y0 + factor++ * lineDistance);
+  DrawSectionHeader("Screen Resolution", y0);
 //  const char* text = screenSizes[itemSelected[SCREENSIZE]];
 //  float x = (float)1/2, y = y0 + factor++ * lineDistance;
 //  if (!move[1]) {

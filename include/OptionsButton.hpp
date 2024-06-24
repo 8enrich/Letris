@@ -11,6 +11,7 @@ public:
   void Tick() override;
   void OpenMenu();
   void CloseMenu();
+  std::string GetButtonText();
 private:
   void MenuHandling();
   void Update();

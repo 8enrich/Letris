@@ -90,3 +90,6 @@ void ButtonManager::ResetScreen() {
 int ButtonManager::GetSelectedButtonIndex(){
   return currentSelectedButtonIndex;
 }
+std::vector<Button*> ButtonManager::GetButtons() {
+  return buttons;
+}

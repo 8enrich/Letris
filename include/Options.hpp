@@ -1,10 +1,12 @@
 #include <raylib.h>
+#include <set>
 #include <string>
 #include <vector>
 #include "ButtonManager.hpp"
 #include "Screen.hpp"
 #include "Game.hpp"
 #include "OptionsButton.hpp"
+#include "Settings.hpp"
 #define CONTROLS_QTD 4
 #define SCREEN_SIZE_QTD 3
 #define OPT_QTD_OPTIONS 5
@@ -21,6 +23,7 @@ private:
   Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY, GRAY};
   Color controlsColor[CONTROLS_QTD] = {RAYWHITE, GRAY, GRAY, GRAY};
   Color screenSizesColor[SCREEN_SIZE_QTD] = {RAYWHITE, GRAY, GRAY};
+
   void Draw() override;
   float y0 = (float)1/8;
   float lineDistance = (float)1/17;
@@ -46,6 +49,7 @@ private:
   void UpdateColors();
   void HandleArrowKey(int);
   float fontSizes[2] = {(float)1/20, (float)1/25};
+  void SetNewResolution(std::string resolution); 
   std::string GetText(const std::string textTotal, size_t& pos);
   std::string columns = "Rotate CW,Left,Down,Right,Instant Fall,Rotate ACW";
   std::string controls[CONTROLS_QTD] = {
@@ -55,9 +59,10 @@ private:
     "K,H,L,J,SPACE,Z",
   };
   const char *screenSizes[SCREEN_SIZE_QTD] = {"800x600", "1080x720", "1366x768"};
-  std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"};
-  float x = (float)1/2, y = y0 + factor++ * lineDistance;
-  ButtonManager buttonManager = ButtonManager({new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double> {x, y}, fontSizes[1], screenSizes2, "TESTE")}, true);
+  std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"}; 
+  std::string selectedResolution = to_string(settings::db["WINDOW_WIDTH"]) + "x" + to_string(settings::db["WINDOW_HEIGHT"]);
+  float x = (float)1/2, y = y0 + 2 * lineDistance;
+  ButtonManager buttonManagers = ButtonManager({new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double> {x, y}, fontSizes[1], screenSizes2, selectedResolution)}, true);
   enum itens {
     CONTROL,
     SCREENSIZE,
