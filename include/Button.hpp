@@ -22,7 +22,7 @@ public:
   Vec2<double> GetButtonPosition();
   std::string GetText(); 
 protected:
-  void Update();
+  virtual void Update();
   bool isButtonClicked();
   bool isButtonClickedByMouse();
   bool hasBorder;

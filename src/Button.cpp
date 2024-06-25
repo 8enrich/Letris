@@ -1,6 +1,5 @@
 #include "../include/Button.hpp"
 #include "../include/raylibFunctions.hpp"
-#include <cstdio>
 #include <raylib.h>
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):

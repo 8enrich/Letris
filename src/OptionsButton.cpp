@@ -12,9 +12,11 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
     this->options = options;
     this->optionInSettings = optionInSettings;
     std::vector<Button*> buttons;
+    realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
+    buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
     for (int i =0; i < options.size(); i++) {
       if (options[i] == optionInSettings) currentSelectedOptionIndex = i; 
-      buttons.push_back(new ScreenButton(options[i], {buttonPosition.GetX(), buttonPosition.GetY()*(float)(i+options.size())/2}, fontSize, Screens::STRING));
+          buttons.push_back(new ScreenButton(options[i], {buttonPosition.GetX(), buttonPosition.GetY()*(i+3)/2}, fontSize, Screens::STRING));
     }
     buttonOptions = new ButtonManager(buttons, true);
 
@@ -22,12 +24,12 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
 void OptionsButton::Move(int n) {}
 
 void OptionsButton::DrawMenu() {
-  int width = settings::screenWidth, height = settings::screenHeight;
-  Vec2<double> realPos = buttonPosition * Vec2<double>{(float)width, (float)height};
-  DrawRectangle(realPos.GetX() - (float)width/9, realPos.GetY() + (float)height/15, width/5, height * options.size()/10, LIGHTGRAY);
+  DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY() + settings::screenHeight/16, buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * options.size(), LIGHTGRAY);
 }
 void OptionsButton::Update(){
   buttonText = options[currentSelectedOptionIndex]; 
+  realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
+  buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
 }
 
 void OptionsButton::MenuHandling(){
@@ -48,9 +50,7 @@ void OptionsButton::OpenMenu(){
 }
 void OptionsButton::Tick(){
   Update();
-  int width = settings::screenWidth, height = settings::screenHeight;
-  Vec2<double> realPos = buttonPosition * Vec2<double>{(float)width, (float)height};
-  DrawRectangle(realPos.GetX()- (float)width/9, realPos.GetY(), width/5, height/20, DARKGRAY);
+  DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY(), buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY()+2, DARKGRAY);
   Draw();
   if(isClicked) OpenMenu();
   while(isMenuOpen) MenuHandling();

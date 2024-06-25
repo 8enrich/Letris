@@ -14,7 +14,7 @@ public:
   std::string GetButtonText();
 private:
   void MenuHandling();
-  void Update();
+  void Update() override;
   ButtonManager* buttonOptions;
   bool isMenuOpen = false;
   std::vector<std::string> options;

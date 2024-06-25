@@ -48,7 +48,7 @@ private:
   void HandleEnterKey();
   void UpdateColors();
   void HandleArrowKey(int);
-  float fontSizes[2] = {(float)1/20, (float)1/25};
+  float fontSizes[2] = {(float)1/20, (float)1/30};
   void SetNewResolution(std::string resolution); 
   std::string GetText(const std::string textTotal, size_t& pos);
   std::string columns = "Rotate CW,Left,Down,Right,Instant Fall,Rotate ACW";
@@ -62,7 +62,7 @@ private:
   std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"}; 
   std::string selectedResolution = to_string(settings::db["WINDOW_WIDTH"]) + "x" + to_string(settings::db["WINDOW_HEIGHT"]);
   float x = (float)1/2, y = y0 + 2 * lineDistance;
-  ButtonManager buttonManagers = ButtonManager({new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double> {x, y}, fontSizes[1], screenSizes2, selectedResolution)}, true);
+  ButtonManager buttonManager = ButtonManager({new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double> {x, y}, fontSizes[1], screenSizes2, selectedResolution)}, true);
   enum itens {
     CONTROL,
     SCREENSIZE,
