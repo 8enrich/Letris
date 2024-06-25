@@ -48,7 +48,11 @@ bool Button::isMouseHoveringButton(){
   return mouseX >= realButtonPosition.GetX() && mouseX <= realButtonPosition.GetX() + buttonWidthHeight.GetX() &&
          mouseY >= realButtonPosition.GetY() && mouseY <= realButtonPosition.GetY() + buttonWidthHeight.GetY();
 }
-
+bool Button::isMouseHoveringVec(Vec2<double> pos, Vec2<double> widthHeight){
+  float mouseX = (float) GetMouseX(), mouseY = (float) GetMouseY();
+  return mouseX >= pos.GetX() && mouseX <= pos.GetX() + widthHeight.GetX() &&
+         mouseY >= pos.GetY() && mouseY <= pos.GetY() + widthHeight.GetY();
+}
 Vec2<double> Button::GetButtonPosition() {
   return buttonPosition;
 }

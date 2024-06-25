@@ -24,7 +24,7 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
 void OptionsButton::Move(int n) {}
 
 void OptionsButton::DrawMenu() {
-  DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY() + settings::screenHeight/16, buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * options.size(), LIGHTGRAY);
+  DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY() + settings::screenHeight/16, buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * 4, LIGHTGRAY);
 }
 void OptionsButton::Update(){
   buttonText = options[currentSelectedOptionIndex]; 
@@ -37,16 +37,23 @@ void OptionsButton::MenuHandling(){
   DrawMenu();
   buttonOptions->Tick();
   EndDrawing();
+  if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && 
+      !isMouseHoveringVec({realButtonPosition.GetX(), realButtonPosition.GetY()+ settings::screenHeight/16},
+      {buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * 4})) CloseMenu();
+
   if(buttonOptions->GetScreen() == Screens::STRING) {
     currentSelectedOptionIndex = buttonOptions->GetSelectedButtonIndex();
     buttonOptions->ResetScreen();
-    std::cout << options[currentSelectedOptionIndex] << std::endl;
     isClicked = false;
     isMenuOpen = false;
   }
 }
 void OptionsButton::OpenMenu(){
   isMenuOpen = true;
+}
+void OptionsButton::CloseMenu(){
+  isClicked=false;
+  isMenuOpen = false;
 }
 void OptionsButton::Tick(){
   Update();

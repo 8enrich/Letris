@@ -19,6 +19,7 @@ public:
   Screens Click();
   ButtonTypes type;
   bool isMouseHoveringButton();
+  bool isMouseHoveringVec(Vec2<double>, Vec2<double>);
   Vec2<double> GetButtonPosition();
   std::string GetText(); 
 protected:
