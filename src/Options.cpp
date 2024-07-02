@@ -115,7 +115,7 @@ void Options::DrawVolume(){
   float xBegin = (float)width/2 - (float)width/8, xEnd = (float)width/2 + (float)width/8,
         y = y0 + factor++ * lineDistance, y1 = y + (float)1/50;
   DrawArrows(y, optionsColor[2]);
-  DrawLineEx((Vector2){xBegin, height * y1}, (Vector2){xEnd, height * y1}, (float)height/200, optionsColor[2]);
+  DrawLineEx(Vector2{xBegin, height * y1}, Vector2{xEnd, height * y1}, (float)height/200, optionsColor[2]);
   DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1},
       (float)height/100, optionsColor[2]);
   ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{(float)1/2 + (float)1/6, y},
