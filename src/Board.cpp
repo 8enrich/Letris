@@ -149,7 +149,15 @@ const Board::Cell *Board::GetCell(Vec2<int> pos) const{
   return &cells[pos.GetY()*width + pos.GetX()];
 }
 
-void Board::ResetBoard(){
+void Board::ResetBoardSettings(){
   cellSize = settings::cellSize;
   screenPos = settings::boardPosition;
+}
+
+void Board::ResetBoardCells(){
+  for (int iY = 0; iY < height; iY++){
+    for (int iX = 0; iX < width; iX++){
+      if(CellExists({iX, iY})) GetCell({iX, iY})->Remove();
+    }
+  }
 }

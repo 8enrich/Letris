@@ -32,7 +32,8 @@ public:
   int GetHeight() const; 
   void RemoveCell(Vec2<int> pos);
   Color GetCellColor(Vec2<int> pos);
-  void ResetBoard();
+  void ResetBoardCells();
+  void ResetBoardSettings();
 private:
   std::vector<Cell> cells;
   const int width, height, padding;

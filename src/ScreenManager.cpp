@@ -41,11 +41,13 @@ Screens ScreenManager::GetActualScreen() const {
 }
 
 void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
-    if (actualScreen == GAME && lastScreen != GAME){
-      board->ResetBoard();
-      if (lastScreen == MENU || lastScreen == GAMEOVER) screens[GAME] = std::make_unique<Game>(board);
+    if (!entered && actualScreen == GAME){
+      board->ResetBoardSettings();
+      if (lastScreen == MENU || lastScreen == GAMEOVER){
+        board->ResetBoardCells();
+        screens[GAME] = std::make_unique<Game>(board);
+      }
       SetMusicVolume(screens[GAME]->GetMusic(), (float)settings::db["VOLUME"]/100);
-      lastScreen = GAME;
     }
 }
 
