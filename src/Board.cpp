@@ -155,9 +155,9 @@ void Board::ResetBoardSettings(){
 }
 
 void Board::ResetBoardCells(){
-  for (int iY = 0; iY < height; iY++){
-    for (int iX = 0; iX < width; iX++){
-      if(CellExists({iX, iY})) GetCell({iX, iY})->Remove();
+  for (int y = 0; y < height; y++){
+    for (int x = 0; x < width; x++){
+      if(CellExists({x, y})) RemoveCell({x, y});
     }
   }
 }
