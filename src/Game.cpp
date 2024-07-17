@@ -6,6 +6,7 @@
 Game::Game(Board *board) :
   board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3")
 {
+  board->ResetBoardCells();
   shape = NewShape();
   SetNextShapes();
   hold = -1;
