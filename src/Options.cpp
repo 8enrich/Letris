@@ -15,8 +15,17 @@ void Options::Tick(){
     EndDrawing();
   //} while(hasMovement);
   speed = 0;
-  std::string resolutionString = buttonManager.GetButtons()[0]->GetText();
-  if (selectedResolution != resolutionString) SetNewResolution(resolutionString);
+  for(Button *button : buttons){
+    if(button == screenSizeButton){
+      std::string resolutionString = button->GetText();
+      if (selectedResolution != resolutionString) SetNewResolution(resolutionString);
+    }
+  }
+  if(buttonManager.GetScreen() != NOTSCREEN) {
+    nextScreen = buttonManager.GetScreen();
+    buttonManager.ResetScreen();
+    OpenClose();
+  }
 }
 
 void Options::Draw() {
@@ -28,23 +37,24 @@ void Options::Draw() {
 //  DrawButtons();
 }
 
+void Options::OpenClose(){
+  Screen::OpenClose();
+  if(!shouldClose) returnButton->SetScreen(nextScreen);
+}
+
+int Options::GetResolutionIndex(std::string resolution){
+  for(int i = 0; i < SCREEN_SIZE_QTD; i++){
+    if(resolution == screenSizes2[i]) return i;
+  }
+  return 0;
+}
+
 void Options::SetNewResolution(std::string resolution){
+  int index = GetResolutionIndex(resolution);
+  settings::UpdateWindowSize(settings::screenSizes[index]);
   selectedResolution = resolution;
-  std::string width = "";
-  std::string height = "";
-  int Xindex = 0;
-  for (int i = 0;i < resolution.size();i++){
-    if (resolution[i] == 'x') {
-      Xindex = i;
-      break;
-    }
-    width += resolution[i];
-  }
-  for (int i = Xindex + 1; i < resolution.size(); i++){
-    height += resolution[i];
-  }
-  settings::UpdateWindowSize({stoi(width), stoi(height)});
-} 
+}
+
 void Options::DrawHeader() {
   ray_functions::DrawFormatedText("OPTIONS", Vec2<double>{1.0f/2, 1.0f/20}, fontSizes[0], RAYWHITE);
 }
@@ -248,9 +258,7 @@ void Options::HandleEnterKey() {
 
 int Options::GetScreenSizeIndex() {
   for (int i = 0; i < SCREEN_SIZE_QTD; i++){
-    if(settings::screenSizes[i].GetX() == GetScreenWidth()){
-      return i;
-    }
+    if(settings::screenSizes[i].GetX() == GetScreenWidth()) return i;
   }
   return 0;
 }

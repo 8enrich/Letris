@@ -6,6 +6,7 @@
 #include "Screen.hpp"
 #include "Game.hpp"
 #include "OptionsButton.hpp"
+#include "ScreenButton.hpp"
 #include "Settings.hpp"
 #define CONTROLS_QTD 4
 #define SCREEN_SIZE_QTD 3
@@ -52,20 +53,36 @@ private:
   void SetNewResolution(std::string resolution); 
   std::string GetText(const std::string textTotal, size_t& pos);
   std::string columns = "Rotate CW,Left,Down,Right,Instant Fall,Rotate ACW";
-  std::string controls[CONTROLS_QTD] = {
-    "W,A,S,D,SPACE,Z",
-    "^,<,>,v,SPACE,Z",
-    "I,J,K,L,SPACE,Z",
-    "K,H,L,J,SPACE,Z",
+  std::vector<std::string> controls = {
+    "W A S D SPACE Z",
+    "^ < > v SPACE Z",
+    "I J K L SPACE Z",
+    "K H L J SPACE Z",
   };
   const char *screenSizes[SCREEN_SIZE_QTD] = {"800x600", "1080x720", "1366x768"};
   std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"}; 
+  std::vector<std::string> screenMode = {"Window", "FullScreen"};
   std::string selectedResolution = to_string(settings::db["WINDOW_WIDTH"]) + "x" + to_string(settings::db["WINDOW_HEIGHT"]);
   float x = (float)1/2, y = y0 + 2 * lineDistance;
-  ButtonManager buttonManager = ButtonManager({new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double> {x, y}, fontSizes[1], screenSizes2, selectedResolution)}, true);
+  ScreenButton *returnButton = new ScreenButton("Return", Vec2<double>{1.0f/2, 3.0f/4}, 1.0f/20, MENU);
+  OptionsButton *screenSizeButton = new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double>{1.0f/2, 1.0f/3},
+      fontSizes[1], screenSizes2, selectedResolution);
+  OptionsButton *screenModeButton = new OptionsButton("Window", Vec2<double>{1.0f/2, 1/2.3},
+      fontSizes[1], screenMode, "Window");
+  const std::vector<Button*> buttons = {
+    new ScreenButton("General", Vec2<double>{1.0f/4, 1.0f/10}, fontSizes[0], MENU),
+    new ScreenButton("Controls", Vec2<double>{1.0f/2, 1.0f/10}, fontSizes[0], MENU),
+    new ScreenButton("Volume", Vec2<double>{3.0f/4, 1.0f/10}, fontSizes[0], MENU),
+    returnButton,
+    screenSizeButton,
+    screenModeButton
+  };
+  ButtonManager buttonManager = ButtonManager(buttons, true);
   enum itens {
     CONTROL,
     SCREENSIZE,
   };
+  int GetResolutionIndex(std::string);
+  void OpenClose() override;
 };
 

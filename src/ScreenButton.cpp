@@ -5,3 +5,7 @@ ScreenButton::ScreenButton(std::string buttonText,  Vec2<double> buttonPosition,
 {
   this->screen = screen;
 }
+
+void ScreenButton::SetScreen(Screens newScreen){
+  screen = newScreen;
+}

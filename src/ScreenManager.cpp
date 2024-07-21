@@ -18,14 +18,14 @@ void ScreenManager::SetScreen(Screens type) {
 void ScreenManager::UpdateScreen() {
     if (!screens[actualScreen]) return;
     if (!entered) {
+        if (actualScreen == OPTIONS) screens[actualScreen]->SetNextScreen(lastScreen);
         screens[actualScreen]->OpenClose();
         entered = true;
     }
 
     if (screens[actualScreen]->ShouldClose()) {
         entered = false;
-        if (actualScreen == OPTIONS) actualScreen = lastScreen;
-        else SetScreen(screens[actualScreen]->GetScreen());
+        SetScreen(screens[actualScreen]->GetScreen());
         return;
     }
 
