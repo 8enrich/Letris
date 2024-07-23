@@ -15,12 +15,9 @@ void Options::Tick(){
     EndDrawing();
   //} while(hasMovement);
   speed = 0;
-  for(Button *button : buttons){
-    if(button == screenSizeButton){
-      std::string resolutionString = button->GetText();
-      if (selectedResolution != resolutionString) SetNewResolution(resolutionString);
-    }
-  }
+  currentSelected = buttonManager.GetCurrentSelected(currentSelected);
+  std::string resolutionString = screenSizeButton->GetText();
+  if (selectedResolution != resolutionString) SetNewResolution(resolutionString);
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
@@ -30,7 +27,19 @@ void Options::Tick(){
 
 void Options::Draw() {
   ClearBackground(BLACK);
-  factor = 1;
+  switch(currentSelected){
+    case GENERAL:
+      DrawGeneral();
+      break;
+    case CONTROLS:
+      DrawControls();
+      break;
+    case VOLUME:
+      DrawVolume();
+      break;
+    default:
+      break;
+  }
 //  DrawHeader();
 //  DrawControls();
 //  DrawVolume();
@@ -55,6 +64,11 @@ void Options::SetNewResolution(std::string resolution){
   selectedResolution = resolution;
 }
 
+void Options::DrawGeneral(){
+  ray_functions::DrawFormatedText("Resolution:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
+  ray_functions::DrawFormatedText("Window Mode:", Vec2<double>{1.0f/3, 1/2.3}, fontSizes[1], RAYWHITE);
+}
+
 void Options::DrawHeader() {
   ray_functions::DrawFormatedText("OPTIONS", Vec2<double>{1.0f/2, 1.0f/20}, fontSizes[0], RAYWHITE);
 }
@@ -65,14 +79,7 @@ void Options::DrawButtons() {
   ray_functions::DrawFormatedText("Back", Vec2<double>{x, y + lineDistance}, fontSizes[0], optionsColor[4]);
 }
 void Options::DrawControls() {
-  DrawSectionHeader("Controls", y0);
-
-  int width = settings::screenWidth, height = settings::screenHeight;
-  int y = height * y0, distance = height * lineDistance;
-  int totalTextWidth = CalculateTotalTextWidth();
-  int margin = (width - totalTextWidth) / (NUM_COLS + 1);
-  DrawColumns(y + factor++ * distance, margin);
-  DrawControlOptions(y + factor++ * distance, margin);
+  ray_functions::DrawFormatedText("Controls:", Vec2<double>{1.0f/3.2, 1.0f/3}, fontSizes[1], RAYWHITE);
 }
 
 void Options::DrawSectionHeader(const char* text, float yPos) {

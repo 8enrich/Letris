@@ -7,10 +7,12 @@
 class OptionsButton : public Button {
 public:
   OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<std::string> options, std::string optionInSettings);
+  OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonManager *buttonManager);
   void Move(int);
   void Tick() override;
   void OpenMenu();
   void CloseMenu();
+  bool GetIsClicked();
   std::string GetButtonText();
 private:
   void MenuHandling();

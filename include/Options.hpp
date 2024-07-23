@@ -18,7 +18,7 @@ public:
   void Tick() override;
 private:
   void OptionsHandling();
-  int currentSelected = 1;
+  int currentSelected = 0;
   int itemSelected[2] = {settings::db["CONTROL"], GetScreenSizeIndex()};
   int itemQuantity[2] = {CONTROLS_QTD, SCREEN_SIZE_QTD};
   Color optionsColor[OPT_QTD_OPTIONS] = {RAYWHITE, GRAY, GRAY, GRAY};
@@ -48,6 +48,7 @@ private:
   int GetScreenSizeIndex();
   void HandleEnterKey();
   void UpdateColors();
+  void DrawGeneral();
   void HandleArrowKey(int);
   float fontSizes[2] = {(float)1/20, (float)1/30};
   void SetNewResolution(std::string resolution); 
@@ -63,24 +64,37 @@ private:
   std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"}; 
   std::vector<std::string> screenMode = {"Window", "FullScreen"};
   std::string selectedResolution = to_string(settings::db["WINDOW_WIDTH"]) + "x" + to_string(settings::db["WINDOW_HEIGHT"]);
+  std::string selectedControl = controls[settings::db["CONTROL"]];
   float x = (float)1/2, y = y0 + 2 * lineDistance;
   ScreenButton *returnButton = new ScreenButton("Return", Vec2<double>{1.0f/2, 3.0f/4}, 1.0f/20, MENU);
-  OptionsButton *screenSizeButton = new OptionsButton(screenSizes2[GetScreenSizeIndex()], Vec2<double>{1.0f/2, 1.0f/3},
+  OptionsButton *screenSizeButton = new OptionsButton(selectedResolution, Vec2<double>{1.0f/2, 1.0f/3},
       fontSizes[1], screenSizes2, selectedResolution);
   OptionsButton *screenModeButton = new OptionsButton("Window", Vec2<double>{1.0f/2, 1/2.3},
       fontSizes[1], screenMode, "Window");
-  const std::vector<Button*> buttons = {
-    new ScreenButton("General", Vec2<double>{1.0f/4, 1.0f/10}, fontSizes[0], MENU),
-    new ScreenButton("Controls", Vec2<double>{1.0f/2, 1.0f/10}, fontSizes[0], MENU),
-    new ScreenButton("Volume", Vec2<double>{3.0f/4, 1.0f/10}, fontSizes[0], MENU),
-    returnButton,
+  const std::vector<Button*> generalButtons = {
     screenSizeButton,
     screenModeButton
+  };
+  const std::vector<Button*> controlButtons = {
+    new OptionsButton(selectedControl, Vec2<double>{1.0f/2, 1.0f/3}, fontSizes[1], controls, selectedControl),
+  };
+  ButtonManager generalManager = ButtonManager(generalButtons, true);
+  ButtonManager controlManager = ButtonManager(controlButtons, true);
+  const std::vector<Button*> buttons = {
+    new OptionsButton("General", Vec2<double>{1.0f/4, 1.0f/10}, fontSizes[0], &generalManager),
+    new OptionsButton("Controls", Vec2<double>{1.0f/2, 1.0f/10}, fontSizes[0], &controlManager),
+    //new OptionsButton("Volume", Vec2<double>{3.0f/4, 1.0f/10}, fontSizes[0], &volumeManager),
+    returnButton,
   };
   ButtonManager buttonManager = ButtonManager(buttons, true);
   enum itens {
     CONTROL,
     SCREENSIZE,
+  };
+  enum buttonsNum {
+    GENERAL,
+    CONTROLS,
+    VOLUME
   };
   int GetResolutionIndex(std::string);
   void OpenClose() override;

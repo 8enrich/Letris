@@ -10,6 +10,7 @@ public:
   void ResetScreen();
   int GetSelectedButtonIndex();
   std::vector<Button*> GetButtons();
+  int GetCurrentSelected(int);
 private:
   int GetButtonIndex(Button *button);
   bool isVertical;

@@ -93,3 +93,19 @@ int ButtonManager::GetSelectedButtonIndex(){
 std::vector<Button*> ButtonManager::GetButtons() {
   return buttons;
 }
+
+int ButtonManager::GetCurrentSelected(int currentSelected){
+  for(int i = 0; i < 3; i++){
+    Button *button = buttons[i];
+    if(typeid(*button) == typeid(OptionsButton)){
+      OptionsButton *optionsButton = static_cast<OptionsButton*>(button);
+      if(optionsButton->GetIsClicked()) currentSelected = i;
+      if(i == currentSelected){
+        optionsButton->OpenMenu();
+        continue;
+      }
+      optionsButton->CloseMenu();
+    }
+  }
+  return currentSelected;
+}

@@ -19,33 +19,41 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
           buttons.push_back(new ScreenButton(options[i], {buttonPosition.GetX(), buttonPosition.GetY()*(i+3)/2}, fontSize, Screens::STRING));
     }
     buttonOptions = new ButtonManager(buttons, true);
-
   }
+
+OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonManager *buttonManager) :
+  Button(buttonText, buttonPosition, fontSize, ButtonTypes::OPTIONS){
+    buttonOptions = buttonManager;
+    this->options = {};
+  }
+
 void OptionsButton::Move(int n) {}
 
 void OptionsButton::DrawMenu() {
   DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY() + settings::screenHeight/16, buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * 4, LIGHTGRAY);
 }
 void OptionsButton::Update(){
-  buttonText = options[currentSelectedOptionIndex]; 
+  if(options.size() > 0) buttonText = options[currentSelectedOptionIndex]; 
   realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
   buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
 }
 
 void OptionsButton::MenuHandling(){
-  BeginDrawing();
+  //BeginDrawing();
   DrawMenu();
   buttonOptions->Tick();
-  EndDrawing();
-  if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && 
-      !isMouseHoveringVec({realButtonPosition.GetX(), realButtonPosition.GetY()+ settings::screenHeight/16},
-      {buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * 4})) CloseMenu();
+  //EndDrawing();
+  if(options.size() > 0){
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && 
+        !isMouseHoveringVec({realButtonPosition.GetX(), realButtonPosition.GetY()+ settings::screenHeight/16},
+        {buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * 4})) CloseMenu();
 
-  if(buttonOptions->GetScreen() == Screens::STRING) {
-    currentSelectedOptionIndex = buttonOptions->GetSelectedButtonIndex();
-    buttonOptions->ResetScreen();
-    isClicked = false;
-    isMenuOpen = false;
+    if(buttonOptions->GetScreen() == Screens::STRING) {
+      currentSelectedOptionIndex = buttonOptions->GetSelectedButtonIndex();
+      buttonOptions->ResetScreen();
+      isClicked = false;
+      isMenuOpen = false;
+    }
   }
 }
 void OptionsButton::OpenMenu(){
@@ -60,11 +68,16 @@ void OptionsButton::Tick(){
   DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY(), buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY()+2, DARKGRAY);
   Draw();
   if(isClicked) OpenMenu();
-  while(isMenuOpen) MenuHandling();
+  isClicked = false;
+  if(isMenuOpen) MenuHandling();
 }
 int OptionsButton::GetSelectedItemIndex(){
   return currentSelectedOptionIndex;
 }
 std::string OptionsButton::GetButtonText(){
   return buttonText;
+}
+
+bool OptionsButton::GetIsClicked(){
+  return isClicked;
 }
