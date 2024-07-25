@@ -62,22 +62,3 @@ void ray_functions::DrawFormatedText(const char *text, Vec2<double> pos, float f
   int width = settings::screenWidth, height = settings::screenHeight;
   DrawText(text, width * pos.GetX() - MeasureText(text, height * fontSize)/2, height * pos.GetY(), height * fontSize, color);
 }
-
-bool ray_functions::HorizontalSlideAnimation(const char *textOut, const char *textIn, int x, int y, int speed, float fontSize, Color color){
-  int signal = (speed > 0)? 1: -1, newX = x - speed, width = settings::screenWidth;
-  DrawText(textOut, newX, y, fontSize, color);
-  if(newX < 0 || newX > settings::screenWidth)
-    DrawText(textIn, newX + (signal * width), y, fontSize, color);
-  if(newX + width <= x || newX - width >= x) return true;
-  return false;
-}
-
-bool ray_functions::HorizontalSlideAnimation(const char *textOut, const char *textIn, float x, float y, int speed, float fontSize, Color color){
-  int signal = (speed > 0)? 1: -1, height = settings::screenHeight;
-  float newX = x - (float)speed/1000;
-  DrawFormatedText(textOut, Vec2<double>{(float)newX, (float)y}, fontSize, color);
-  if(newX - MeasureText(textOut, height * fontSize)/2 <= 0 || newX + MeasureText(textOut, height * fontSize)/2 >= 1)
-    DrawFormatedText(textIn, Vec2<double>{(float)newX + signal, (float)y}, fontSize, color);
-  if(newX + 1 <= x || newX - 1 >= x) return true;
-  return false;
-}
