@@ -3,6 +3,13 @@
 #include <raylib.h>
 #include <string>
 
+Options::~Options(){
+  for (auto button : buttons) delete button;
+  for (auto button : generalButtons) delete button;
+  for (auto button : controlButtons) delete button;
+  for (auto button : volumeButtons) delete button;
+}
+
 void Options::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   //OptionsHandling();
@@ -17,7 +24,11 @@ void Options::Tick(){
   speed = 0;
   currentSelected = buttonManager.GetCurrentSelected(currentSelected);
   std::string resolutionString = screenSizeButton->GetText();
+  std::string controlString = controlButtons[0]->GetText();
+  double mousePosition = volumeButtons[0]->GetMousePositionX();
   if (selectedResolution != resolutionString) SetNewResolution(resolutionString);
+  if (selectedControl != controlString) SetNewControl(controlString);
+  if (MouseInVolumeBar(mousePosition)) SetNewVolume(mousePosition);
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
@@ -27,6 +38,7 @@ void Options::Tick(){
 
 void Options::Draw() {
   ClearBackground(BLACK);
+  ray_functions::DrawFormatedRectangle(Vec2<double>{1.0f/2, 1.0f/12}, Vec2<double>{1/1.5, 1.0f/10}, WHITE);
   switch(currentSelected){
     case GENERAL:
       DrawGeneral();
@@ -49,19 +61,39 @@ void Options::Draw() {
 void Options::OpenClose(){
   Screen::OpenClose();
   if(!shouldClose) returnButton->SetScreen(nextScreen);
+  currentSelected = 0;
 }
 
-int Options::GetResolutionIndex(std::string resolution){
-  for(int i = 0; i < SCREEN_SIZE_QTD; i++){
-    if(resolution == screenSizes2[i]) return i;
+int Options::GetIndex(std::string item, std::vector<std::string> vector){
+  for(int i = 0, size = vector.size(); i < size; i++){
+    if(item == vector[i]) return i;
   }
   return 0;
 }
 
 void Options::SetNewResolution(std::string resolution){
-  int index = GetResolutionIndex(resolution);
+  int index = GetIndex(resolution, screenSizes2);
   settings::UpdateWindowSize(settings::screenSizes[index]);
   selectedResolution = resolution;
+}
+
+void Options::SetNewControl(std::string control){
+  int index = GetIndex(control, controls);
+  settings::db["CONTROL"] = index;
+  selectedControl = control;
+}
+
+void Options::SetNewVolume(double mousePosition){
+  int width = settings::screenWidth;
+  volume = mousePosition/width * 500 - 200;
+  if(volume < 0) volume = 0;
+  if(volume > 100) volume = 100;
+  settings::db["VOLUME"] = volume;
+}
+
+bool Options::MouseInVolumeBar(double mousePosition){
+  int width = settings::screenWidth;
+  return mousePosition >= width/2.0f - width/9.0f && mousePosition <= width/2.0f + width/9.0f;
 }
 
 void Options::DrawGeneral(){
@@ -165,17 +197,13 @@ void Options::DrawScreenSize() {
 }
 
 void Options::DrawVolume(){
-  DrawSectionHeader("Volume", y0 + factor++ * lineDistance);
-
+  ray_functions::DrawFormatedText("Volume:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
   int width = settings::screenWidth, height = settings::screenHeight;
-  float xBegin = (float)width/2 - (float)width/8, xEnd = (float)width/2 + (float)width/8,
-        y = y0 + factor++ * lineDistance, y1 = y + (float)1/50;
-  DrawArrows(y, optionsColor[2]);
-  DrawLineEx((Vector2){xBegin, height * y1}, (Vector2){xEnd, height * y1}, (float)height/200, optionsColor[2]);
-  DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1},
-      (float)height/100, optionsColor[2]);
-  ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{1.0f/2 + 1.0f/6, y},
-      fontSizes[1], optionsColor[2]);
+  float xBegin = width/2.0f - width/9.0f, xEnd = width/2.0f + width/9.0f, y1 = 1/2.85;
+  DrawLineEx((Vector2){xBegin, height * y1}, (Vector2){xEnd, height * y1}, (float)height/200, WHITE);
+  DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1}, (float)height/100, WHITE);
+  ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{1.0f/2 + 1.0f/6, 1.0f/3},
+      fontSizes[1], WHITE);
 }
 
 void Options::DrawArrows(double y, Color color) {

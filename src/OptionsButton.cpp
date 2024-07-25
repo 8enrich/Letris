@@ -14,40 +14,36 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
     std::vector<Button*> buttons;
     realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
     buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
-    for (int i =0; i < options.size(); i++) {
-      if (options[i] == optionInSettings) currentSelectedOptionIndex = i; 
-          buttons.push_back(new ScreenButton(options[i], {buttonPosition.GetX(), buttonPosition.GetY()*(i+3)/2}, fontSize, Screens::STRING));
+    for (int i = 0, size = options.size(); i < size; i++) {
+      if (options[i] == optionInSettings) currentSelectedOptionIndex = i;
+          buttons.push_back(new ScreenButton(options[i], {buttonPosition.GetX(), buttonPosition.GetY() + (i+1) * 1.0f/15},
+                fontSize, Screens::STRING));
     }
     buttonOptions = new ButtonManager(buttons, true);
   }
 
-OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonManager *buttonManager) :
+OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<Button*> buttons) :
   Button(buttonText, buttonPosition, fontSize, ButtonTypes::OPTIONS){
-    buttonOptions = buttonManager;
+    buttonOptions = new ButtonManager(buttons, true);
     this->options = {};
   }
 
 void OptionsButton::Move(int n) {}
 
 void OptionsButton::DrawMenu() {
-  DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY() + settings::screenHeight/16, buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * 4, LIGHTGRAY);
+  ray_functions::DrawFormatedRectangle(buttonPosition, GetMenuWidthHeight(), LIGHTGRAY);
 }
 void OptionsButton::Update(){
-  if(options.size() > 0) buttonText = options[currentSelectedOptionIndex]; 
+  if(options.size() > 0) buttonText = options[currentSelectedOptionIndex];
   realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
   buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
 }
 
 void OptionsButton::MenuHandling(){
-  //BeginDrawing();
   DrawMenu();
   buttonOptions->Tick();
-  //EndDrawing();
   if(options.size() > 0){
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && 
-        !isMouseHoveringVec({realButtonPosition.GetX(), realButtonPosition.GetY()+ settings::screenHeight/16},
-        {buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY() * options.size() * 4})) CloseMenu();
-
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !isMouseHoveringVec(buttonPosition, GetMenuWidthHeight())) CloseMenu();
     if(buttonOptions->GetScreen() == Screens::STRING) {
       currentSelectedOptionIndex = buttonOptions->GetSelectedButtonIndex();
       buttonOptions->ResetScreen();
@@ -65,11 +61,14 @@ void OptionsButton::CloseMenu(){
 }
 void OptionsButton::Tick(){
   Update();
-  DrawRectangle(realButtonPosition.GetX(), realButtonPosition.GetY(), buttonWidthHeight.GetX()+2, buttonWidthHeight.GetY()+2, DARKGRAY);
-  Draw();
   if(isClicked) OpenMenu();
   isClicked = false;
   if(isMenuOpen) MenuHandling();
+  Color selectedColor = (isMenuOpen)? BLACK : DARKGRAY;
+  Color color = (options.size() > 0)? DARKGRAY : selectedColor;
+  ray_functions::DrawFormatedRectangle(buttonPosition, Vec2<double>{(GetLargestOptionText() + 10)/(float)settings::screenWidth,
+      1.0f/20}, color);
+  Draw();
 }
 int OptionsButton::GetSelectedItemIndex(){
   return currentSelectedOptionIndex;
@@ -80,4 +79,17 @@ std::string OptionsButton::GetButtonText(){
 
 bool OptionsButton::GetIsClicked(){
   return isClicked;
+}
+
+int OptionsButton::GetLargestOptionText(){
+  int largest = MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), value;
+  for(int i = 0, size = options.size(); i < size; i++){
+    value = MeasureText(options[i].c_str(), fontSize*settings::screenHeight);
+    if(largest < value) largest = value;
+  }
+  return largest;
+}
+
+Vec2<double> OptionsButton::GetMenuWidthHeight(){
+  return Vec2<double>{(GetLargestOptionText() + 10)/(float)settings::screenWidth, 1.0f * options.size()/12};
 }

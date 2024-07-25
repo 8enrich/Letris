@@ -12,6 +12,11 @@ void ray_functions::DrawRectangle(Vec2<double> pos, Vec2<double> widthHeight, Co
   DrawRectangle(pos.GetX(), pos.GetY(), widthHeight.GetX(), widthHeight.GetY(), color);
 }
 
+void ray_functions::DrawFormatedRectangle(Vec2<double> pos, Vec2<double> widthHeight, Color color){
+  int width = settings::screenWidth, height = settings::screenHeight;
+  DrawRectangle(width * (pos.GetX() - widthHeight.GetX()/2.0f), height * pos.GetY(), width * widthHeight.GetX(), height * widthHeight.GetY(), color);
+}
+
 Vec2<double> ray_functions::FakePositionToRealPosition(Vec2<double> pos, std::string text, float fontSize){
   int width = settings::screenWidth, height = settings::screenHeight;
   return {width * pos.GetX() - MeasureText(text.c_str(), height * fontSize)/2, height * pos.GetY()};

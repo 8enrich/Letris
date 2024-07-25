@@ -16,6 +16,7 @@
 class Options : public Screen {
 public:
   void Tick() override;
+  ~Options();
 private:
   void OptionsHandling();
   int currentSelected = 0;
@@ -61,7 +62,7 @@ private:
     "K H L J SPACE Z",
   };
   const char *screenSizes[SCREEN_SIZE_QTD] = {"800x600", "1080x720", "1366x768"};
-  std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"}; 
+  std::vector<std::string> screenSizes2 = {"800x600", "1280x720", "1366x768"};
   std::vector<std::string> screenMode = {"Window", "FullScreen"};
   std::string selectedResolution = to_string(settings::db["WINDOW_WIDTH"]) + "x" + to_string(settings::db["WINDOW_HEIGHT"]);
   std::string selectedControl = controls[settings::db["CONTROL"]];
@@ -72,18 +73,19 @@ private:
   OptionsButton *screenModeButton = new OptionsButton("Window", Vec2<double>{1.0f/2, 1/2.3},
       fontSizes[1], screenMode, "Window");
   const std::vector<Button*> generalButtons = {
+    screenModeButton,
     screenSizeButton,
-    screenModeButton
   };
   const std::vector<Button*> controlButtons = {
     new OptionsButton(selectedControl, Vec2<double>{1.0f/2, 1.0f/3}, fontSizes[1], controls, selectedControl),
   };
-  ButtonManager generalManager = ButtonManager(generalButtons, true);
-  ButtonManager controlManager = ButtonManager(controlButtons, true);
+  const std::vector<Button*> volumeButtons = {
+    new Button("                                     ", Vec2<double>{1.0f/2, 1.0f/3}, fontSizes[1])
+  };
   const std::vector<Button*> buttons = {
-    new OptionsButton("General", Vec2<double>{1.0f/4, 1.0f/10}, fontSizes[0], &generalManager),
-    new OptionsButton("Controls", Vec2<double>{1.0f/2, 1.0f/10}, fontSizes[0], &controlManager),
-    //new OptionsButton("Volume", Vec2<double>{3.0f/4, 1.0f/10}, fontSizes[0], &volumeManager),
+    new OptionsButton("General", Vec2<double>{1.0f/4, 1.0f/10}, fontSizes[0], generalButtons),
+    new OptionsButton("Controls", Vec2<double>{1.0f/2, 1.0f/10}, fontSizes[0], controlButtons),
+    new OptionsButton("Volume", Vec2<double>{3.0f/4, 1.0f/10}, fontSizes[0], volumeButtons),
     returnButton,
   };
   ButtonManager buttonManager = ButtonManager(buttons, true);
@@ -96,7 +98,10 @@ private:
     CONTROLS,
     VOLUME
   };
-  int GetResolutionIndex(std::string);
+  int GetIndex(std::string, std::vector<std::string>);
   void OpenClose() override;
+  void SetNewControl(std::string);
+  void SetNewVolume(double);
+  bool MouseInVolumeBar(double);
 };
 

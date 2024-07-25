@@ -1,5 +1,6 @@
 #include "../include/ButtonManager.hpp"
 #include "../include/OptionsButton.hpp"
+#include "../include/ScreenButton.hpp"
 #include <raylib.h>
 
 ButtonManager::ButtonManager(std::vector<Button*> buttons, bool isVertical): buttons(buttons), isVertical(isVertical) {
@@ -76,9 +77,15 @@ void ButtonManager::MouseHandling(Button* button){
   buttons[currentSelectedButtonIndex]->Unselect();
   currentSelectedButtonIndex = GetButtonIndex(button);
   buttons[currentSelectedButtonIndex]->Select();
-  if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+  if(typeid(*button) == typeid(ScreenButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
     currentScreen = buttons[currentSelectedButtonIndex]->Click();
+    return;
   }
+  if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+    buttons[currentSelectedButtonIndex]->Click();
+    return;
+  }
+  buttons[currentSelectedButtonIndex]->Unclick();
 }
 Screens ButtonManager::GetScreen() {
   return currentScreen;

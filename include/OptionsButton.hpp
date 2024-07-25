@@ -7,7 +7,7 @@
 class OptionsButton : public Button {
 public:
   OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<std::string> options, std::string optionInSettings);
-  OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonManager *buttonManager);
+  OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<Button*> buttons);
   void Move(int);
   void Tick() override;
   void OpenMenu();
@@ -24,4 +24,6 @@ private:
   int currentSelectedOptionIndex = 0;
   int GetSelectedItemIndex();
   void DrawMenu();
+  int GetLargestOptionText();
+  Vec2<double> GetMenuWidthHeight();
 };

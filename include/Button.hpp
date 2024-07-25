@@ -12,6 +12,7 @@ enum class ButtonTypes {
 class Button {
 public:
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type);
+  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize);
   void Draw();
   virtual void Tick();
   void Select();
@@ -22,6 +23,8 @@ public:
   bool isMouseHoveringVec(Vec2<double>, Vec2<double>);
   Vec2<double> GetButtonPosition();
   std::string GetText(); 
+  void Unclick();
+  double GetMousePositionX();
 protected:
   virtual void Update();
   bool isButtonClicked();

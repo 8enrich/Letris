@@ -8,6 +8,12 @@ Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSi
   isSelected = false;
 }
 
+Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize):
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize)
+{
+  isSelected = false;
+}
+
 void Button::Draw(){
   Color color = isSelected ? selectedColor : unselectedColor;
   ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, color);
@@ -57,3 +63,11 @@ Vec2<double> Button::GetButtonPosition() {
   return buttonPosition;
 }
 
+void Button::Unclick(){
+  isClicked = false;
+}
+
+double Button::GetMousePositionX(){
+  if(isMouseHoveringButton() && isButtonClicked()) return GetMouseX();
+  return 0;
+}
