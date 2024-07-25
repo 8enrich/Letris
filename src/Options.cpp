@@ -39,8 +39,10 @@ void Options::Draw() {
 
 void Options::OpenClose(){
   Screen::OpenClose();
-  if(!shouldClose) returnButton->SetScreen(nextScreen);
-  currentSelected = 0;
+  if(!shouldClose){ 
+  	returnButton->SetScreen(nextScreen);
+  	currentSelected = 0;
+  }
 }
 
 int Options::GetIndex(std::string item, std::vector<std::string> vector){
@@ -64,9 +66,9 @@ void Options::SetNewControl(std::string control){
 
 void Options::SetNewVolume(double mousePosition){
   int width = settings::screenWidth;
-  volume = mousePosition/width * 500 - 200;
-  if(volume < 0) volume = 0;
-  if(volume > 100) volume = 100;
+  float xBegin = width/2.0f - width/9.0f, xEnd = width/2.0f + width/9.0f, y1 = 1/2.85;
+  double doubleVolume = 100 * (mousePosition - xBegin)/(xEnd - xBegin);
+  volume = (doubleVolume - (int) doubleVolume >= 0.5)? (int) doubleVolume + 1: (int) doubleVolume;
   settings::db["VOLUME"] = volume;
 }
 
