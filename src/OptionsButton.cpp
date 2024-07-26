@@ -7,28 +7,22 @@
 #include <raylib.h>
 #include <vector>
 
-OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<std::string> options, std::string optionInSettings) : 
+OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<std::string> options) :
   Button(buttonText, buttonPosition, fontSize, ButtonTypes::OPTIONS){
     this->options = options;
-    this->optionInSettings = optionInSettings;
     std::vector<Button*> buttons;
-    realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
-    buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
     for (int i = 0, size = options.size(); i < size; i++) {
-      if (options[i] == optionInSettings) currentSelectedOptionIndex = i;
-          buttons.push_back(new ScreenButton(options[i], {buttonPosition.GetX(), buttonPosition.GetY() + (i+1) * 1.0f/15},
-                fontSize, Screens::STRING));
+      if (options[i] == buttonText) currentSelectedOptionIndex = i;
+      buttons.push_back(new Button(options[i], {buttonPosition.GetX(), buttonPosition.GetY() + (i+1) * 1.0f/15}, fontSize));
     }
-    buttonOptions = new ButtonManager(buttons, true);
+    buttonOptions = new ButtonManager(buttons);
   }
 
 OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition, float fontSize, std::vector<Button*> buttons) :
   Button(buttonText, buttonPosition, fontSize, ButtonTypes::OPTIONS){
-    buttonOptions = new ButtonManager(buttons, true);
+    buttonOptions = new ButtonManager(buttons);
     this->options = {};
   }
-
-void OptionsButton::Move(int n) {}
 
 void OptionsButton::DrawMenu() {
   ray_functions::DrawFormatedRectangle(buttonPosition, GetMenuWidthHeight(), LIGHTGRAY);
@@ -44,9 +38,9 @@ void OptionsButton::MenuHandling(){
   buttonOptions->Tick();
   if(options.size() > 0){
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !isMouseHoveringVec(buttonPosition, GetMenuWidthHeight())) CloseMenu();
-    if(buttonOptions->GetScreen() == Screens::STRING) {
+    if (buttonOptions->HasButtonClicked()){
       currentSelectedOptionIndex = buttonOptions->GetSelectedButtonIndex();
-      buttonOptions->ResetScreen();
+      buttonOptions->GetButtons()[currentSelectedOptionIndex]->Unclick();
       isClicked = false;
       isMenuOpen = false;
     }
@@ -83,8 +77,8 @@ bool OptionsButton::GetIsClicked(){
 
 int OptionsButton::GetLargestOptionText(){
   int largest = MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), value;
-  for(int i = 0, size = options.size(); i < size; i++){
-    value = MeasureText(options[i].c_str(), fontSize*settings::screenHeight);
+  for(std::string item : options){
+    value = MeasureText(item.c_str(), fontSize*settings::screenHeight);
     if(largest < value) largest = value;
   }
   return largest;

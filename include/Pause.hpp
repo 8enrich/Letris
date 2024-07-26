@@ -15,7 +15,7 @@ private:
     new ScreenButton("Options", Vec2<double>{x, y + lineDistance}, fontSize, OPTIONS),
     new ScreenButton("Back to Main Menu", Vec2<double>{x, y + 2 * lineDistance}, fontSize, MENU)
   };
-  ButtonManager buttonManager = ButtonManager(buttons, true);
+  ButtonManager buttonManager = ButtonManager(buttons);
 
   void OptionsHandling();
   void Draw() override;

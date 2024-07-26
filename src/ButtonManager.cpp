@@ -3,90 +3,41 @@
 #include "../include/ScreenButton.hpp"
 #include <raylib.h>
 
-ButtonManager::ButtonManager(std::vector<Button*> buttons, bool isVertical): buttons(buttons), isVertical(isVertical) {
-  this->buttons[0]->Select();
-}
+ButtonManager::ButtonManager(std::vector<Button*> buttons): buttons(buttons) {}
+
 void ButtonManager::Tick(){
-  if (isVertical) VerticalInputHandler();
-  else InputHandler();
   for (Button *button : buttons) {
     button->Tick();
     MouseHandling(button);
   }
 }
 
-void ButtonManager::InputHandler(){
-  auto keyPressed = GetKeyPressed();
-  auto buttonPressed = buttons[currentSelectedButtonIndex];
-  auto type = buttonPressed->type;
-  switch (keyPressed) {
-    case KEY_ENTER:
-      if (type == ButtonTypes::SCREEN) currentScreen = buttonPressed->Click();
-      break;
-    case KEY_RIGHT:
-      if (type != ButtonTypes::OPTIONS) MoveSelection(1);
-     // else buttonPressed.Move(1);
-      break;
-    case KEY_LEFT:
-      if (type != ButtonTypes::OPTIONS) MoveSelection(-1);
-     // else buttonPressed.Move(-1);
-      break;
-    case KEY_UP:
-      if (type == ButtonTypes::OPTIONS) MoveSelection(-1);
-      break;
-    case KEY_DOWN:
-      if (type == ButtonTypes::OPTIONS) MoveSelection(1);
-      break;
-  }
-}
-
-void ButtonManager::VerticalInputHandler() {
-  auto keyPressed = GetKeyPressed();
-  auto buttonPressed = buttons[currentSelectedButtonIndex];
-  auto type = buttonPressed->type;
-  switch (keyPressed) {
-    case KEY_ENTER:
-      if (type == ButtonTypes::SCREEN) currentScreen = buttonPressed->Click();
-      if (type == ButtonTypes::OPTIONS) buttonPressed->Click();
-      break;
-    case KEY_UP:
-      MoveSelection(-1);
-      break;
-    case KEY_DOWN:
-      MoveSelection(1);
-      break;
-
-  }
-}
-void ButtonManager::MoveSelection(int num) {
-    buttons[currentSelectedButtonIndex]->Unselect();
-    currentSelectedButtonIndex = (currentSelectedButtonIndex + num + buttons.size()) % buttons.size();
-    buttons[currentSelectedButtonIndex]->Select();
-}
-
-int ButtonManager::GetButtonIndex(Button *button) {
+int ButtonManager::GetButtonIndex(Button *buttonTarget) {
   int index = 0;
-  for (Button *button1 : buttons) {
-    if (button1 == button) break;
+  for (Button *button : buttons) {
+    if (button == buttonTarget) break;
     index++;
   }
   return index;
 }
+
 void ButtonManager::MouseHandling(Button* button){
-  if (!button->isMouseHoveringButton()) return;
-  buttons[currentSelectedButtonIndex]->Unselect();
+  if (!button->isMouseHoveringButton()){
+    button->Unselect();
+    return;
+  }
   currentSelectedButtonIndex = GetButtonIndex(button);
-  buttons[currentSelectedButtonIndex]->Select();
-  if(typeid(*button) == typeid(ScreenButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-    currentScreen = buttons[currentSelectedButtonIndex]->Click();
-    return;
+  button->Select();
+  if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = buttons[currentSelectedButtonIndex]->Click();
+  if(typeid(*button) == typeid(Button)){
+    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+      buttons[currentSelectedButtonIndex]->Click();
+      return;
+    }
+    buttons[currentSelectedButtonIndex]->Unclick();
   }
-  if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-    buttons[currentSelectedButtonIndex]->Click();
-    return;
-  }
-  buttons[currentSelectedButtonIndex]->Unclick();
 }
+
 Screens ButtonManager::GetScreen() {
   return currentScreen;
 }
@@ -94,9 +45,11 @@ Screens ButtonManager::GetScreen() {
 void ButtonManager::ResetScreen() {
   currentScreen = NOTSCREEN;
 }
+
 int ButtonManager::GetSelectedButtonIndex(){
   return currentSelectedButtonIndex;
 }
+
 std::vector<Button*> ButtonManager::GetButtons() {
   return buttons;
 }
@@ -115,4 +68,11 @@ int ButtonManager::GetCurrentSelected(int currentSelected){
     }
   }
   return currentSelected;
+}
+
+bool ButtonManager::HasButtonClicked(){
+  for(Button *button : buttons){
+    if(button->isButtonClicked()) return true;
+  }
+  return false;
 }

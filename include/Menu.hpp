@@ -16,6 +16,5 @@ private:
     new ScreenButton("Options", Vec2<double>{1.0f/2, 1.0f/1.5}, 1.0f/15, OPTIONS),
     new ScreenButton("Quit", Vec2<double>{3.0f/4, 1.0f/1.5}, 1.0f/15, EXIT)
   };
-  ButtonManager buttonManager = ButtonManager(buttons, false);
-
+  ButtonManager buttonManager = ButtonManager(buttons);
 };

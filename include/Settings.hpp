@@ -40,9 +40,6 @@ enum Screens {
   PAUSE,
   GAMEOVER,
   NOTSCREEN,
-  STRING,
-  GRAPHICS,
-  CONTROLS
 };
 
 enum Keys{

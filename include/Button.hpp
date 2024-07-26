@@ -6,7 +6,6 @@
 enum class ButtonTypes {
   SCREEN,
   OPTIONS,
-  APPLY
 };
 
 class Button {
@@ -22,12 +21,12 @@ public:
   bool isMouseHoveringButton();
   bool isMouseHoveringVec(Vec2<double>, Vec2<double>);
   Vec2<double> GetButtonPosition();
-  std::string GetText(); 
+  std::string GetText();
   void Unclick();
   double GetMousePositionX();
+  bool isButtonClicked();
 protected:
   virtual void Update();
-  bool isButtonClicked();
   bool isButtonClickedByMouse();
   bool hasBorder;
   bool isSelected;
