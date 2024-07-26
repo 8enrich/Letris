@@ -115,6 +115,7 @@ void Game::UpdateShape(){
 
 void Game::Draw(){
   ClearBackground(BLACK);
+  buttonManager.Tick();
   board->Draw();
   board->DrawStats(score, level, cleanedLinesCount);
   if(hold >= 0) DrawHoldShape();
@@ -126,6 +127,11 @@ void Game::Update(){
   UpdateBoard();
   UpdateShape();
   UpdateLevel();
+  if(buttonManager.GetScreen() != NOTSCREEN) {
+    nextScreen = buttonManager.GetScreen();
+    buttonManager.ResetScreen();
+    OpenClose();
+  }
 }
 
 void Game::UpdateBoard(){

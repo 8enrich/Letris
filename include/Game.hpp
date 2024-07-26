@@ -2,6 +2,9 @@
 #include "Board.hpp"
 #include "Shape.hpp"
 #include "Screen.hpp"
+#include "ButtonManager.hpp"
+#include "ScreenButton.hpp"
+#include "Button.hpp" 
 
 class Game : public Screen {
   public:
@@ -49,4 +52,8 @@ class Game : public Screen {
                        L_Shape(*board),
                        S_Shape(*board),
                        Z_Shape(*board)};
+    std::vector<Button*> buttons = {
+      new ScreenButton("Pause", Vec2<double>{1/1.1, 1.0f/25}, 1.0f/20, PAUSE)
+    };
+    ButtonManager buttonManager = ButtonManager(buttons);
 };

@@ -34,3 +34,7 @@ Music Screen::GetMusic(){
 }
 
 Screens Screen::GetScreen(){ return nextScreen;}
+
+void Screen::SetNextScreen(Screens newNextScreen){
+  nextScreen = newNextScreen;
+}
