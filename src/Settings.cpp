@@ -1,13 +1,13 @@
 #include "../include/Settings.hpp"
 
 std::ifstream settings::f(std::string(ASSETS_PATH) + "user_settings.json"); 
-json settings::db = json::parse(f);
-int settings::screenWidth = db["WINDOW_WIDTH"];
-int settings::screenHeight = db["WINDOW_HEIGHT"];
-Vec2<int> settings::boardPosition = {db["BOARD_POSITION"][0], db["BOARD_POSITION"][1]};
-int settings::cellSize = db["CELLSIZE"];
-Vec2<int> settings::boardWidthHeight {db["BOARD_RESOLUTION"][0], db["BOARD_RESOLUTION"][1]};
-int settings::volume = db["VOLUME"];
+json settings::db = json::parse(settings::f);
+int settings::screenWidth = settings::db["WINDOW_WIDTH"];
+int settings::screenHeight = settings::db["WINDOW_HEIGHT"];
+Vec2<int> settings::boardPosition = {settings::db["BOARD_POSITION"][0], settings::db["BOARD_POSITION"][1]};
+int settings::cellSize = settings::db["CELLSIZE"];
+Vec2<int> settings::boardWidthHeight {settings::db["BOARD_RESOLUTION"][0], settings::db["BOARD_RESOLUTION"][1]};
+int settings::volume = settings::db["VOLUME"];
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
   screenHeight = newSize.GetY();
