@@ -68,11 +68,13 @@ void Options::SetNewScreenMode(std::string screenMode) {
     settings::db["WINDOWED"] = screenMode == "Window";
     selectedScreenMode = screenMode;
     if (settings::db["WINDOWED"]) {
+        ToggleFullscreen();
         SetNewResolution("800x600");
         return;
     }
     int display = GetCurrentMonitor();
     settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
+    ToggleFullscreen();
 }
 
 void Options::SetNewVolume(double mousePosition){

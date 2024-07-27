@@ -28,7 +28,7 @@ int main() {
     if (!settings::db["WINDOWED"]) {
         int display = GetCurrentMonitor();
         settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
-        //ToggleFullscreen();
+        ToggleFullscreen();
     }
     while (!screenManager.ShouldClose()) {
         screenManager.ResetGameScreenIfNeeded(&board);
