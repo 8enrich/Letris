@@ -270,3 +270,7 @@ void Game::DrawNextShapes(){
           (dimension * dimension) - ((double)5/4) * dimension + 1)});
   }
 }
+
+int Game::GetScore(){
+  return score;
+}

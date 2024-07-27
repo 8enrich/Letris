@@ -17,7 +17,19 @@ void GameOver::Tick(){
 
 void GameOver::Draw(){
   ClearBackground(BLACK);
-  ray_functions::DrawFormatedText("GAME OVER", Vec2<double>{(float)1/2, (float)1/5}, (float) 1/13, RAYWHITE);
+  ray_functions::DrawFormatedText("GAME OVER", Vec2<double>{1.0f/2, 1.0f/5}, 1.0f/13, RAYWHITE);
+  DrawScores();
+}
+
+void GameOver::DrawScores(){
+  ray_functions::DrawFormatedText("Score:", Vec2<double>{1.0f/4, 1/3.2}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText(TextFormat("%d", score), Vec2<double>{1.0f/4, 1/2.6}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText("HighScores:", Vec2<double>{3.0f/4, 1/3.2}, fontSize, RAYWHITE);
+  for(int i = 0; i < 5; i++){
+    ray_functions::DrawFormatedText(TextFormat("%d", settings::highscores[i]), Vec2<double>{3.0f/4, (1 + 0.17 *(i + 1))/3.2},
+        fontSize, RAYWHITE);
+  }
+  if(hasNewHighscore) ray_functions::DrawFormatedText("New HighScore!", Vec2<double>{1.0f/4, 1/1.8}, fontSize, RAYWHITE);
 }
 
 void GameOver::OptionsHandling(){
@@ -25,5 +37,25 @@ void GameOver::OptionsHandling(){
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
     OpenClose();
+    hasNewHighscore = false;
+  }
+}
+
+void GameOver::SetScore(int newScore){
+  score = newScore;
+}
+
+void GameOver::SetHighscores(){
+  for(int i = 0; i < 5; i++){
+    if(score > settings::highscores[i]){
+      for(int j = 4; j > i; j--){
+        settings::highscores[j] = settings::highscores[j - 1];
+        settings::db["HIGHSCORES"][j] = settings::highscores[j];
+      }
+      settings::highscores[i] = score;
+      hasNewHighscore = true;
+      settings::db["HIGHSCORES"][i] = settings::highscores[i];
+      break;
+    }
   }
 }
