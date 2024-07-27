@@ -15,6 +15,7 @@ namespace settings {
   extern json db; 
   extern int screenWidth;
   extern int screenHeight;
+  extern bool isWindowed;
   constexpr int fps = 30;
   extern int cellSize;
   constexpr int padding = 2;

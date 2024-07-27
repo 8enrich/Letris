@@ -64,6 +64,17 @@ void Options::SetNewControl(std::string control){
   selectedControl = control;
 }
 
+void Options::SetNewScreenMode(std::string screenMode) {
+    settings::db["WINDOWED"] = screenMode == "Window";
+    selectedScreenMode = screenMode;
+    if (settings::db["WINDOWED"]) {
+        SetNewResolution("800x600");
+        return;
+    }
+    int display = GetCurrentMonitor();
+    settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
+}
+
 void Options::SetNewVolume(double mousePosition){
   int width = settings::screenWidth;
   float xBegin = width/2.0f - width/9.0f, xEnd = width/2.0f + width/9.0f, y1 = 1/2.85;
@@ -90,7 +101,7 @@ void Options::DrawVolume(){
   ray_functions::DrawFormatedText("Volume:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
   int width = settings::screenWidth, height = settings::screenHeight;
   float xBegin = width/2.0f - width/9.0f, xEnd = width/2.0f + width/9.0f, y1 = 1/2.85;
-  DrawLineEx((Vector2){xBegin, height * y1}, (Vector2){xEnd, height * y1}, (float)height/200, WHITE);
+  DrawLineEx(Vector2{xBegin, height * y1}, Vector2{xEnd, height * y1}, (float)height/200, WHITE);
   DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1}, (float)height/100, WHITE);
   ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{1.0f/2 + 1.0f/6, 1.0f/3},
       fontSizes[1], WHITE);
@@ -98,10 +109,12 @@ void Options::DrawVolume(){
 
 void Options::OptionsHandling() {
   currentSelected = buttonManager.GetCurrentSelected(currentSelected);
+  std::string screenModeString = screenModeButton->GetText();
   std::string resolutionString = screenSizeButton->GetText();
   std::string controlString = controlButtons[0]->GetText();
   double mousePosition = volumeButtons[0]->GetMousePositionX();
-  if (selectedResolution != resolutionString) SetNewResolution(resolutionString);
+  if (selectedResolution != resolutionString && settings::db["WINDOWED"]) SetNewResolution(resolutionString);
+  if (selectedScreenMode != screenModeString) SetNewScreenMode(screenModeString);
   if (selectedControl != controlString) SetNewControl(controlString);
   if (MouseInVolumeBar(mousePosition)) SetNewVolume(mousePosition);
   if(buttonManager.GetScreen() != NOTSCREEN) {

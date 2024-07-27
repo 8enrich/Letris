@@ -1,9 +1,10 @@
 #include "../include/Settings.hpp"
-
+#include "raylib.h"
 std::ifstream settings::f(std::string(ASSETS_PATH) + "user_settings.json"); 
 json settings::db = json::parse(settings::f);
-int settings::screenWidth = settings::db["WINDOW_WIDTH"];
-int settings::screenHeight = settings::db["WINDOW_HEIGHT"];
+bool settings::isWindowed = settings::db["WINDOWED"];
+int settings::screenWidth = settings::db["WINDOW_WIDTH"];// settings::isWindowed?settings::db["WINDOW_WIDTH"]:GetMonitorWidth(GetCurrentMonitor());
+int settings::screenHeight = settings::db["WINDOW_HEIGHT"];//settings::isWindowed?settings::db["WINDOW_HEIGHT"]:GetMonitorHeight(GetCurrentMonitor());
 Vec2<int> settings::boardPosition = {settings::db["BOARD_POSITION"][0], settings::db["BOARD_POSITION"][1]};
 int settings::cellSize = settings::db["CELLSIZE"];
 Vec2<int> settings::boardWidthHeight {settings::db["BOARD_RESOLUTION"][0], settings::db["BOARD_RESOLUTION"][1]};
