@@ -10,6 +10,7 @@ class Game : public Screen {
   public:
     Game(Board *board);
     void Tick() override;
+    int GetScore();
   private:
     int tickCount;
     void Draw() override;

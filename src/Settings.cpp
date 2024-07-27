@@ -9,6 +9,7 @@ Vec2<int> settings::boardPosition = {settings::db["BOARD_POSITION"][0], settings
 int settings::cellSize = settings::db["CELLSIZE"];
 Vec2<int> settings::boardWidthHeight {settings::db["BOARD_RESOLUTION"][0], settings::db["BOARD_RESOLUTION"][1]};
 int settings::volume = settings::db["VOLUME"];
+std::vector<int> settings::highscores = settings::db["HIGHSCORES"];
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
   screenHeight = newSize.GetY();

@@ -13,7 +13,7 @@ private:
   const std::vector<Button*> buttons = {
     new ScreenButton("Continue", Vec2<double>{x, y}, fontSize, GAME),
     new ScreenButton("Options", Vec2<double>{x, y + lineDistance}, fontSize, OPTIONS),
-    new ScreenButton("Back to Main Menu", Vec2<double>{x, y + 2 * lineDistance}, fontSize, MENU)
+    new ScreenButton("Main Menu", Vec2<double>{x, y + 2 * lineDistance}, fontSize, MENU)
   };
   ButtonManager buttonManager = ButtonManager(buttons);
 
