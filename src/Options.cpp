@@ -69,7 +69,7 @@ void Options::SetNewScreenMode(std::string screenMode) {
     selectedScreenMode = screenMode;
     if (settings::db["WINDOWED"]) {
         ToggleFullscreen();
-        SetNewResolution("800x600");
+        SetNewResolution(selectedResolution);
         return;
     }
     int display = GetCurrentMonitor();

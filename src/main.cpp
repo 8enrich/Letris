@@ -25,6 +25,7 @@ int main() {
     screenManager.AddScreen(MENU, std::make_unique<Menu>());
     screenManager.AddScreen(PAUSE, std::make_unique<Pause>());
     screenManager.AddScreen(GAMEOVER, std::make_unique<GameOver>());
+    while(!IsWindowReady()){}
     if (!settings::db["WINDOWED"]) {
         int display = GetCurrentMonitor();
         settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
