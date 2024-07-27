@@ -27,6 +27,7 @@ private:
   void SetNewVolume(double);
   void SetNewScreenMode(std::string);
   bool MouseInVolumeBar(double);
+  int GetMaxResolutionIndex();
   float fontSizes[2] = {(float)1/20, (float)1/30};
   void SetNewResolution(std::string resolution); 
   std::string columns = "Rotate CW,Left,Down,Right,Instant Fall,Rotate ACW";
@@ -36,7 +37,7 @@ private:
     "I J K L SPACE Z",
     "K H L J SPACE Z",
   };
-  std::vector<std::string> screenSizes = {"800x600", "1280x720", "1366x768"};
+  std::vector<std::string> screenSizes = {"800x600", "1280x720", "1366x768", "1600x900", "1920x1080"};
   std::vector<std::string> screenModes = {"Window", "FullScreen"};
   std::string selectedResolution = to_string(settings::db["WINDOW_WIDTH"]) + "x" + to_string(settings::db["WINDOW_HEIGHT"]);
   std::string selectedScreenMode = settings::db["WINDOWED"] ? screenModes[0] : screenModes[1];

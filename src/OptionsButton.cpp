@@ -87,3 +87,7 @@ int OptionsButton::GetLargestOptionText(){
 Vec2<double> OptionsButton::GetMenuWidthHeight(){
   return Vec2<double>{(GetLargestOptionText() + 10)/(float)settings::screenWidth, 1.0f * options.size()/12};
 }
+
+void OptionsButton::SetCurrentSelectedOptionIndex(int index){
+  currentSelectedOptionIndex = index;
+}

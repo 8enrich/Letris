@@ -14,11 +14,14 @@ void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenHeight = newSize.GetY();
   db["WINDOW_WIDTH"] = screenWidth;
   db["WINDOW_HEIGHT"] = screenHeight;
-  int centerX = GetMonitorWidth(0) / 2 - screenWidth / 2;
-  int centerY = GetMonitorHeight(0) / 2 - screenHeight / 2;
-  SetWindowPosition(centerX, centerY);
   SetWindowSize(screenWidth, screenHeight);
   UpdateBoardPosition();
+  if(db["WINDOWED"]){
+    int display = GetCurrentMonitor();
+    int centerX = (GetMonitorWidth(display) - screenWidth)/2;
+    int centerY = (GetMonitorHeight(display) - screenHeight)/2;
+    SetWindowPosition(centerX, centerY);
+  }
 }
 
 void settings::UpdateBoardPosition(){
@@ -27,4 +30,14 @@ void settings::UpdateBoardPosition(){
   cellSize = (int)(y * 0.33);
   db["BOARD_POSITION"] = {boardPosition.GetX(), boardPosition.GetY()};
   db["CELLSIZE"] = cellSize;
+}
+
+void settings::FullScreen(){
+  int display = GetCurrentMonitor();
+  screenWidth = GetMonitorWidth(display);
+  screenHeight = GetMonitorHeight(display);
+  db["WINDOW_WIDTH"] = screenWidth;
+  db["WINDOW_HEIGHT"] = screenHeight;
+  settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
+  ToggleBorderlessWindowed();
 }

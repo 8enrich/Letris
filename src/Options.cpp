@@ -53,7 +53,12 @@ int Options::GetIndex(std::string item, std::vector<std::string> vector){
 }
 
 void Options::SetNewResolution(std::string resolution){
-  int index = GetIndex(resolution, screenSizes);
+  int index = GetIndex(resolution, screenSizes), display = GetCurrentMonitor();
+  if(settings::screenSizes[index].GetX() > GetMonitorWidth(display)){
+    index = GetMaxResolutionIndex();
+    resolution = screenSizes[index];
+    screenSizeButton->SetCurrentSelectedOptionIndex(index);
+  }
   settings::UpdateWindowSize(settings::screenSizes[index]);
   selectedResolution = resolution;
 }
@@ -65,16 +70,25 @@ void Options::SetNewControl(std::string control){
 }
 
 void Options::SetNewScreenMode(std::string screenMode) {
-    settings::db["WINDOWED"] = screenMode == "Window";
-    selectedScreenMode = screenMode;
-    if (settings::db["WINDOWED"]) {
-        ToggleFullscreen();
-        SetNewResolution(selectedResolution);
-        return;
-    }
-    int display = GetCurrentMonitor();
-    settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
-    ToggleFullscreen();
+  settings::db["WINDOWED"] = screenMode == "Window";
+  selectedScreenMode = screenMode;
+  if (settings::db["WINDOWED"]) {
+    ToggleBorderlessWindowed();
+    SetNewResolution(selectedResolution);
+    return;
+  }
+  selectedResolution = screenSizes[GetMaxResolutionIndex()];
+  int index = GetIndex(selectedResolution, screenSizes);
+  screenSizeButton->SetCurrentSelectedOptionIndex(index);
+  settings::FullScreen();
+}
+
+int Options::GetMaxResolutionIndex(){
+  int display = GetCurrentMonitor(), maxWidth = GetMonitorWidth(display), index = 0;
+  for(int size = screenSizes.size(); index < size; index++){
+    if(settings::screenSizes[index].GetX() > maxWidth) break;
+  }
+  return index - 1;
 }
 
 void Options::SetNewVolume(double mousePosition){

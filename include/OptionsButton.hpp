@@ -13,6 +13,8 @@ public:
   void CloseMenu();
   bool GetIsClicked();
   std::string GetButtonText();
+  void SetButtonText(std::string);
+  void SetCurrentSelectedOptionIndex(int);
 private:
   void MenuHandling();
   void Update() override;

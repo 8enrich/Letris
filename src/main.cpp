@@ -26,11 +26,7 @@ int main() {
     screenManager.AddScreen(PAUSE, std::make_unique<Pause>());
     screenManager.AddScreen(GAMEOVER, std::make_unique<GameOver>());
     while(!IsWindowReady()){}
-    if (!settings::db["WINDOWED"]) {
-        int display = GetCurrentMonitor();
-        settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
-        ToggleFullscreen();
-    }
+    if (!settings::db["WINDOWED"]) settings::FullScreen();
     while (!screenManager.ShouldClose()) {
         screenManager.ResetGameScreenIfNeeded(&board);
         screenManager.UpdateScreen();
