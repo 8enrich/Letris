@@ -15,6 +15,7 @@ namespace settings {
   extern json db; 
   extern int screenWidth;
   extern int screenHeight;
+  extern bool isWindowed;
   constexpr int fps = 30;
   extern int cellSize;
   constexpr int padding = 2;
@@ -27,9 +28,10 @@ namespace settings {
     {KEY_I, KEY_J, KEY_K, KEY_L, KEY_SPACE, KEY_Z},
     {KEY_K, KEY_H, KEY_J, KEY_L, KEY_SPACE, KEY_Z}
   };
-  constexpr Vec2<int> screenSizes[3] = {{800, 600}, {1280, 720}, {1366, 768}};
+  constexpr Vec2<int> screenSizes[5] = {{800, 600}, {1280, 720}, {1366, 768}, {1600, 900}, {1920, 1080}};
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
+  void FullScreen();
 }
 
 enum Screens {
