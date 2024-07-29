@@ -53,8 +53,7 @@ class Game : public Screen {
                        L_Shape(*board),
                        S_Shape(*board),
                        Z_Shape(*board)};
-    std::vector<Button*> buttons = {
-      new ScreenButton("Pause", Vec2<double>{1/1.1, 1.0f/25}, 1.0f/20, PAUSE)
-    };
+    ScreenButton Pause = ScreenButton("Pause", Vec2<double>{1 / 1.1, 1.0f / 25}, 1.0f / 20, PAUSE);
+    std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);
 };

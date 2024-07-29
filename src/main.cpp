@@ -8,6 +8,7 @@
 #include "../include/ScreenManager.hpp"
 #include <raylib.h>
 #include <memory>
+#include <iostream>
 
 #ifndef _DEBUG
 #pragma comment(linker, "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")

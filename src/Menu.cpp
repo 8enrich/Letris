@@ -1,10 +1,7 @@
 #include "../include/Menu.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
-Menu::Menu(){}
-Menu::~Menu(){
-  for (auto button : buttons) delete button; 
-}
+
 void Menu::Tick(){
   OptionsHandling();
   BeginDrawing();

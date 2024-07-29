@@ -12,7 +12,6 @@
 class Options : public Screen {
 public:
   void Tick() override;
-  ~Options();
 private:
   void OptionsHandling();
   int currentSelected = 0;
@@ -42,27 +41,20 @@ private:
   std::string selectedResolution = to_string(settings::db["WINDOW_WIDTH"]) + "x" + to_string(settings::db["WINDOW_HEIGHT"]);
   std::string selectedScreenMode = settings::db["WINDOWED"] ? screenModes[0] : screenModes[1];
   std::string selectedControl = controls[settings::db["CONTROL"]];
-  ScreenButton *returnButton = new ScreenButton("Return", Vec2<double>{1.0f/2, 3.0f/4}, 1.0f/20, MENU);
-  OptionsButton *screenSizeButton = new OptionsButton(selectedResolution, Vec2<double>{1.0f/2, 1.0f/3},
+  ScreenButton returnButton = ScreenButton("Return", Vec2<double>{1.0f/2, 3.0f/4}, 1.0f/20, MENU);
+  OptionsButton screenSizeButton = OptionsButton(selectedResolution, Vec2<double>{1.0f/2, 1.0f/3},
       fontSizes[1], screenSizes);
-  OptionsButton *screenModeButton = new OptionsButton(selectedScreenMode, Vec2<double>{1.0f/2, 1/2.3},
+  OptionsButton screenModeButton = OptionsButton(selectedScreenMode, Vec2<double>{1.0f/2, 1/2.3},
       fontSizes[1], screenModes);
-  const std::vector<Button*> generalButtons = {
-    screenModeButton,
-    screenSizeButton,
-  };
-  const std::vector<Button*> controlButtons = {
-    new OptionsButton(selectedControl, Vec2<double>{1.0f/2, 1.0f/3}, fontSizes[1], controls)
-  };
-  const std::vector<Button*> volumeButtons = {
-    new Button("                                     ", Vec2<double>{1.0f/2, 1.0f/3}, fontSizes[1])
-  };
-  const std::vector<Button*> buttons = {
-    new OptionsButton("General", Vec2<double>{1.0f/4, 1.0f/10}, fontSizes[0], generalButtons),
-    new OptionsButton("Controls", Vec2<double>{1.0f/2, 1.0f/10}, fontSizes[0], controlButtons),
-    new OptionsButton("Sound", Vec2<double>{3.0f/4, 1.0f/10}, fontSizes[0], volumeButtons),
-    returnButton,
-  };
+  const std::vector<Button*> generalButtons = { &screenModeButton, &screenSizeButton};
+  OptionsButton FirstControlButton = OptionsButton(selectedControl, Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1], controls);
+  const std::vector<Button*> controlButtons = { &FirstControlButton };
+  Button MasterVolumeButton = Button("                                     ", Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1]);
+  const std::vector<Button*> volumeButtons = { &MasterVolumeButton };
+  OptionsButton General = OptionsButton("General", Vec2<double>{1.0f / 4, 1.0f / 10}, fontSizes[0], generalButtons);
+  OptionsButton Controls = OptionsButton("Controls", Vec2<double>{1.0f / 2, 1.0f / 10}, fontSizes[0], controlButtons);
+  OptionsButton Sound = OptionsButton("Sound", Vec2<double>{3.0f / 4, 1.0f / 10}, fontSizes[0], volumeButtons);
+  const std::vector<Button*> buttons = { &General, &Controls, &Sound, &returnButton };
   ButtonManager buttonManager = ButtonManager(buttons);
   enum buttonsNum {
     GENERAL,

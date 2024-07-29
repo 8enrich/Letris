@@ -3,13 +3,6 @@
 #include <raylib.h>
 #include <string>
 
-Options::~Options(){
-  for (auto button : buttons) delete button;
-  for (auto button : generalButtons) delete button;
-  for (auto button : controlButtons) delete button;
-  for (auto button : volumeButtons) delete button;
-}
-
 void Options::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
@@ -40,7 +33,7 @@ void Options::Draw() {
 void Options::OpenClose(){
   Screen::OpenClose();
   if(!shouldClose){ 
-  	returnButton->SetScreen(nextScreen);
+  	returnButton.SetScreen(nextScreen);
   	currentSelected = 0;
   }
 }
@@ -57,7 +50,7 @@ void Options::SetNewResolution(std::string resolution){
   if(settings::screenSizes[index].GetX() > GetMonitorWidth(display)){
     index = GetMaxResolutionIndex();
     resolution = screenSizes[index];
-    screenSizeButton->SetCurrentSelectedOptionIndex(index);
+    screenSizeButton.SetCurrentSelectedOptionIndex(index);
   }
   settings::UpdateWindowSize(settings::screenSizes[index]);
   selectedResolution = resolution;
@@ -79,7 +72,7 @@ void Options::SetNewScreenMode(std::string screenMode) {
   }
   selectedResolution = screenSizes[GetMaxResolutionIndex()];
   int index = GetIndex(selectedResolution, screenSizes);
-  screenSizeButton->SetCurrentSelectedOptionIndex(index);
+  screenSizeButton.SetCurrentSelectedOptionIndex(index);
   settings::FullScreen();
 }
 
@@ -125,8 +118,8 @@ void Options::DrawVolume(){
 
 void Options::OptionsHandling() {
   currentSelected = buttonManager.GetCurrentSelected(currentSelected);
-  std::string screenModeString = screenModeButton->GetText();
-  std::string resolutionString = screenSizeButton->GetText();
+  std::string screenModeString = screenModeButton.GetText();
+  std::string resolutionString = screenSizeButton.GetText();
   std::string controlString = controlButtons[0]->GetText();
   double mousePosition = volumeButtons[0]->GetMousePositionX();
   if (selectedResolution != resolutionString && settings::db["WINDOWED"]) SetNewResolution(resolutionString);
