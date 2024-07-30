@@ -33,7 +33,7 @@ void GameOver::OptionsHandling(){
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
     OpenClose();
-    hasNewHighscore = false;
+    if(nextScreen == GAME) hasNewHighscore = false;
   }
 }
 
@@ -43,6 +43,7 @@ void GameOver::SetScore(int newScore){
 
 void GameOver::SetHighscores(){
   for(int i = 0; i < 5; i++){
+    if(score == settings::highscores[i]) break;
     if(score > settings::highscores[i]){
       for(int j = 4; j > i; j--){
         settings::highscores[j] = settings::highscores[j - 1];
