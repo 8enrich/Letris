@@ -3,44 +3,56 @@
 #include <raylib.h>
 
 void GameOver::Tick(){
+  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
   BeginDrawing();
   Draw();
+  buttonManager.Tick();
   EndDrawing();
 }
 
 void GameOver::Draw(){
   ClearBackground(BLACK);
-  ray_functions::DrawFormatedText("Game Over", Vec2<double>{(float)1/2, (float)1/5}, (float) 1/13, RAYWHITE);
-  ray_functions::DrawFormatedText("Jogar Novamente", Vec2<double>{(float)1/2, (float)1/2.5}, (float)1/20, optionsColor[0]);
-  ray_functions::DrawFormatedText("Opções", Vec2<double>{(float)1/2, (float)1/1.8}, (float)1/20, optionsColor[1]);
-  ray_functions::DrawFormatedText("Voltar ao Menu", Vec2<double>{(float)1/2, (float)32/45}, (float)1/20, optionsColor[2]);
+  ray_functions::DrawFormatedText("GAME OVER", Vec2<double>{1.0f/2, 1.0f/5}, 1.0f/13, RAYWHITE);
+  DrawScores();
+}
+
+void GameOver::DrawScores(){
+  ray_functions::DrawFormatedText("Score:", Vec2<double>{1.0f/4, 1/3.2}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText(TextFormat("%d", score), Vec2<double>{1.0f/4, 1/2.6}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText("HighScores:", Vec2<double>{3.0f/4, 1/3.2}, fontSize, RAYWHITE);
+  for(int i = 0; i < 5; i++){
+    ray_functions::DrawFormatedText(TextFormat("%d", settings::highscores[i]), Vec2<double>{3.0f/4, (1 + 0.17 *(i + 1))/3.2},
+        fontSize, RAYWHITE);
+  }
+  if(hasNewHighscore) ray_functions::DrawFormatedText("New HighScore!", Vec2<double>{1.0f/4, 1/1.8}, fontSize, RAYWHITE);
 }
 
 void GameOver::OptionsHandling(){
-  auto keypressed = GetKeyPressed();
-  switch (keypressed) {
-    case KEY_DOWN:
-      currentSelected = (currentSelected + 1)%OPT_QTD;
-      break;
-    case KEY_UP:
-      currentSelected = (currentSelected + (OPT_QTD * 2 - 1))%OPT_QTD;
-      break;
-  }
-  for (int i = 0; i < OPT_QTD; i++) { optionsColor[i] = (i == currentSelected) ? RAYWHITE : GRAY; }
-  if (IsKeyPressed(KEY_ENTER)) {
-    switch (currentSelected) {
-      case 0:
-        nextScreen = GAME;
-        break;
-      case 1:
-        nextScreen = OPTIONS;
-        break;
-      case 2:
-        nextScreen = MENU;
-        break;
-    }
+  if (buttonManager.GetScreen() != NOTSCREEN) {
+    nextScreen = buttonManager.GetScreen();
+    buttonManager.ResetScreen();
     OpenClose();
-    currentSelected = 0;
+    if(nextScreen == GAME) hasNewHighscore = false;
+  }
+}
+
+void GameOver::SetScore(int newScore){
+  score = newScore;
+}
+
+void GameOver::SetHighscores(){
+  for(int i = 0; i < 5; i++){
+    if(score == settings::highscores[i]) break;
+    if(score > settings::highscores[i]){
+      for(int j = 4; j > i; j--){
+        settings::highscores[j] = settings::highscores[j - 1];
+        settings::db["HIGHSCORES"][j] = settings::highscores[j];
+      }
+      settings::highscores[i] = score;
+      hasNewHighscore = true;
+      settings::db["HIGHSCORES"][i] = settings::highscores[i];
+      break;
+    }
   }
 }

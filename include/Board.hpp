@@ -32,9 +32,12 @@ public:
   int GetHeight() const; 
   void RemoveCell(Vec2<int> pos);
   Color GetCellColor(Vec2<int> pos);
+  void ResetBoardCells();
+  void ResetBoardSettings();
 private:
   std::vector<Cell> cells;
-  const int width, height, cellSize, padding;
+  const int width, height, padding;
+  int cellSize;
   Vec2<int> screenPos;
   const Board::Cell *GetCell(Vec2<int>) const;
   Board::Cell *GetCell(Vec2<int>);

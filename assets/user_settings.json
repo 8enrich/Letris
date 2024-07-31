@@ -1,0 +1,25 @@
+{
+    "BOARD_POSITION": [
+        426,
+        89
+    ],
+    "BOARD_RESOLUTION": [
+        10,
+        20
+    ],
+    "CELLSIZE": 29,
+    "CONTROL": 0,
+    "FPS": 30,
+    "HIGHSCORES": [
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "PADDING": 2,
+    "VOLUME": 0,
+    "WINDOWED": false,
+    "WINDOW_HEIGHT": 768,
+    "WINDOW_WIDTH": 1366
+}

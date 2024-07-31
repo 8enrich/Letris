@@ -11,7 +11,16 @@ void ray_functions::DrawRectangle(Vec2<int> pos, Vec2<int> widthHeight, Color co
 void ray_functions::DrawRectangle(Vec2<double> pos, Vec2<double> widthHeight, Color color){
   DrawRectangle(pos.GetX(), pos.GetY(), widthHeight.GetX(), widthHeight.GetY(), color);
 }
-  
+
+void ray_functions::DrawFormatedRectangle(Vec2<double> pos, Vec2<double> widthHeight, Color color){
+  int width = settings::screenWidth, height = settings::screenHeight;
+  DrawRectangle(width * (pos.GetX() - widthHeight.GetX()/2.0f), height * pos.GetY(), width * widthHeight.GetX(), height * widthHeight.GetY(), color);
+}
+
+Vec2<double> ray_functions::FakePositionToRealPosition(Vec2<double> pos, std::string text, float fontSize){
+  int width = settings::screenWidth, height = settings::screenHeight;
+  return {width * pos.GetX() - MeasureText(text.c_str(), height * fontSize)/2, height * pos.GetY()};
+}
 void ray_functions::DrawRectangleLinesEx(Vec2<int> pos, Vec2<int> widthHeight, int lineThickness, Color color){
   assert((pos >= 0 && pos < Vec2<int>{GetScreenWidth(), GetScreenHeight()}));
   assert(lineThickness > 0);
@@ -51,12 +60,5 @@ int ray_functions::GetAction(int control){
 
 void ray_functions::DrawFormatedText(const char *text, Vec2<double> pos, float fontSize, Color color){
   int width = settings::screenWidth, height = settings::screenHeight;
-  DrawText(text, width * pos.GetX() - (MeasureText(text, height * fontSize))/2, height * pos.GetY(), height * fontSize, color);
-}
-
-void ray_functions::HorizontalSlideAnimation(const char *textOut, const char *textIn, int x, int y, int speed, int fontSize, Color color){
-  int signal = (speed > 0)? 1: -1, newX = x - speed;
-  DrawText(textOut, newX, y, fontSize, color);
-  if(newX < 0 || newX > settings::screenWidth)
-    DrawText(textIn, newX + (signal * settings::screenWidth), y, fontSize, color);
+  DrawText(text, width * pos.GetX() - MeasureText(text, height * fontSize)/2, height * pos.GetY(), height * fontSize, color);
 }

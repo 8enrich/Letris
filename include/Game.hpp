@@ -2,12 +2,15 @@
 #include "Board.hpp"
 #include "Shape.hpp"
 #include "Screen.hpp"
+#include "ButtonManager.hpp"
+#include "ScreenButton.hpp"
+#include "Button.hpp" 
 
 class Game : public Screen {
   public:
-    Game(Board board);
+    Game(Board *board);
     void Tick() override;
-    static int control;
+    int GetScore();
   private:
     int tickCount;
     void Draw() override;
@@ -20,7 +23,7 @@ class Game : public Screen {
     void DropLine(int);
     void DropLines();
     int cleanedLines[4] = {0,0,0,0};
-    Board board;
+    Board *board;
     Shape *shape;
     void Hold();
     int hold;
@@ -43,11 +46,14 @@ class Game : public Screen {
     bool HasLost();
     int tickToFix;
     int maxTickToFix;
-    Shape shapes[7] = {I_Shape(board),
-                       O_Shape(board),
-                       T_Shape(board),
-                       J_Shape(board),
-                       L_Shape(board),
-                       S_Shape(board),
-                       Z_Shape(board)};
+    Shape shapes[7] = {I_Shape(*board),
+                       O_Shape(*board),
+                       T_Shape(*board),
+                       J_Shape(*board),
+                       L_Shape(*board),
+                       S_Shape(*board),
+                       Z_Shape(*board)};
+    ScreenButton Pause = ScreenButton("Pause", Vec2<double>{1 / 1.1, 1.0f / 25}, 1.0f / 20, PAUSE);
+    std::vector<Button*> buttons = { &Pause };
+    ButtonManager buttonManager = ButtonManager(buttons);
 };
