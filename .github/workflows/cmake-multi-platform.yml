@@ -45,18 +45,37 @@ jobs:
         
     - name: Install dependencies (Ubuntu only)
       if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get update && sudo apt-get install -y \
-        libasound2-dev \
-        libx11-dev \
-        libxrandr-dev \
-        libxi-dev \
-        libgl1-mesa-dev \
-        libglu1-mesa-dev \
-        libxcursor-dev \
-        libxinerama-dev \
-        libwayland-dev \
-        libxkbcommon-dev
-        
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository universe
+        sudo apt-get update
+        sudo apt-get install -y \
+          libasound2-dev \
+          libx11-dev \
+          libxrandr-dev \
+          libxi-dev \
+          libgl1-mesa-dev \
+          libglu1-mesa-dev \
+          libxcursor-dev \
+          libxinerama-dev \
+          libwayland-dev \
+          libxkbcommon-dev
+
+    - name: Search for packages (Ubuntu only)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        apt-cache search libasound
+        apt-cache search libx11
+        apt-cache search libxrandr
+        apt-cache search libxi
+        apt-cache search libgl1-mesa
+        apt-cache search libglu1-mesa
+        apt-cache search libxcursor
+        apt-cache search libxinerama
+        apt-cache search libwayland
+        apt-cache search libxkbcommon
+
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
