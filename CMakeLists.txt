@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(letris)
-#set(CMAKE_C_STANDARD 99)
+# set(CMAKE_C_STANDARD 99)
 
 # Adding Raylib
 include(FetchContent)
@@ -38,3 +38,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE raylib nlohmann_json)
 # Setting ASSETS_PATH
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_LIST_DIR}/assets/") # Set the asset path macro to the absolute path on the dev machine
 #target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="./assets/") # Set the asset path macro in release mode to a relative path that assumes the assets folder is in the same directory as the game executable
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17") # Ou a versão que você está usando
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++17")
