@@ -35,10 +35,6 @@ void settings::UpdateBoardPosition(){
 
 void settings::FullScreen(){
   int display = GetCurrentMonitor();
-  screenWidth = GetMonitorWidth(display);
-  screenHeight = GetMonitorHeight(display);
-  db["WINDOW_WIDTH"] = screenWidth;
-  db["WINDOW_HEIGHT"] = screenHeight;
   settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
   ToggleBorderlessWindowed();
 }
