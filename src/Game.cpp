@@ -99,13 +99,13 @@ void Game::DropLine(int line) {
 }
 
 void Game::UpdateShape(){
-  shape = UpdateShape(shape, &tickToFix);
+  UpdateShape(shape, &tickToFix);
 }
 
-Shape* Game::UpdateShape(Shape *s, int *tick){
+void Game::UpdateShape(Shape*& s, int *tick){
   if (s->WillCollideDown()){
     (*tick)--;
-    if(*tick > 0) return s;
+    if(*tick > 0) return;
     Vec2<int> cellPosition;
     int dimension = s->GetDimension();
     for (int x = 0; x < dimension; ++x){
@@ -122,7 +122,6 @@ Shape* Game::UpdateShape(Shape *s, int *tick){
   }
   if(*tick > maxTickToFix || *tick <= 0) *tick = maxTickToFix;
   if(*tick < maxTickToFix) (*tick)--;
-  return s;
 }
 
 void Game::Draw(){
@@ -147,10 +146,10 @@ void Game::Update(){
 }
 
 void Game::UpdateBoard(){
-  UpdateBoard(shape, settings::db["CONTROL"]);
+  UpdateBoard(shape, settings::db["CONTROL"], &tickToFix);
 }
 
-void Game::UpdateBoard(Shape *s, int control){
+void Game::UpdateBoard(Shape *s, int control, int *tick){
   if(!s->WillCollideDown() && !(tickCount % speed)){ s->Fall(); }
   auto keyPressed = ray_functions::GetAction(control);
   int fallen;
@@ -158,20 +157,20 @@ void Game::UpdateBoard(Shape *s, int control){
     case INSTANTFALL:
       fallen = s->InstantFall();
       UpdateScore(2 * fallen);
-      tickToFix = 1;
+      *tick = 1;
       return;
     case ROTATECW:
       if(s->HasSpaceToRotate()){
         s->Rotate();
         s->MoveIfCollided();
-        tickToFix++;
+        (*tick)++;
       }
       break;
     case ROTATEACW:
       if(s->HasSpaceToRotate()){
         s->RotateAntiClockWise();
         s->MoveIfCollided();
-        tickToFix++;
+        (*tick)++;
       }
       break;
     case KEY_C:
@@ -189,13 +188,13 @@ void Game::UpdateBoard(Shape *s, int control){
       case RIGHT:
         if (!s->WillCollideRight()){
           s->MoveRight();
-          tickToFix++;
+          (*tick)++;
         }
         break;
       case LEFT:
         if (!s->WillCollideLeft()) {
           s->MoveLeft();
-          tickToFix++;
+          (*tick)++;
         }
         break;
       case DOWN:

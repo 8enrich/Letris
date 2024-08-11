@@ -35,8 +35,8 @@ void Coop::Tick(){
 }
 
 void Coop::SetPlayersShapes(){
-  playersShapes[0] = shape;
-  playersShapes[1] = shape2;
+  playersShapes[0] = &shape;
+  playersShapes[1] = &shape2;
 }
 
 void Coop::Draw(){
@@ -44,19 +44,19 @@ void Coop::Draw(){
   buttonManager.Tick();
   board->Draw();
   for(int i = 0; i < 2; i++){
-    playersShapes[i]->Draw();
+    (*playersShapes[i])->Draw();
   }
 }
 
 void Coop::ResetShapes(){
   float values[2] = {1.0f/4, 3.0f/4};
   for(int i = 0; i < 2; i++){
-    playersShapes[i]->ResetShape(values[i]);
+    (*playersShapes[i])->ResetShape(values[i]);
   }
 }
 
 void Coop::Update(){
   Game::Update();
-  UpdateBoard(shape2, 0);
-  shape2 = UpdateShape(shape2, &tickToFix2);
+  UpdateBoard(shape2, 0, &tickToFix2);
+  UpdateShape(shape2, &tickToFix2);
 }

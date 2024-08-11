@@ -18,9 +18,9 @@ class Game : public Screen {
     void Draw() override;
     virtual void Update();
     void UpdateBoard();
-    void UpdateBoard(Shape*,int);
+    void UpdateBoard(Shape*,int, int*);
     void UpdateShape();
-    Shape* UpdateShape(Shape*, int*);
+    void UpdateShape(Shape*&, int*);
     Shape *NewShape();
     Shape *NewShape(Shape*);
     Shape *NextShape();

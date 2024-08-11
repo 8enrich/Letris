@@ -16,7 +16,7 @@ class Coop : public Game {
     Shape *shape2;
     Shape i, o, t, j, l, s, z;
     Shape shapes2[7];
-    Shape *playersShapes[2];
+    Shape **playersShapes[2];
     void SetPlayersShapes();
     void ResetShapes();
     void Update() override;
