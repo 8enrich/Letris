@@ -33,7 +33,7 @@ void GameOver::OptionsHandling(){
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
     OpenClose();
-    if(nextScreen == GAME) hasNewHighscore = false;
+    if(nextScreen == GAME || nextScreen == COOP) hasNewHighscore = false;
   }
 }
 
@@ -54,5 +54,12 @@ void GameOver::SetHighscores(){
       settings::db["HIGHSCORES"][i] = settings::highscores[i];
       break;
     }
+  }
+}
+
+void GameOver::OpenClose(){
+  Screen::OpenClose();
+  if(!shouldClose){
+  	PlayAgain.SetScreen(nextScreen);
   }
 }

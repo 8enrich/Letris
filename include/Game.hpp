@@ -12,15 +12,17 @@ class Game : public Screen {
     void Tick() override;
     int GetScore();
   private:
-    Shape *shape;
     Shape i, o, t, j, l, s, z;
   protected:
     int tickCount;
     void Draw() override;
-    void Update();
+    virtual void Update();
     void UpdateBoard();
+    void UpdateBoard(Shape*,int);
     void UpdateShape();
+    Shape* UpdateShape(Shape*, int*);
     Shape *NewShape();
+    Shape *NewShape(Shape*);
     Shape *NextShape();
     void ClearLines();
     void DropLine(int);
@@ -47,6 +49,7 @@ class Game : public Screen {
     bool HasLost();
     int tickToFix;
     int maxTickToFix;
+    Shape *shape;
     Shape shapes[7];
     ScreenButton Pause = ScreenButton("Pause", Vec2<double>{1 / 1.1, 1.0f / 25}, 1.0f / 20, PAUSE);
     std::vector<Button*> buttons = { &Pause };

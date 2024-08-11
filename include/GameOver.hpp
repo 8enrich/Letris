@@ -10,6 +10,7 @@ public:
   void Tick() override;
   void SetScore(int);
   void SetHighscores();
+  void OpenClose() override;
 private:
   float fontSize = 1.0f/20;
   ScreenButton PlayAgain = ScreenButton("Play Again", Vec2<double>{1.0f / 4, 1 / 1.5}, fontSize, GAME);

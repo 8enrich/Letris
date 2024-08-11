@@ -3,6 +3,7 @@
 #include "Board.hpp"
 #include "Game.hpp"
 #include "GameOver.hpp"
+#include "Coop.hpp"
 #include <raylib.h>
 #include <memory>
 #include <unordered_map>
@@ -20,6 +21,5 @@ private:
     Screens lastScreen;
     bool entered;
     void SetScoreInGameOver();
-    Screens gameScreenIndex;
     std::unordered_map<Screens, std::unique_ptr<Screen>> screens;
 };

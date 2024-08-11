@@ -11,10 +11,14 @@ class Coop : public Game {
   public:
     Coop(Board *board);
     void Tick() override;
-    int GetScore();
   private:
-    //void Draw() override;
-    Shape *shape;
+    void Draw() override;
+    Shape *shape2;
     Shape i, o, t, j, l, s, z;
     Shape shapes2[7];
+    Shape *playersShapes[2];
+    void SetPlayersShapes();
+    void ResetShapes();
+    void Update() override;
+    int tickToFix2;
 };

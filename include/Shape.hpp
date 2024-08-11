@@ -43,7 +43,8 @@ public:
   void MoveIfCollided();
   bool HasSpaceToRotate() const;
   void ResetShape();
-  private:
+  void ResetShape(float);
+private:
   Vec2<int> boardPos;
   Rotation currentRotation;
   const bool* shape_matrix;
@@ -63,7 +64,7 @@ public:
   int GetCollidedCellX(Vec2<int>, Vec2<int>) const;
   bool HasCollision() const;
   void ResetRotation();
-  void ResetBoardPos();
+  void SetBoardPos(float);
   void UpdatePosition(Vec2<int>);
 };
 

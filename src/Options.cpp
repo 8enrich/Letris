@@ -32,7 +32,7 @@ void Options::Draw() {
 
 void Options::OpenClose(){
   Screen::OpenClose();
-  if(!shouldClose){ 
+  if(!shouldClose){
   	returnButton.SetScreen(nextScreen);
   	currentSelected = 0;
   }

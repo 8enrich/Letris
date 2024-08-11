@@ -193,12 +193,16 @@ Vec2<int> Shape::GetHighestCell() const{
   return Vec2<int>{0, 0};
 }
 
-void Shape::ResetShape(){
-  ResetBoardPos();
+void Shape::ResetShape(float value){
+  SetBoardPos(value);
   ResetRotation();
 }
 
-void Shape::ResetBoardPos(){ boardPos = Vec2<int>{(board.GetWidth() - dimension)/2, 0}; }
+void Shape::ResetShape(){ ResetShape(1.0f/2); }
+
+void Shape::SetBoardPos(float value){
+  boardPos = Vec2<int>{(int)((board.GetWidth() - dimension) * value), 0};
+}
 
 void Shape::ResetRotation(){ currentRotation = Rotation(Rotation::UP); }
 

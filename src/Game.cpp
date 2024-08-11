@@ -49,14 +49,18 @@ bool Game::HasLost(){
 }
 
 Shape *Game::NewShape(){
-  return &shapes[GetRandomValue(0, 6)];
+  return NewShape(shapes);
+}
+
+Shape *Game::NewShape(Shape *vector){
+  return &vector[GetRandomValue(0, 6)];
 }
 
 Shape *Game::NextShape(){
-  shape = &shapes[nextShapes[0]];
+  int next = nextShapes[0];
   MoveNextShapes();
-  shape->ResetShape();
-  return shape;
+  shapes[next].ResetShape();
+  return &shapes[next];
 }
 
 void Game::ClearLines(){
@@ -95,25 +99,30 @@ void Game::DropLine(int line) {
 }
 
 void Game::UpdateShape(){
-  if (shape->WillCollideDown()){
-    tickToFix--;
-    if(tickToFix > 0) return;
+  shape = UpdateShape(shape, &tickToFix);
+}
+
+Shape* Game::UpdateShape(Shape *s, int *tick){
+  if (s->WillCollideDown()){
+    (*tick)--;
+    if(*tick > 0) return s;
     Vec2<int> cellPosition;
-    int dimension = shape->GetDimension();
+    int dimension = s->GetDimension();
     for (int x = 0; x < dimension; ++x){
       for (int y = 0; y < dimension; ++y){
-        bool cell = shape->GetShapeRotation(x, y);
+        bool cell = s->GetShapeRotation(x, y);
         if(cell){
-          cellPosition = shape->GetBoardPos() + Vec2<int>{x, y};
-          board->SetCell(cellPosition, shape->GetColor());
+          cellPosition = s->GetBoardPos() + Vec2<int>{x, y};
+          board->SetCell(cellPosition, s->GetColor());
         }
       }
     }
-    shape = NextShape();
+    s = NextShape();
     canHold = true;
   }
-  if(tickToFix > maxTickToFix || tickToFix <= 0) tickToFix = maxTickToFix;
-  if(tickToFix < maxTickToFix) tickToFix--;
+  if(*tick > maxTickToFix || *tick <= 0) *tick = maxTickToFix;
+  if(*tick < maxTickToFix) (*tick)--;
+  return s;
 }
 
 void Game::Draw(){
@@ -138,26 +147,30 @@ void Game::Update(){
 }
 
 void Game::UpdateBoard(){
-  if(!shape->WillCollideDown() && !(tickCount % speed)){ shape->Fall(); }
-  auto keyPressed = ray_functions::GetAction(settings::db["CONTROL"]);
+  UpdateBoard(shape, settings::db["CONTROL"]);
+}
+
+void Game::UpdateBoard(Shape *s, int control){
+  if(!s->WillCollideDown() && !(tickCount % speed)){ s->Fall(); }
+  auto keyPressed = ray_functions::GetAction(control);
   int fallen;
   switch(keyPressed){
     case INSTANTFALL:
-      fallen = shape->InstantFall();
+      fallen = s->InstantFall();
       UpdateScore(2 * fallen);
       tickToFix = 1;
       return;
     case ROTATECW:
-      if(shape->HasSpaceToRotate()){
-        shape->Rotate();
-        shape->MoveIfCollided();
+      if(s->HasSpaceToRotate()){
+        s->Rotate();
+        s->MoveIfCollided();
         tickToFix++;
       }
       break;
     case ROTATEACW:
-      if(shape->HasSpaceToRotate()){
-        shape->RotateAntiClockWise();
-        shape->MoveIfCollided();
+      if(s->HasSpaceToRotate()){
+        s->RotateAntiClockWise();
+        s->MoveIfCollided();
         tickToFix++;
       }
       break;
@@ -171,23 +184,23 @@ void Game::UpdateBoard(){
       break;
   }
   if (!(tickCount%3)){
-    auto keyDown = ray_functions::GetKeyDown(settings::db["CONTROL"]);
+    auto keyDown = ray_functions::GetKeyDown(control);
     switch(keyDown){
       case RIGHT:
-        if (!shape->WillCollideRight()){
-          shape->MoveRight();
+        if (!s->WillCollideRight()){
+          s->MoveRight();
           tickToFix++;
         }
         break;
       case LEFT:
-        if (!shape->WillCollideLeft()) {
-          shape->MoveLeft();
+        if (!s->WillCollideLeft()) {
+          s->MoveLeft();
           tickToFix++;
         }
         break;
       case DOWN:
-        if (!shape->WillCollideDown()){
-          shape->MoveDown();
+        if (!s->WillCollideDown()){
+          s->MoveDown();
           UpdateScore(1);
         }
       default:
