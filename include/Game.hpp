@@ -17,9 +17,8 @@ class Game : public Screen {
     int tickCount;
     void Draw() override;
     virtual void Update();
-    void UpdateBoard();
+    void Update(Shape*&,int,int*,Shape*);
     void UpdateBoard(Shape*,int, int*);
-    void UpdateShape();
     void UpdateShape(Shape*&, int*, Shape*);
     Shape *NewShape();
     Shape *NewShape(Shape*);

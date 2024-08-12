@@ -46,6 +46,7 @@ void Coop::Draw(){
   for(int i = 0; i < 2; i++){
     (*playersShapes[i])->Draw();
   }
+  board->DrawStats(score, level, cleanedLinesCount);
 }
 
 void Coop::ResetShapes(){
@@ -54,8 +55,7 @@ void Coop::ResetShapes(){
 
 void Coop::Update(){
   Game::Update();
-  UpdateBoard(shape2, 1, &tickToFix2);
-  UpdateShape(shape2, &tickToFix2, shapes2);
+  Game::Update(shape2, 4, &tickToFix2, shapes2);
 }
 
 Shape *Coop::NextShape(Shape *vector){

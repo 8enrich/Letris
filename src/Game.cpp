@@ -98,10 +98,6 @@ void Game::DropLine(int line) {
   }
 }
 
-void Game::UpdateShape(){
-  UpdateShape(shape, &tickToFix, shapes);
-}
-
 void Game::UpdateShape(Shape*& s, int *tick, Shape *vector){
   if (s->WillCollideDown()){
     (*tick)--;
@@ -135,18 +131,18 @@ void Game::Draw(){
 }
 
 void Game::Update(){
-  UpdateBoard();
-  UpdateShape();
+  Update(shape, settings::db["CONTROL"], &tickToFix, shapes);
+}
+
+void Game::Update(Shape *&s, int control, int *tick, Shape *vector){
+  UpdateBoard(s, control, tick);
+  UpdateShape(s, tick, vector);
   UpdateLevel();
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
     OpenClose();
   }
-}
-
-void Game::UpdateBoard(){
-  UpdateBoard(shape, settings::db["CONTROL"], &tickToFix);
 }
 
 void Game::UpdateBoard(Shape *s, int control, int *tick){
