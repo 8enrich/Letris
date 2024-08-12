@@ -49,14 +49,23 @@ void Coop::Draw(){
 }
 
 void Coop::ResetShapes(){
-  float values[2] = {1.0f/4, 3.0f/4};
-  for(int i = 0; i < 2; i++){
-    (*playersShapes[i])->ResetShape(values[i]);
-  }
+  for(int i = 0; i < 2; i++) ResetShape(i, (*playersShapes[i]));
 }
 
 void Coop::Update(){
   Game::Update();
-  UpdateBoard(shape2, 0, &tickToFix2);
-  UpdateShape(shape2, &tickToFix2);
+  UpdateBoard(shape2, 1, &tickToFix2);
+  UpdateShape(shape2, &tickToFix2, shapes2);
+}
+
+Shape *Coop::NextShape(Shape *vector){
+  Shape *s = Game::NextShape(vector);
+  int index = ((vector[0]).GetBoardPos() == (shapes2[0]).GetBoardPos())? 1 : 0;
+  ResetShape(index, s);
+  return s;
+}
+
+void Coop::ResetShape(int index, Shape*& s){
+  float values[2] = {1.0f/4, 3.0f/4};
+  s->ResetShape(values[index]);
 }

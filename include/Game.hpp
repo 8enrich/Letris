@@ -20,10 +20,10 @@ class Game : public Screen {
     void UpdateBoard();
     void UpdateBoard(Shape*,int, int*);
     void UpdateShape();
-    void UpdateShape(Shape*&, int*);
+    void UpdateShape(Shape*&, int*, Shape*);
     Shape *NewShape();
     Shape *NewShape(Shape*);
-    Shape *NextShape();
+    virtual Shape *NextShape(Shape*);
     void ClearLines();
     void DropLine(int);
     void DropLines();
@@ -35,7 +35,7 @@ class Game : public Screen {
     void SwapShapeAndHold(int);
     int nextShapes[3];
     void SetNextShapes();
-    void MoveNextShapes();
+    void MoveNextShapes(Shape*);
     int score;
     void UpdateScore(int);
     void Score();

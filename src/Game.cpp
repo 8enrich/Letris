@@ -56,11 +56,11 @@ Shape *Game::NewShape(Shape *vector){
   return &vector[GetRandomValue(0, 6)];
 }
 
-Shape *Game::NextShape(){
+Shape *Game::NextShape(Shape *vector){
   int next = nextShapes[0];
-  MoveNextShapes();
-  shapes[next].ResetShape();
-  return &shapes[next];
+  MoveNextShapes(vector);
+  vector[next].ResetShape();
+  return &vector[next];
 }
 
 void Game::ClearLines(){
@@ -99,10 +99,10 @@ void Game::DropLine(int line) {
 }
 
 void Game::UpdateShape(){
-  UpdateShape(shape, &tickToFix);
+  UpdateShape(shape, &tickToFix, shapes);
 }
 
-void Game::UpdateShape(Shape*& s, int *tick){
+void Game::UpdateShape(Shape*& s, int *tick, Shape *vector){
   if (s->WillCollideDown()){
     (*tick)--;
     if(*tick > 0) return;
@@ -117,7 +117,7 @@ void Game::UpdateShape(Shape*& s, int *tick){
         }
       }
     }
-    s = NextShape();
+    s = NextShape(vector);
     canHold = true;
   }
   if(*tick > maxTickToFix || *tick <= 0) *tick = maxTickToFix;
@@ -217,7 +217,7 @@ void Game::Hold(){
     return;
   }
   hold = index;
-  shape = NextShape();
+  shape = NextShape(shapes);
 }
 
 void Game::SwapShapeAndHold(int index){
@@ -229,13 +229,13 @@ void Game::SetNextShapes(){
   for(int i = 0; i < 3; i++){ nextShapes[i] = NewShape()->GetIndex(); }
 }
 
-void Game::MoveNextShapes(){
+void Game::MoveNextShapes(Shape *vector){
   for(int i = 0; i < 3; i++){
     if(i + 1 != 3){
       nextShapes[i] = nextShapes[i + 1];
       continue;
     }
-    nextShapes[i] = NewShape()->GetIndex();
+    nextShapes[i] = NewShape(vector)->GetIndex();
   }
 }
 

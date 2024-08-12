@@ -59,7 +59,5 @@ void GameOver::SetHighscores(){
 
 void GameOver::OpenClose(){
   Screen::OpenClose();
-  if(!shouldClose){
-  	PlayAgain.SetScreen(nextScreen);
-  }
+  if(nextScreen == GAME || nextScreen == COOP) PlayAgain.SetScreen(nextScreen);
 }

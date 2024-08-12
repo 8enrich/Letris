@@ -21,4 +21,6 @@ class Coop : public Game {
     void ResetShapes();
     void Update() override;
     int tickToFix2;
+    Shape *NextShape(Shape*) override;
+    void ResetShape(int,Shape*&);
 };

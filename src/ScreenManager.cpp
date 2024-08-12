@@ -18,8 +18,8 @@ void ScreenManager::SetScreen(Screens type) {
 void ScreenManager::UpdateScreen() {
     if (!screens[actualScreen]) return;
     if (!entered) {
-        if (actualScreen == OPTIONS || actualScreen == GAMEOVER || actualScreen == PAUSE)
-          screens[actualScreen]->SetNextScreen(lastScreen);
+        if (actualScreen == OPTIONS) screens[actualScreen]->SetNextScreen(lastScreen);
+        if (lastScreen == COOP || lastScreen == GAME) screens[actualScreen]->SetNextScreen(lastScreen);
         if (actualScreen == GAMEOVER) SetScoreInGameOver();
         screens[actualScreen]->OpenClose();
         entered = true;
