@@ -50,11 +50,16 @@ void Shape::Draw() const {
   }
 }
 
+
 void Shape::DrawOutOfBoard(Vec2<double> pos) const{
+  DrawOutOfBoard(pos, color);
+}
+
+void Shape::DrawOutOfBoard(Vec2<double> pos, Color c) const{
   for(int y = 0; y < dimension; ++y){
     for(int x = 0; x < dimension; ++x){
       bool cell = GetShapeRotation(x, y, Rotation::UP);
-      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2<int>{x, y}) - pos, color);
+      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2<int>{x, y}) - pos, c);
     }
   }
 }

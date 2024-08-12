@@ -270,8 +270,13 @@ void Game::UpdateLevel(){
 
 void Game::DrawHoldShape(){
   int dimension = shapes[hold].GetDimension();
+  if(canHold){
+    shapes[hold].DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
+        (dimension * dimension) - ((double)5/4) * dimension + 1});
+    return;
+  }
   shapes[hold].DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
-      (dimension * dimension) - ((double)5/4) * dimension + 1});
+      (dimension * dimension) - ((double)5/4) * dimension + 1}, LIGHTGRAY);
 }
 
 void Game::DrawNextShapes(){

@@ -24,6 +24,7 @@ public:
 	Shape& operator=(const Shape &other){return *this = Shape(other);}
   void Draw() const;
   void DrawOutOfBoard(Vec2<double>) const;
+  void DrawOutOfBoard(Vec2<double>, Color) const;
   void Rotate();
   void RotateAntiClockWise();
   void Fall();
