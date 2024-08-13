@@ -46,13 +46,8 @@ class Game : public Screen {
     bool HasLost();
     int tickToFix;
     int maxTickToFix;
-    Shape shapes[7] = {I_Shape(*board),
-                       O_Shape(*board),
-                       T_Shape(*board),
-                       J_Shape(*board),
-                       L_Shape(*board),
-                       S_Shape(*board),
-                       Z_Shape(*board)};
+    Shape i, o, t, j, l, s, z;
+    Shape shapes[7];
     ScreenButton Pause = ScreenButton("Pause", Vec2<double>{1 / 1.1, 1.0f / 25}, 1.0f / 20, PAUSE);
     std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);

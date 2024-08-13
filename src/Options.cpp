@@ -143,11 +143,13 @@ void Options::OptionsHandling() {
     if(key || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
       if(s != ""){
         for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
-          KeyboardKey keyToChange = settings::controls[settings::db["CONTROL"]][i];
-          settings::db["CUSTOM_CONTROLS"][i] = keyToChange;
+          settings::db["CUSTOM_CONTROLS"][i] = settings::controls[settings::db["CONTROL"]][i];
         }
         for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
-          if(controlButtons[i]->GetText() == s) controlButtons[i]->SetText(controlButtons[buttonClicked - 1]->GetText());
+          if(controlButtons[i]->GetText() == s){
+            settings::db["CUSTOM_CONTROLS"][i] = settings::controls[settings::db["CONTROL"]][buttonClicked - 1];
+            controlButtons[i]->SetText(controlButtons[buttonClicked - 1]->GetText());
+          }
         }
         controlButtons[buttonClicked - 1]->SetText(s);
         settings::db["CUSTOM_CONTROLS"][buttonClicked - 1] = key;

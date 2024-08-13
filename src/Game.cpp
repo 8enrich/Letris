@@ -4,7 +4,10 @@
 #include <raylib.h>
 
 Game::Game(Board *board) :
-  board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3")
+  board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3"),
+  i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
+  j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
+  shapes{ i, o, t, j, l, s, z }
 {
   board->ResetBoardCells();
   shape = NewShape();
