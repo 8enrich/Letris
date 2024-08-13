@@ -2,6 +2,7 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 #include <string>
+#include <iostream>
 
 void Options::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
@@ -59,8 +60,10 @@ void Options::SetNewResolution(std::string resolution){
 void Options::SetNewControl(std::string control){
   int index = GetIndex(control, controls);
   settings::db["CONTROL"] = index;
-  if(index == 4) settings::SetCustomControls();
   selectedControl = control;
+  for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
+    controlButtons[i]->SetText(settings::keyToString[settings::controls[index][i]]);
+  }
 }
 
 void Options::SetNewScreenMode(std::string screenMode) {
@@ -131,16 +134,25 @@ void Options::OptionsHandling() {
   if (selectedScreenMode != screenModeString) SetNewScreenMode(screenModeString);
   if (selectedControl != controlString) SetNewControl(controlString);
   if (MouseInVolumeBar(mousePosition)) SetNewVolume(mousePosition);
-  for(int i = 0, size = controlButtons.size(); i < size; i++){
-    if(controlButtons[i]->isButtonClicked() && i != size - 1) buttonClicked = i + 1;
+  for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
+    if(controlButtons[i]->isButtonClicked()) buttonClicked = i + 1;
   }
   if(buttonClicked){
     auto key = GetKeyPressed();
     std::string s = settings::keyToString[static_cast<KeyboardKey>(key)];
     if(key || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-      if(key && s != ""){
+      if(s != ""){
+        for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
+          KeyboardKey keyToChange = settings::controls[settings::db["CONTROL"]][i];
+          settings::db["CUSTOM_CONTROLS"][i] = keyToChange;
+        }
+        for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
+          if(controlButtons[i]->GetText() == s) controlButtons[i]->SetText(controlButtons[buttonClicked - 1]->GetText());
+        }
         controlButtons[buttonClicked - 1]->SetText(s);
         settings::db["CUSTOM_CONTROLS"][buttonClicked - 1] = key;
+        FirstControlButton.SetCurrentSelectedOptionIndex(4);
+        settings::SetCustomControls();
       }
       buttonClicked = 0;
     }

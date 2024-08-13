@@ -49,19 +49,19 @@ private:
       fontSizes[1], screenModes);
   const std::vector<Button*> generalButtons = { &screenModeButton, &screenSizeButton};
   OptionsButton FirstControlButton = OptionsButton(selectedControl, Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1], controls);
-  Button RotateControl = Button(settings::keyToString[settings::db["CUSTOM_CONTROLS"][0]],
+  Button RotateControl = Button(settings::keyToString[settings::controls[settings::db["CONTROL"]][0]],
       Vec2<double>{1.0f/2, 1/2.4}, fontSizes[1]);
-  Button LeftControl = Button(settings::keyToString[settings::db["CUSTOM_CONTROLS"][1]],
+  Button LeftControl = Button(settings::keyToString[settings::controls[settings::db["CONTROL"]][1]],
       Vec2<double>{1.0f/2, 1/2.25}, fontSizes[1]);
-  Button DownControl = Button(settings::keyToString[settings::db["CUSTOM_CONTROLS"][2]],
+  Button DownControl = Button(settings::keyToString[settings::controls[settings::db["CONTROL"]][2]],
       Vec2<double>{1.0f/2, 1/2.1}, fontSizes[1]);
-  Button RightControl = Button(settings::keyToString[settings::db["CUSTOM_CONTROLS"][3]],
+  Button RightControl = Button(settings::keyToString[settings::controls[settings::db["CONTROL"]][3]],
       Vec2<double>{1.0f/2, 1/1.95}, fontSizes[1]);
-  Button FallControl = Button(settings::keyToString[settings::db["CUSTOM_CONTROLS"][4]],
+  Button FallControl = Button(settings::keyToString[settings::controls[settings::db["CONTROL"]][4]],
       Vec2<double>{1.0f/2, 1/1.8}, fontSizes[1]);
-  Button ARotateControl = Button(settings::keyToString[settings::db["CUSTOM_CONTROLS"][5]],
+  Button ARotateControl = Button(settings::keyToString[settings::controls[settings::db["CONTROL"]][5]],
       Vec2<double>{1.0f/2, 1/1.65}, fontSizes[1]);
-  Button HoldControl = Button(settings::keyToString[settings::db["CUSTOM_CONTROLS"][6]],
+  Button HoldControl = Button(settings::keyToString[settings::controls[settings::db["CONTROL"]][6]],
       Vec2<double>{1.0f/2, 1/1.5}, fontSizes[1]);
   int buttonClicked = 0;
   const std::vector<Button*> controlButtons = { &RotateControl, &LeftControl,
