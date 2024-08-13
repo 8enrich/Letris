@@ -71,3 +71,7 @@ double Button::GetMousePositionX(){
   if(isMouseHoveringButton() && isButtonClicked()) return GetMouseX();
   return 0;
 }
+
+void Button::SetText(std::string newText){
+  buttonText = newText;
+}

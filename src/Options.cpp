@@ -59,6 +59,7 @@ void Options::SetNewResolution(std::string resolution){
 void Options::SetNewControl(std::string control){
   int index = GetIndex(control, controls);
   settings::db["CONTROL"] = index;
+  if(index == 4) settings::SetCustomControls();
   selectedControl = control;
 }
 
@@ -103,7 +104,11 @@ void Options::DrawGeneral(){
 }
 
 void Options::DrawControls() {
-  ray_functions::DrawFormatedText("Controls:", Vec2<double>{1.0f/3.2, 1.0f/3}, fontSizes[1], RAYWHITE);
+  ray_functions::DrawFormatedText("Controls:", Vec2<double>{1.0f/3.4, 1.0f/3}, fontSizes[1], RAYWHITE);
+  for(int i = 0; i < 7; i++){
+    ray_functions::DrawFormatedText(TextFormat("%s:", columns[i].c_str()), Vec2<double>{1.0f/3.4, 1.0f/(2.4 - i * 0.15)},
+        fontSizes[1], RAYWHITE);
+  }
 }
 
 void Options::DrawVolume(){
@@ -120,12 +125,26 @@ void Options::OptionsHandling() {
   currentSelected = buttonManager.GetCurrentSelected(currentSelected);
   std::string screenModeString = screenModeButton.GetText();
   std::string resolutionString = screenSizeButton.GetText();
-  std::string controlString = controlButtons[0]->GetText();
+  std::string controlString = controlButtons[controlButtons.size() - 1]->GetText();
   double mousePosition = volumeButtons[0]->GetMousePositionX();
   if (selectedResolution != resolutionString && settings::db["WINDOWED"]) SetNewResolution(resolutionString);
   if (selectedScreenMode != screenModeString) SetNewScreenMode(screenModeString);
   if (selectedControl != controlString) SetNewControl(controlString);
   if (MouseInVolumeBar(mousePosition)) SetNewVolume(mousePosition);
+  for(int i = 0, size = controlButtons.size(); i < size; i++){
+    if(controlButtons[i]->isButtonClicked() && i != size - 1) buttonClicked = i + 1;
+  }
+  if(buttonClicked){
+    auto key = GetKeyPressed();
+    std::string s = settings::keyToString[static_cast<KeyboardKey>(key)];
+    if(key || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+      if(key && s != ""){
+        controlButtons[buttonClicked - 1]->SetText(s);
+        settings::db["CUSTOM_CONTROLS"][buttonClicked - 1] = key;
+      }
+      buttonClicked = 0;
+    }
+  }
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();

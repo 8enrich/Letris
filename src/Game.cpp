@@ -158,7 +158,7 @@ void Game::UpdateBoard(){
         tickToFix++;
       }
       break;
-    case KEY_C:
+    case HOLD:
       if(canHold){ Hold(); }
       break;
     case KEY_ESCAPE:
