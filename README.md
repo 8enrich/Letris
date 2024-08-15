@@ -31,10 +31,6 @@ in progress
 
 in progress
 
-## Contributing
-
-Contributions are welcome! Please refer to the `CONTRIBUTING.md` file for guidelines on how to contribute to this project.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
@@ -42,3 +38,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For any inquiries or support, please open an issue on the [GitHub repository](https://github.com/8enrich/Letris).
+.
