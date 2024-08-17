@@ -51,6 +51,7 @@ Options::~Options(){
   deleteButtonVector(generalButtons);
   deleteButtonVector(volumeButtons);
   deleteButtonVector(buttons);
+  delete buttonManager;
 }
 
 
