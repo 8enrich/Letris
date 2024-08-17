@@ -95,7 +95,7 @@ void Options::OpenClose(){
   }
 }
 
-int Options::GetIndex(string item, std::vector<std::string> vector){
+int Options::GetIndex(string item, vector<string> vector){
   for(int i = 0, size = vector.size(); i < size; i++){
     if(item == vector[i]) return i;
   }
