@@ -4,12 +4,68 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
+using namespace settings;
+
+Options::Options() :
+  currentSelected(0),
+  buttonClicked(0),
+  volume(db["VOLUME"]),
+  selectedResolution(to_string(db["WINDOW_WIDTH"]) + "x" + to_string(db["WINDOW_HEIGHT"])),
+  selectedScreenMode(db["WINDOWED"] ? screenModes[0] : screenModes[1]),
+  selectedControl(controls[db["CONTROL"]])
+{
+  CreateControlButtons();
+  CreateGeneralButtons();
+  CreateSoundButtons();
+  returnButton = new ScreenButton("Return", Vec2<double>{1.0f/2, 3.0f/4}, 1.0f/20, MENU);
+  buttons = { general, control, sound, returnButton };
+  buttonManager = new ButtonManager(buttons);
+}
+
+void Options::CreateControlButtons(){
+  for(int i = 0; i < 7; i++){
+    controlButtons.push_back(new Button(keyToString[settings::controls[db["CONTROL"]][i]],
+        Vec2<double>{1.0f/2, 1/(2.4 - i * 0.15)}, fontSizes[1]));
+  }
+  controlButton = new OptionsButton(selectedControl, Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1], controls);
+  controlButtons.push_back(controlButton);
+  control = new OptionsButton("Controls", Vec2<double>{1.0f / 2, 1.0f / 10}, fontSizes[0], controlButtons);
+}
+
+void Options::CreateGeneralButtons(){
+  screenSizeButton = new OptionsButton(selectedResolution, Vec2<double>{1.0f/2, 1.0f/3}, fontSizes[1], screenSizes);
+  screenModeButton = new OptionsButton(selectedScreenMode, Vec2<double>{1.0f/2, 1/2.3}, fontSizes[1], screenModes);
+  generalButtons = { screenModeButton, screenSizeButton};
+  general = new OptionsButton("General", Vec2<double>{1.0f / 4, 1.0f / 10}, fontSizes[0], generalButtons);
+}
+
+void Options::CreateSoundButtons(){
+  masterVolumeButton = new Button("                                     ", Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1]);
+  volumeButtons = { masterVolumeButton };
+  sound = new OptionsButton("Sound", Vec2<double>{3.0f / 4, 1.0f / 10}, fontSizes[0], volumeButtons);
+}
+
+Options::~Options(){
+  deleteButtonVector(controlButtons);
+  deleteButtonVector(generalButtons);
+  deleteButtonVector(volumeButtons);
+  deleteButtonVector(buttons);
+}
+
+
+void Options::deleteButtonVector(vector<Button*> vector){
+  for(int i = 0; i < vector.size(); i++){
+    delete vector[i];
+  }
+}
+
 void Options::Tick(){
   if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   OptionsHandling();
   BeginDrawing();
   Draw();
-  buttonManager.Tick();
+  buttonManager->Tick();
   EndDrawing();
 }
 
@@ -33,51 +89,51 @@ void Options::Draw() {
 
 void Options::OpenClose(){
   Screen::OpenClose();
-  if(!shouldClose){ 
-  	returnButton.SetScreen(nextScreen);
+  if(!shouldClose){
+  	returnButton->SetScreen(nextScreen);
   	currentSelected = 0;
   }
 }
 
-int Options::GetIndex(std::string item, std::vector<std::string> vector){
+int Options::GetIndex(string item, std::vector<std::string> vector){
   for(int i = 0, size = vector.size(); i < size; i++){
     if(item == vector[i]) return i;
   }
   return 0;
 }
 
-void Options::SetNewResolution(std::string resolution){
+void Options::SetNewResolution(string resolution){
   int index = GetIndex(resolution, screenSizes), display = GetCurrentMonitor();
   if(settings::screenSizes[index].GetX() > GetMonitorWidth(display)){
     index = GetMaxResolutionIndex();
     resolution = screenSizes[index];
-    screenSizeButton.SetCurrentSelectedOptionIndex(index);
+    screenSizeButton->SetCurrentSelectedOptionIndex(index);
   }
-  settings::UpdateWindowSize(settings::screenSizes[index]);
+  UpdateWindowSize(settings::screenSizes[index]);
   selectedResolution = resolution;
 }
 
-void Options::SetNewControl(std::string control){
+void Options::SetNewControl(string control){
   int index = GetIndex(control, controls);
-  settings::db["CONTROL"] = index;
+  db["CONTROL"] = index;
   selectedControl = control;
   for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
-    controlButtons[i]->SetText(settings::keyToString[settings::controls[index][i]]);
+    controlButtons[i]->SetText(keyToString[settings::controls[index][i]]);
   }
 }
 
-void Options::SetNewScreenMode(std::string screenMode) {
-  settings::db["WINDOWED"] = screenMode == "Window";
+void Options::SetNewScreenMode(string screenMode) {
+  db["WINDOWED"] = screenMode == "Window";
   selectedScreenMode = screenMode;
-  if (settings::db["WINDOWED"]) {
+  if (db["WINDOWED"]) {
     ToggleBorderlessWindowed();
     SetNewResolution(selectedResolution);
     return;
   }
   selectedResolution = screenSizes[GetMaxResolutionIndex()];
   int index = GetIndex(selectedResolution, screenSizes);
-  screenSizeButton.SetCurrentSelectedOptionIndex(index);
-  settings::FullScreen();
+  screenSizeButton->SetCurrentSelectedOptionIndex(index);
+  FullScreen();
 }
 
 int Options::GetMaxResolutionIndex(){
@@ -89,15 +145,15 @@ int Options::GetMaxResolutionIndex(){
 }
 
 void Options::SetNewVolume(double mousePosition){
-  int width = settings::screenWidth;
+  int width = screenWidth;
   float xBegin = width/2.0f - width/9.0f, xEnd = width/2.0f + width/9.0f, y1 = 1/2.85;
   double doubleVolume = 100 * (mousePosition - xBegin)/(xEnd - xBegin);
   volume = (doubleVolume - (int) doubleVolume >= 0.5)? (int) doubleVolume + 1: (int) doubleVolume;
-  settings::db["VOLUME"] = volume;
+  db["VOLUME"] = volume;
 }
 
 bool Options::MouseInVolumeBar(double mousePosition){
-  int width = settings::screenWidth;
+  int width = screenWidth;
   return mousePosition >= width/2.0f - width/9.0f && mousePosition <= width/2.0f + width/9.0f;
 }
 
@@ -116,7 +172,7 @@ void Options::DrawControls() {
 
 void Options::DrawVolume(){
   ray_functions::DrawFormatedText("Volume:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
-  int width = settings::screenWidth, height = settings::screenHeight;
+  int width = screenWidth, height = screenHeight;
   float xBegin = width/2.0f - width/9.0f, xEnd = width/2.0f + width/9.0f, y1 = 1/2.85;
   DrawLineEx(Vector2{xBegin, height * y1}, Vector2{xEnd, height * y1}, (float)height/200, WHITE);
   DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1}, (float)height/100, WHITE);
@@ -125,43 +181,87 @@ void Options::DrawVolume(){
 }
 
 void Options::OptionsHandling() {
-  currentSelected = buttonManager.GetCurrentSelected(currentSelected);
-  std::string screenModeString = screenModeButton.GetText();
-  std::string resolutionString = screenSizeButton.GetText();
-  std::string controlString = controlButtons[controlButtons.size() - 1]->GetText();
-  double mousePosition = volumeButtons[0]->GetMousePositionX();
-  if (selectedResolution != resolutionString && settings::db["WINDOWED"]) SetNewResolution(resolutionString);
+  currentSelected = buttonManager->GetCurrentSelected(currentSelected);
+  GeneralButtonsHandling();
+  ControlButtonsHandling();
+  VolumeButtonsHandling();
+  if(buttonManager->GetScreen() != NOTSCREEN) {
+    nextScreen = buttonManager->GetScreen();
+    buttonManager->ResetScreen();
+    OpenClose();
+  }
+}
+
+void Options::GeneralButtonsHandling(){
+  ScreenModeHandling();
+  ScreenResolutionHandling();
+}
+
+void Options::ScreenModeHandling(){
+  string screenModeString = screenModeButton->GetText();
   if (selectedScreenMode != screenModeString) SetNewScreenMode(screenModeString);
+}
+
+void Options::ScreenResolutionHandling(){
+  string resolutionString = screenSizeButton->GetText();
+  if (selectedResolution != resolutionString && db["WINDOWED"]) SetNewResolution(resolutionString);
+}
+
+void Options::ControlButtonsHandling(){
+  ControlHandling();
+  CustomControlHandling();
+}
+
+void Options::ControlHandling(){
+  string controlString = controlButtons[controlButtons.size() - 1]->GetText();
   if (selectedControl != controlString) SetNewControl(controlString);
-  if (MouseInVolumeBar(mousePosition)) SetNewVolume(mousePosition);
+}
+
+void Options::CustomControlHandling(){
+  CheckButtonClicked();
+  if(buttonClicked) GetKeyboardInput();
+}
+
+void Options::CheckButtonClicked(){
   for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
     if(controlButtons[i]->isButtonClicked()) buttonClicked = i + 1;
   }
-  if(buttonClicked){
-    auto key = GetKeyPressed();
-    std::string s = settings::keyToString[static_cast<KeyboardKey>(key)];
-    if(key || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-      if(s != ""){
-        for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
-          settings::db["CUSTOM_CONTROLS"][i] = settings::controls[settings::db["CONTROL"]][i];
-        }
-        for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
-          if(controlButtons[i]->GetText() == s){
-            settings::db["CUSTOM_CONTROLS"][i] = settings::controls[settings::db["CONTROL"]][buttonClicked - 1];
-            controlButtons[i]->SetText(controlButtons[buttonClicked - 1]->GetText());
-          }
-        }
-        controlButtons[buttonClicked - 1]->SetText(s);
-        settings::db["CUSTOM_CONTROLS"][buttonClicked - 1] = key;
-        FirstControlButton.SetCurrentSelectedOptionIndex(4);
-        settings::SetCustomControls();
-      }
-      buttonClicked = 0;
+}
+
+void Options::GetKeyboardInput(){
+  KeyboardKey key = static_cast<KeyboardKey>(GetKeyPressed());
+  string stringKey = keyToString[key];
+  if(key || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+    if(stringKey != "") ChangeControls(stringKey, key);
+    buttonClicked = 0;
+  }
+}
+
+void Options::ChangeControls(string stringKey, KeyboardKey key){
+  SetControlsToActualControls();
+  SwapSameControls(stringKey);
+  controlButtons[buttonClicked - 1]->SetText(stringKey);
+  db["CUSTOM_CONTROLS"][buttonClicked - 1] = key;
+  controlButton->SetCurrentSelectedOptionIndex(4);
+  SetCustomControls();
+}
+
+void Options::SetControlsToActualControls(){
+  for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
+    db["CUSTOM_CONTROLS"][i] = settings::controls[db["CONTROL"]][i];
+  }
+}
+
+void Options::SwapSameControls(string stringKey){
+  for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
+    if(controlButtons[i]->GetText() == stringKey){
+      db["CUSTOM_CONTROLS"][i] = settings::controls[db["CONTROL"]][buttonClicked - 1];
+      controlButtons[i]->SetText(controlButtons[buttonClicked - 1]->GetText());
     }
   }
-  if(buttonManager.GetScreen() != NOTSCREEN) {
-    nextScreen = buttonManager.GetScreen();
-    buttonManager.ResetScreen();
-    OpenClose();
-  }
+}
+
+void Options::VolumeButtonsHandling(){
+  double mousePosition = volumeButtons[0]->GetMousePositionX();
+  if (MouseInVolumeBar(mousePosition)) SetNewVolume(mousePosition);
 }

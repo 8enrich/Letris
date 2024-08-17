@@ -154,6 +154,6 @@ std::unordered_map<KeyboardKey, std::string> settings::keyToString = {
   { KEY_RIGHT_SHIFT, "RShift" },
   { KEY_LEFT_ALT, "LAlt" },
   { KEY_RIGHT_ALT, "RAlt" },
-  {KEY_LEFT_CONTROL, "LCtrl"},
-  {KEY_RIGHT_CONTROL, "RCtrl"}
+  { KEY_LEFT_CONTROL, "LCtrl" },
+  { KEY_RIGHT_CONTROL, "RCtrl" }
 };
