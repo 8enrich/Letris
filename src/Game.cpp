@@ -247,10 +247,7 @@ int Game::QuantityOfLines(){
 void Game::UpdateLevel(){
   if(cleanedLinesCount >= 10 * (level + 1) && level < 29){
     level++;
-    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){
-      speed--;
-      maxTickToFix -= 2;
-    }
+    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
   }
 }
 
