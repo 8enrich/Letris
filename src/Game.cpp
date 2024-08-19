@@ -8,7 +8,7 @@ Game::Game(Board *board) :
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
   shapes{ i, o, t, j, l, s, z },
-  hold(-1), canHold(true), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30)
+  hold(-1), canHold(true), score(0), level(0), speed(settings::fps * 0.86), cleanedLinesCount(0), maxTickToFix(30)
 {
   board->ResetBoardCells();
   shape = NewShape();
