@@ -20,7 +20,6 @@ private:
   void CreateSoundButtons();
   void deleteButtonVector(std::vector<Button*> vector);
   void OptionsHandling();
-  int currentSelected;
   void Draw() override;
   void DrawGeneral();
   void DrawVolume();
@@ -32,8 +31,23 @@ private:
   void SetNewScreenMode(std::string);
   bool MouseInVolumeBar(double);
   int GetMaxResolutionIndex();
-  const float fontSizes[2] = {(float)1/20, (float)1/30};
+  void GeneralButtonsHandling();
+  void ScreenModeHandling();
+  void ScreenResolutionHandling();
+  void ControlButtonsHandling();
+  void ControlHandling();
+  void CustomControlHandling();
+  void CheckButtonClicked();
+  void GetKeyboardInput();
+  void ChangeControls(std::string, KeyboardKey);
+  void SetControlsToActualControls();
+  void SwapSameControls(std::string);
+  void VolumeButtonsHandling();
   void SetNewResolution(std::string resolution);
+  int currentSelected;
+  int buttonClicked;
+  int volume;
+  const float fontSizes[2] = {1.0f/20, 1.0f/30};
   const std::vector<std::string> columns = {"Rotate CW","Left","Down","Right","Instant Fall","Rotate ACW", "Hold"};
   const std::vector<std::string> controls = {"Right hand", "Arrows", "Left hand", "Vim Mode", "Custom"};
   const std::vector<std::string> screenSizes = {"800x600", "1280x720", "1366x768", "1600x900", "1920x1080"};
@@ -41,8 +55,6 @@ private:
   std::string selectedResolution;
   std::string selectedScreenMode;
   std::string selectedControl;
-  int buttonClicked;
-  int volume;
   ScreenButton *returnButton;
   OptionsButton *screenSizeButton;
   OptionsButton *screenModeButton;
@@ -61,17 +73,5 @@ private:
     CONTROLS,
     VOLUME
   };
-  void GeneralButtonsHandling();
-  void ScreenModeHandling();
-  void ScreenResolutionHandling();
-  void ControlButtonsHandling();
-  void ControlHandling();
-  void CustomControlHandling();
-  void CheckButtonClicked();
-  void GetKeyboardInput();
-  void ChangeControls(std::string, KeyboardKey);
-  void SetControlsToActualControls();
-  void SwapSameControls(std::string);
-  void VolumeButtonsHandling();
 };
 

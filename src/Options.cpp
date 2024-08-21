@@ -6,11 +6,10 @@
 
 using namespace std;
 using namespace settings;
+using namespace ray_functions;
 
 Options::Options() :
-  currentSelected(0),
-  buttonClicked(0),
-  volume(db["VOLUME"]),
+  currentSelected(0), buttonClicked(0), volume(db["VOLUME"]),
   selectedResolution(to_string(db["WINDOW_WIDTH"]) + "x" + to_string(db["WINDOW_HEIGHT"])),
   selectedScreenMode(db["WINDOWED"] ? screenModes[0] : screenModes[1]),
   selectedControl(controls[db["CONTROL"]])
@@ -72,7 +71,7 @@ void Options::Tick(){
 
 void Options::Draw() {
   ClearBackground(BLACK);
-  ray_functions::DrawFormatedRectangle(Vec2<double>{1.0f/2, 1.0f/12}, Vec2<double>{1/1.5, 1.0f/10}, WHITE);
+  DrawFormatedRectangle(Vec2<double>{1.0f/2, 1.0f/12}, Vec2<double>{1/1.5, 1.0f/10}, WHITE);
   switch(currentSelected){
     case GENERAL:
       DrawGeneral();
@@ -159,25 +158,25 @@ bool Options::MouseInVolumeBar(double mousePosition){
 }
 
 void Options::DrawGeneral(){
-  ray_functions::DrawFormatedText("Resolution:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
-  ray_functions::DrawFormatedText("Window Mode:", Vec2<double>{1.0f/3, 1/2.3}, fontSizes[1], RAYWHITE);
+  DrawFormatedText("Resolution:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
+  DrawFormatedText("Window Mode:", Vec2<double>{1.0f/3, 1/2.3}, fontSizes[1], RAYWHITE);
 }
 
 void Options::DrawControls() {
-  ray_functions::DrawFormatedText("Controls:", Vec2<double>{1.0f/3.4, 1.0f/3}, fontSizes[1], RAYWHITE);
+  DrawFormatedText("Controls:", Vec2<double>{1.0f/3.4, 1.0f/3}, fontSizes[1], RAYWHITE);
   for(int i = 0; i < 7; i++){
-    ray_functions::DrawFormatedText(TextFormat("%s:", columns[i].c_str()), Vec2<double>{1.0f/3.4, 1.0f/(2.4 - i * 0.15)},
+    DrawFormatedText(TextFormat("%s:", columns[i].c_str()), Vec2<double>{1.0f/3.4, 1.0f/(2.4 - i * 0.15)},
         fontSizes[1], RAYWHITE);
   }
 }
 
 void Options::DrawVolume(){
-  ray_functions::DrawFormatedText("Volume:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
+  DrawFormatedText("Volume:", Vec2<double>{1.0f/3, 1.0f/3}, fontSizes[1], RAYWHITE);
   int width = screenWidth, height = screenHeight;
   float xBegin = width/2.0f - width/9.0f, xEnd = width/2.0f + width/9.0f, y1 = 1/2.85;
   DrawLineEx(Vector2{xBegin, height * y1}, Vector2{xEnd, height * y1}, (float)height/200, WHITE);
   DrawCircleV({(xEnd - xBegin) * (float)volume/100 + xBegin, height * y1}, (float)height/100, WHITE);
-  ray_functions::DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{1.0f/2 + 1.0f/6, 1.0f/3},
+  DrawFormatedText(TextFormat("%d% %", volume), Vec2<double>{1.0f/2 + 1.0f/6, 1.0f/3},
       fontSizes[1], WHITE);
 }
 
