@@ -154,6 +154,10 @@ bool Shape::HasSpaceToRotate() const{
   return GetCollidedCellX(rightAddVector, highestCell) - GetCollidedCellX(leftAddVector, highestCell) > dimension;
 }
 
+int Shape::GetDistanceUntilCollision() const{
+  return GetDistanceUntilCollision(downAddVector);
+}
+
 int Shape::GetDistanceUntilCollision(Vec2<int> addVector) const{
   int factor = 1;
   Vec2<int> pos;

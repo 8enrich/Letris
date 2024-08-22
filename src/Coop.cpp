@@ -54,13 +54,25 @@ void Coop::ResetShapes(){
 }
 
 void Coop::Update(){
+  int index = (shape->GetDistanceUntilCollision() >= shape2->GetDistanceUntilCollision())? 0 : 1;
+  for(int i = 0; i < 2; i++){
+    UpdatePlayer(index);
+    (*playersShapes[1 - index])->MoveIfCollided();
+    index = 1 - index;
+  }
+}
+
+void Coop::UpdatePlayer(int index){
+  if(index){
+    Game::Update(shape2, 4, &tickToFix2, shapes2);
+    return;
+  }
   Game::Update();
-  Game::Update(shape2, 4, &tickToFix2, shapes2);
 }
 
 Shape *Coop::NextShape(Shape *vector){
   Shape *s = Game::NextShape(vector);
-  int index = ((vector[0]).GetBoardPos() == (shapes2[0]).GetBoardPos())? 1 : 0;
+  int index = (&(vector[0]) == &(shapes2[0]))? 1 : 0;
   ResetShape(index, s);
   return s;
 }

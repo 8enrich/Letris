@@ -45,6 +45,7 @@ public:
   bool HasSpaceToRotate() const;
   void ResetShape();
   void ResetShape(float);
+  int GetDistanceUntilCollision() const;
 private:
   Vec2<int> boardPos;
   Rotation currentRotation;
