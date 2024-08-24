@@ -131,12 +131,9 @@ void Game::Draw(){
 
 void Game::DrawBoard(){
   board->Draw();
-  int screenHeight = settings::screenHeight;
-  Vec2<int> screenPos = board->GetScreenPos();
-  int cellSize = board->GetCellsize();
-  DrawHold(screenHeight, screenPos, cellSize);
-  DrawNext(screenHeight, screenPos, cellSize);
-  DrawStats(screenHeight, screenPos, cellSize);
+  DrawHold();
+  DrawNext();
+  DrawStats();
 }
 
 void Game::Update(){
@@ -300,20 +297,30 @@ int Game::GetScore(){
   return score;
 }
 
-void Game::DrawHold(int screenHeight, Vec2<int> screenPos, int cellSize) const{
-  ray_functions::DrawText("Hold", screenPos - Vec2<int>{cellSize*4, cellSize*2}, screenHeight * 1/30, RAYWHITE);
-  ray_functions::DrawRectangleLinesEx(screenPos - Vec2<int>{cellSize*6, cellSize/2},
-      Vec2<int>{cellSize*6, cellSize*4}, cellSize/2, RAYWHITE);
+void Game::DrawHold() const{
+  DrawHold(Vec2<double>{4, 2}, Vec2<double>{-6, -1/2.1});
 }
 
-void Game::DrawNext(int screenHeight, Vec2<int> screenPos, int cellSize) const{
-  ray_functions::DrawText("Next",screenPos + Vec2<int>{cellSize*12, -cellSize*2}, screenHeight * 1/30, RAYWHITE);
-  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)(-cellSize/2)},
-      Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
+void Game::DrawHold(Vec2<double> textPos, Vec2<double> rectPos) const{
+  board->DrawText("Hold", textPos, 1.0f/30, RAYWHITE);
+  board->DrawRectangleLinesEx(rectPos, Vec2<double>{6, 4}, 1.0f/2, RAYWHITE);
 }
 
-void Game::DrawStats(int screenHeight, Vec2<int> screenPos, int cellSize) const{
+void Game::DrawNext() const{  
+  int boardSize = board->GetWidth();	 
+  board->DrawText("Next", Vec2<double>{(double)-(boardSize + 2), 2}, 1.0f/30, RAYWHITE);
+  DrawNext(Vec2<double>{(double)boardSize, (double)(-1/2.1)});	
+}
+
+void Game::DrawNext(Vec2<double> pos) const{
+  board->DrawRectangleLinesEx(pos, Vec2<double>{(double)6, (double)12}, 1.0f/2, RAYWHITE);
+}
+
+void Game::DrawStats() const{
   int lines = cleanedLinesCount;
+  int screenHeight = settings::screenHeight;
+  Vec2<int> screenPos = board->GetScreenPos();
+  int cellSize = board->GetCellsize();
   std::unordered_map<std::string, int> mapa =
   {
     {"Lines", lines},

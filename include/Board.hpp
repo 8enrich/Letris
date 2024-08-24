@@ -33,6 +33,8 @@ public:
   void ResetBoardSettings();
   Vec2<int> GetScreenPos();
   int GetCellsize();
+  void DrawRectangleLinesEx(Vec2<double>,Vec2<double>,float,Color) const;
+  void DrawText(std::string,Vec2<double>,float,Color) const;
 private:
   std::vector<Cell> cells;
   const int width, height, padding;

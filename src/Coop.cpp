@@ -81,17 +81,14 @@ void Coop::ResetShape(int index, Shape*& s){
   s->ResetShape(values[index]);
 }
 
-void Coop::DrawNext(int screenHeight, Vec2<int> screenPos, int cellSize) const{
-  ray_functions::DrawText("P1",screenPos - Vec2<int>{cellSize*3, cellSize*2}, screenHeight * 1/30, RAYWHITE);
-  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) - Vec2<double>{(double)cellSize*6, (double)cellSize*0.47},
-      Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
-  ray_functions::DrawText("P2",screenPos + Vec2<int>{cellSize*12, -cellSize*2}, screenHeight * 1/30, RAYWHITE);
-  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)(-cellSize/2)},
-      Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
-}
+void Coop::DrawNext() const{
+  int boardSize = board->GetWidth();
+  board->DrawText("P1",Vec2<double>{(double)3, (double)2}, 1.0f/30, RAYWHITE);
+  Game::DrawNext(Vec2<double>{(double)-6, (double)-0.47});
+  board->DrawText("P2",Vec2<double>{(double)-12, (double)2}, 1.0f/30, RAYWHITE);
+  Game::DrawNext(Vec2<double>{(double)boardSize, (double)(-1.0f/2)});
+} 
 
-void Coop::DrawHold(int screenHeight, Vec2<int> screenPos, int cellSize) const{
-  ray_functions::DrawText("Hold",screenPos + Vec2<int>{cellSize*12, cellSize*15}, screenHeight * 1/30, RAYWHITE);
-  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)cellSize*16.53},
-      Vec2<double>{(double)cellSize*6, (double)cellSize*4}, cellSize/2, RAYWHITE);
-}
+void Coop::DrawHold() const{
+  Game::DrawHold(Vec2<double>{-12, -15}, Vec2<double>{10.1, 16.53});
+} 
