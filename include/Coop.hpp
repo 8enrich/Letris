@@ -21,9 +21,12 @@ class Coop : public Game {
     void ResetShapes();
     void Update() override;
     int tickToFix2;
+    int nextShapes2[3] = {0, 1, 2};
     Shape *NextShape(Shape*) override;
     void ResetShape(int,Shape*&);
     void UpdatePlayer(int);
     void DrawNext() const override;
     void DrawHold() const override;
+    void DrawStats() const override;
+    void DrawNextShapes() const override;
 };

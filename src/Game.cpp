@@ -285,11 +285,15 @@ void Game::DrawHoldShape(){
       (dimension * dimension) - ((double)5/4) * dimension + 1}, LIGHTGRAY);
 }
 
-void Game::DrawNextShapes(){
+void Game::DrawNextShapes() const{
+  double boardSize = (double) board->GetWidth();
+  DrawNextShapes(shapes, (2*boardSize + 6), nextShapes);
+}
+
+void Game::DrawNextShapes(const Shape *vector, double posX, const int *next) const{
   for(int i = 0; i < 3; i++){
-    int dimension = shapes[nextShapes[i]].GetDimension();
-    shapes[nextShapes[i]].DrawOutOfBoard(Vec2<double>{-((16.1 + 10.1 - dimension)/2), i * -4 + (((double)1/4) *
-          (dimension * dimension) - ((double)5/4) * dimension + 1)});
+    int dimension = vector[next[i]].GetDimension();
+    vector[next[i]].DrawOutOfBoard(Vec2<double>{-(posX - dimension)/2, i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)});
   }
 }
 
@@ -317,6 +321,10 @@ void Game::DrawNext(Vec2<double> pos) const{
 }
 
 void Game::DrawStats() const{
+  DrawStats(10);
+}
+
+void Game::DrawStats(int firstValue) const{
   int lines = cleanedLinesCount;
   int screenHeight = settings::screenHeight;
   Vec2<int> screenPos = board->GetScreenPos();
@@ -331,7 +339,7 @@ void Game::DrawStats() const{
   const char *numStr;
   double xPos, yPos;
   for(auto item = mapa.begin(); item != mapa.end(); i++, ++item){
-    y = 10 + i * 3;
+    y = firstValue + i * 3;
     numStr = TextFormat("%d", item->second);
     textWidth = MeasureText(numStr, screenHeight * 1/25);
     xPos = screenPos.GetX() - cellSize*4 + (MeasureText(item->first.c_str(), screenHeight * 1/30) - textWidth)/2;

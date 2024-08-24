@@ -46,6 +46,7 @@ void Coop::Draw(){
   for(int i = 0; i < 2; i++){
     (*playersShapes[i])->Draw();
   }
+  DrawNextShapes();
 }
 
 void Coop::ResetShapes(){
@@ -91,4 +92,13 @@ void Coop::DrawNext() const{
 
 void Coop::DrawHold() const{
   Game::DrawHold(Vec2<double>{-12, -15}, Vec2<double>{10.1, 16.53});
-} 
+}
+
+void Coop::DrawStats() const{
+  Game::DrawStats(12);
+}
+
+void Coop::DrawNextShapes() const{
+  Game::DrawNextShapes();
+  Game::DrawNextShapes(shapes2, -6,nextShapes2);
+}

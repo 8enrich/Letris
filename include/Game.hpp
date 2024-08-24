@@ -44,12 +44,14 @@ class Game : public Screen {
     int cleanedLinesCount;
     void UpdateLevel();
     void DrawHoldShape();
-    void DrawNextShapes();
+    virtual void DrawNextShapes() const;
+    void DrawNextShapes(const Shape*,double, const int*) const;
     virtual void DrawNext() const;
     void DrawNext(Vec2<double>) const;
     virtual void DrawHold() const;
     void DrawHold(Vec2<double>,Vec2<double>) const;
-    void DrawStats() const;
+    virtual void DrawStats() const;
+    void DrawStats(int) const;
     void DrawBoard();
     bool HasLost();
     int tickToFix;
