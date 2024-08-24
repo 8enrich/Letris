@@ -123,11 +123,20 @@ void Game::UpdateShape(Shape*& s, int *tick, Shape *vector){
 void Game::Draw(){
   ClearBackground(BLACK);
   buttonManager.Tick();
-  board->Draw();
-  board->DrawStats(score, level, cleanedLinesCount);
+  DrawBoard();
   if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
   shape->Draw();
+}
+
+void Game::DrawBoard(){
+  board->Draw();
+  int screenHeight = settings::screenHeight;
+  Vec2<int> screenPos = board->GetScreenPos();
+  int cellSize = board->GetCellsize();
+  DrawHold(screenHeight, screenPos, cellSize);
+  DrawNext(screenHeight, screenPos, cellSize);
+  DrawStats(screenHeight, screenPos, cellSize);
 }
 
 void Game::Update(){
@@ -289,4 +298,39 @@ void Game::DrawNextShapes(){
 
 int Game::GetScore(){
   return score;
+}
+
+void Game::DrawHold(int screenHeight, Vec2<int> screenPos, int cellSize) const{
+  ray_functions::DrawText("Hold", screenPos - Vec2<int>{cellSize*4, cellSize*2}, screenHeight * 1/30, RAYWHITE);
+  ray_functions::DrawRectangleLinesEx(screenPos - Vec2<int>{cellSize*6, cellSize/2},
+      Vec2<int>{cellSize*6, cellSize*4}, cellSize/2, RAYWHITE);
+}
+
+void Game::DrawNext(int screenHeight, Vec2<int> screenPos, int cellSize) const{
+  ray_functions::DrawText("Next",screenPos + Vec2<int>{cellSize*12, -cellSize*2}, screenHeight * 1/30, RAYWHITE);
+  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)(-cellSize/2)},
+      Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
+}
+
+void Game::DrawStats(int screenHeight, Vec2<int> screenPos, int cellSize) const{
+  int lines = cleanedLinesCount;
+  std::unordered_map<std::string, int> mapa =
+  {
+    {"Lines", lines},
+    {"Level", level},
+    {"Score", score},
+  };
+  int i = 0, y, textWidth;
+  const char *numStr;
+  double xPos, yPos;
+  for(auto item = mapa.begin(); item != mapa.end(); i++, ++item){
+    y = 10 + i * 3;
+    numStr = TextFormat("%d", item->second);
+    textWidth = MeasureText(numStr, screenHeight * 1/25);
+    xPos = screenPos.GetX() - cellSize*4 + (MeasureText(item->first.c_str(), screenHeight * 1/30) - textWidth)/2;
+    yPos = screenPos.GetY() + (cellSize*(y + 1));
+    ray_functions::DrawText((item->first).c_str(), screenPos - Vec2<int>{cellSize*4, -(cellSize*y)},
+        screenHeight * 1/30, RAYWHITE);
+    ray_functions::DrawText(numStr, Vec2<double>{xPos,yPos}, screenHeight * 1/25, RAYWHITE);
+  }
 }

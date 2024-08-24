@@ -45,6 +45,10 @@ class Game : public Screen {
     void UpdateLevel();
     void DrawHoldShape();
     void DrawNextShapes();
+    virtual void DrawNext(int,Vec2<int>,int) const;
+    virtual void DrawHold(int,Vec2<int>,int) const;
+    void DrawStats(int,Vec2<int>,int) const;
+    void DrawBoard();
     bool HasLost();
     int tickToFix;
     int maxTickToFix;

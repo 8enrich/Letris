@@ -42,11 +42,10 @@ void Coop::SetPlayersShapes(){
 void Coop::Draw(){
   ClearBackground(BLACK);
   buttonManager.Tick();
-  board->Draw();
+  DrawBoard();
   for(int i = 0; i < 2; i++){
     (*playersShapes[i])->Draw();
   }
-  board->DrawStats(score, level, cleanedLinesCount);
 }
 
 void Coop::ResetShapes(){
@@ -80,4 +79,19 @@ Shape *Coop::NextShape(Shape *vector){
 void Coop::ResetShape(int index, Shape*& s){
   float values[2] = {1.0f/4, 3.0f/4};
   s->ResetShape(values[index]);
+}
+
+void Coop::DrawNext(int screenHeight, Vec2<int> screenPos, int cellSize) const{
+  ray_functions::DrawText("P1",screenPos - Vec2<int>{cellSize*3, cellSize*2}, screenHeight * 1/30, RAYWHITE);
+  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) - Vec2<double>{(double)cellSize*6, (double)cellSize*0.47},
+      Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
+  ray_functions::DrawText("P2",screenPos + Vec2<int>{cellSize*12, -cellSize*2}, screenHeight * 1/30, RAYWHITE);
+  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)(-cellSize/2)},
+      Vec2<double>{(double)cellSize*6, (double)cellSize*12}, cellSize/2, RAYWHITE);
+}
+
+void Coop::DrawHold(int screenHeight, Vec2<int> screenPos, int cellSize) const{
+  ray_functions::DrawText("Hold",screenPos + Vec2<int>{cellSize*12, cellSize*15}, screenHeight * 1/30, RAYWHITE);
+  ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + Vec2<double>{cellSize*10.1, (double)cellSize*16.53},
+      Vec2<double>{(double)cellSize*6, (double)cellSize*4}, cellSize/2, RAYWHITE);
 }
