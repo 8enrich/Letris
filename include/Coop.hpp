@@ -1,10 +1,6 @@
 #pragma once
 #include "Board.hpp"
 #include "Shape.hpp"
-#include "Screen.hpp"
-#include "ButtonManager.hpp"
-#include "ScreenButton.hpp"
-#include "Button.hpp"
 #include "Game.hpp"
 
 class Coop : public Game {
@@ -21,8 +17,8 @@ class Coop : public Game {
     void ResetShapes();
     void Update() override;
     int tickToFix2;
-    int nextShapes2[3] = {0, 1, 2};
-    Shape *NextShape(Shape*) override;
+    int nextShapes2[3];
+    Shape *NextShape(Shape*, int*) override;
     void ResetShape(int,Shape*&);
     void UpdatePlayer(int);
     void DrawNext() const override;

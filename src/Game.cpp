@@ -56,9 +56,9 @@ Shape *Game::NewShape(Shape *vector){
   return &vector[GetRandomValue(0, 6)];
 }
 
-Shape *Game::NextShape(Shape *vector){
-  int next = nextShapes[0];
-  MoveNextShapes(vector);
+Shape *Game::NextShape(Shape *vector, int *nexts){
+  int next = nexts[0];
+  MoveNextShapes(vector, nexts);
   vector[next].ResetShape();
   return &vector[next];
 }
@@ -98,26 +98,30 @@ void Game::DropLine(int line) {
   }
 }
 
-void Game::UpdateShape(Shape*& s, int *tick, Shape *vector){
+void Game::UpdateShape(Shape*& s, int *tick, Shape *vector, int *nexts){
   if (s->WillCollideDown()){
     (*tick)--;
     if(*tick > 0) return;
-    Vec2<int> cellPosition;
-    int dimension = s->GetDimension();
-    for (int x = 0; x < dimension; ++x){
-      for (int y = 0; y < dimension; ++y){
-        bool cell = s->GetShapeRotation(x, y);
-        if(cell){
-          cellPosition = s->GetBoardPos() + Vec2<int>{x, y};
-          board->SetCell(cellPosition, s->GetColor());
-        }
-      }
-    }
-    s = NextShape(vector);
+    FixShape(s); 
+    s = NextShape(vector, nexts);
     canHold = true;
   }
   if(*tick > maxTickToFix || *tick <= 0) *tick = maxTickToFix;
   if(*tick < maxTickToFix) (*tick)--;
+}
+
+void Game::FixShape(Shape*& s){
+  Vec2<int> cellPosition;
+  int dimension = s->GetDimension();
+  for (int x = 0; x < dimension; ++x){
+    for (int y = 0; y < dimension; ++y){
+      bool cell = s->GetShapeRotation(x, y);
+      if(cell){
+        cellPosition = s->GetBoardPos() + Vec2<int>{x, y};
+        board->SetCell(cellPosition, s->GetColor());
+      }
+    }
+  }
 }
 
 void Game::Draw(){
@@ -137,12 +141,12 @@ void Game::DrawBoard(){
 }
 
 void Game::Update(){
-  Update(shape, settings::db["CONTROL"], &tickToFix, shapes);
+  Update(shape, settings::db["CONTROL"], &tickToFix, shapes, nextShapes);
 }
 
-void Game::Update(Shape *&s, int control, int *tick, Shape *vector){
+void Game::Update(Shape *&s, int control, int *tick, Shape *vector, int *nexts){
   UpdateBoard(s, control, tick);
-  UpdateShape(s, tick, vector);
+  UpdateShape(s, tick, vector, nexts);
   UpdateLevel();
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
@@ -219,7 +223,7 @@ void Game::Hold(){
     return;
   }
   hold = index;
-  shape = NextShape(shapes);
+  shape = NextShape(shapes, nextShapes);
 }
 
 void Game::SwapShapeAndHold(int index){
@@ -228,16 +232,20 @@ void Game::SwapShapeAndHold(int index){
 }
 
 void Game::SetNextShapes(){
-  for(int i = 0; i < 3; i++){ nextShapes[i] = NewShape()->GetIndex(); }
+  SetNextShapes(nextShapes, shapes);
 }
 
-void Game::MoveNextShapes(Shape *vector){
+void Game::SetNextShapes(int *nexts, Shape *vector){
+  for(int i = 0; i < 3; i++){ nexts[i] = NewShape(vector)->GetIndex(); }
+}
+
+void Game::MoveNextShapes(Shape *vector, int *nexts){
   for(int i = 0; i < 3; i++){
     if(i + 1 != 3){
-      nextShapes[i] = nextShapes[i + 1];
+      nexts[i] = nexts[i + 1];
       continue;
     }
-    nextShapes[i] = NewShape(vector)->GetIndex();
+    nexts[i] = NewShape(vector)->GetIndex();
   }
 }
 

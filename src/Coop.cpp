@@ -12,6 +12,7 @@ Coop::Coop(Board *board) :
   shape2 = NewShape(shapes2);
   SetPlayersShapes();
   ResetShapes();
+  SetNextShapes(nextShapes2, shapes2);
   tickToFix2 = maxTickToFix;
 }
 
@@ -64,14 +65,14 @@ void Coop::Update(){
 
 void Coop::UpdatePlayer(int index){
   if(index){
-    Game::Update(shape2, 4, &tickToFix2, shapes2);
+    Game::Update(shape2, 4, &tickToFix2, shapes2, nextShapes2);
     return;
   }
   Game::Update();
 }
 
-Shape *Coop::NextShape(Shape *vector){
-  Shape *s = Game::NextShape(vector);
+Shape *Coop::NextShape(Shape *vector, int* nexts){
+  Shape *s = Game::NextShape(vector, nexts);
   int index = (&(vector[0]) == &(shapes2[0]))? 1 : 0;
   ResetShape(index, s);
   return s;
@@ -87,7 +88,7 @@ void Coop::DrawNext() const{
   board->DrawText("P1",Vec2<double>{(double)3, (double)2}, 1.0f/30, RAYWHITE);
   Game::DrawNext(Vec2<double>{(double)-6, (double)-0.47});
   board->DrawText("P2",Vec2<double>{(double)-12, (double)2}, 1.0f/30, RAYWHITE);
-  Game::DrawNext(Vec2<double>{(double)boardSize, (double)(-1.0f/2)});
+  Game::DrawNext(Vec2<double>{(double)boardSize, (double)(-1/2.1)});
 } 
 
 void Coop::DrawHold() const{
@@ -99,6 +100,7 @@ void Coop::DrawStats() const{
 }
 
 void Coop::DrawNextShapes() const{
-  Game::DrawNextShapes();
-  Game::DrawNextShapes(shapes2, -6,nextShapes2);
+  double boardSize = (double) board->GetWidth();
+  Game::DrawNextShapes(shapes, -6, nextShapes);
+  Game::DrawNextShapes(shapes2, (2*boardSize + 6), nextShapes2);
 }

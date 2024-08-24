@@ -17,12 +17,14 @@ class Game : public Screen {
     int tickCount;
     void Draw() override;
     virtual void Update();
-    void Update(Shape*&,int,int*,Shape*);
+    void Update(Shape*&,int,int*,Shape*,int*);
     void UpdateBoard(Shape*,int, int*);
-    void UpdateShape(Shape*&, int*, Shape*);
+    void UpdateShape(Shape*&, int*, Shape*,int*);
+    void UpdateShape(Shape*&,Shape*,int*);
+    virtual Shape*NextShape(Shape*,int*);
+    void FixShape(Shape*&);
     Shape *NewShape();
     Shape *NewShape(Shape*);
-    virtual Shape *NextShape(Shape*);
     void ClearLines();
     void DropLine(int);
     void DropLines();
@@ -34,7 +36,8 @@ class Game : public Screen {
     void SwapShapeAndHold(int);
     int nextShapes[3];
     void SetNextShapes();
-    void MoveNextShapes(Shape*);
+    void SetNextShapes(int*,Shape*);
+    void MoveNextShapes(Shape*, int*);
     int score;
     void UpdateScore(int);
     void Score();
