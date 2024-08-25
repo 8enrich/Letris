@@ -13,6 +13,7 @@ class Coop : public Game {
     void Update() override;
     Shape *NextShape(Player*) override;
     void ResetShape(int,Shape*&);
+    void ResetShape(Player*) override;
     void UpdatePlayer(int);
     void DrawNext() const override;
     void DrawHold() const override;
@@ -20,8 +21,10 @@ class Coop : public Game {
     void DrawNextShapes() const override;
     void SetPlayers();
     void ResetShapes();
-    Shape shapes2[7];
+    void DrawHoldShape() const;
+    Shape shapes[7];
     Player *player2;
     Player *players[2];
     const float positions[2] = {1.0f/4, 3.0f/4};
+    int GetPlayerIndex(Player*);
 };

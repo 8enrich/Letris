@@ -7,10 +7,9 @@ Coop::Coop(Board *board) :
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), 
   z(Z_Shape(*board)),
-  shapes2{i, o, t, j, l, s, z},
-  player2(new Player(maxTickToFix, -1, true))
+  shapes{i, o, t, j, l, s, z},
+  player2(new Player(maxTickToFix, true, shapes))
 {
-  CreatePlayerShapes(player2, shapes2);
   player2->shape = NewShape(*(player2->shapes));
   SetPlayers();
   ResetShapes();
@@ -49,6 +48,7 @@ void Coop::Draw(){
     (players[i]->shape)->Draw();
   }
   DrawNextShapes();
+  if(hold >= 0) DrawHoldShape();  
 }
 
 void Coop::Update(){
@@ -70,8 +70,7 @@ void Coop::UpdatePlayer(int index){
 
 Shape *Coop::NextShape(Player* player){
   Shape *s = Game::NextShape(player);
-  int index = (&(player->shapes) == &(player2->shapes))? 1 : 0;
-  ResetShape(index, s);
+  ResetShape(GetPlayerIndex(player), s);
   return s;
 }
 
@@ -83,12 +82,20 @@ void Coop::ResetShape(int index, Shape*& s){
   s->ResetShape(positions[index]);
 }
 
+void Coop::ResetShape(Player *player){
+  ResetShape(GetPlayerIndex(player), player->shape);
+}
+
+int Coop::GetPlayerIndex(Player *player){
+  return (&(player->shapes) == &(player2->shapes))? 1 : 0;
+}
+
 void Coop::DrawNext() const{
   int boardSize = board->GetWidth();
   board->DrawText("P1",Vec2<double>{(double)3, (double)2}, 1.0f/30, RAYWHITE);
   Game::DrawNext(Vec2<double>{(double)-6, (double)-0.47});
   board->DrawText("P2",Vec2<double>{(double)-12, (double)2}, 1.0f/30, RAYWHITE);
-  Game::DrawNext(Vec2<double>{(double)boardSize, (double)(-1/2.1)});
+  Game::DrawNext(Vec2<double>{(double)boardSize + 0.1, (double)(-1/2.1)});
 } 
 
 void Coop::DrawHold() const{
@@ -103,4 +110,9 @@ void Coop::DrawNextShapes() const{
   double boardSize = (double) board->GetWidth();
   Game::DrawNextShapes(player, -6);
   Game::DrawNextShapes(player2, (2*boardSize + 6));
+}
+
+void Coop::DrawHoldShape() const{
+  double boardSize = (double) board->GetWidth();
+  Game::DrawHoldShape(Vec2<double>{(double)-(2*boardSize + 6), (double)4.25}, player->canHold || player2->canHold);
 }

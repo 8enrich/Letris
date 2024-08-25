@@ -9,9 +9,8 @@ Game::Game(Board *board) :
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
   shapes{ i, o, t, j, l, s, z },
   maxTickToFix(30),
-  player(new Player(maxTickToFix, -1, true))
+  player(new Player(maxTickToFix, true, shapes))
 {
-  CreatePlayerShapes();
   board->ResetBoardCells();
   player->shape = NewShape();
   SetNextShapes();
@@ -19,15 +18,7 @@ Game::Game(Board *board) :
   level = 0;
   speed = 15;
   cleanedLinesCount = 0;
-}
-
-void Game::CreatePlayerShapes(){
-  CreatePlayerShapes(player, shapes);
-}
-
-void Game::CreatePlayerShapes(Player *player, Shape *vector){
-  player->shapes = new Shape*[7];
-  for (int i = 0; i < 7; ++i) player->shapes[i] = &vector[i];
+  hold = -1;
 }
 
 void Game::Tick(){
@@ -136,7 +127,7 @@ void Game::Draw(){
   ClearBackground(BLACK);
   buttonManager.Tick();
   DrawBoard();
-  if(player->hold >= 0) DrawHoldShape();
+  if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
   (player->shape)->Draw();
 }
@@ -165,6 +156,11 @@ void Game::Update(Player *player, int control){
 
 void Game::UpdateBoard(Player *player, int control){
   if(!(player->shape)->WillCollideDown() && !(tickCount % speed)){ (player->shape)->Fall(); }
+  MoveIfKeyPressed(player, control);
+  if (!(tickCount%3)) MoveIfKeyDown(player, control);
+}
+
+void Game::MoveIfKeyPressed(Player *player, int control){
   auto keyPressed = ray_functions::GetAction(control);
   int fallen;
   switch(keyPressed){
@@ -187,56 +183,59 @@ void Game::UpdateBoard(Player *player, int control){
         (player->tickToFix)++;
       }
       break;
-    case KEY_C:
-      if(player->canHold){ Hold(); }
+    case HOLD:
+      if(player->canHold){ Hold(player); }
       break;
     case KEY_ESCAPE:
       nextScreen = PAUSE;
       OpenClose();
-    default:
-      break;
-  }
-  if (!(tickCount%3)){
-    auto keyDown = ray_functions::GetKeyDown(control);
-    switch(keyDown){
-      case RIGHT:
-        if (!(player->shape)->WillCollideRight()){
-          (player->shape)->MoveRight();
-          (player->tickToFix)++;
-        }
-        break;
-      case LEFT:
-        if (!(player->shape)->WillCollideLeft()) {
-          (player->shape)->MoveLeft();
-          (player->tickToFix)++;
-        }
-        break;
-      case DOWN:
-        if (!(player->shape)->WillCollideDown()){
-          (player->shape)->MoveDown();
-          UpdateScore(1);
-        }
-      default:
-        break;
-    }
+    default: break;
   }
 }
 
-void Game::Hold(){
+void Game::MoveIfKeyDown(Player *player, int control){
+  auto keyDown = ray_functions::GetKeyDown(control);
+  switch(keyDown){
+    case RIGHT:
+      if (!(player->shape)->WillCollideRight()){
+        (player->shape)->MoveRight();
+        (player->tickToFix)++;
+      }
+      break;
+    case LEFT:
+      if (!(player->shape)->WillCollideLeft()) {
+        (player->shape)->MoveLeft();
+        (player->tickToFix)++;
+      }
+      break;
+    case DOWN:
+      if (!(player->shape)->WillCollideDown()){
+        (player->shape)->MoveDown();
+        UpdateScore(1);
+      }
+    default: break;
+  }
+}
+
+void Game::Hold(Player *player){
   player->canHold = false;
   int index = (player->shape)->GetIndex();
-  if(player->hold >= 0){
-    SwapShapeAndHold(index);
-    (player->shape)->ResetShape();
+  if(hold >= 0){
+    SwapShapeAndHold(index, player);
+    ResetShape(player);
     return;
   }
-  player->hold = index;
+  hold = index;
   player->shape = NextShape(player);
 }
 
-void Game::SwapShapeAndHold(int index){
-  player->shape = player->shapes[player->hold];
-  player->hold = index;
+void Game::ResetShape(Player *player){
+  (player->shape)->ResetShape();
+}
+
+void Game::SwapShapeAndHold(int index, Player *player){
+  player->shape = player->shapes[hold];
+  hold = index;
 }
 
 void Game::SetNextShapes(){
@@ -290,15 +289,17 @@ void Game::UpdateLevel(){
   }
 }
 
-void Game::DrawHoldShape(){
-  int dimension = player->shapes[player->hold]->GetDimension();
-  if(player->canHold){
-    player->shapes[player->hold]->DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
-        (dimension * dimension) - ((double)5/4) * dimension + 1});
-    return;
-  }
-  player->shapes[player->hold]->DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
-      (dimension * dimension) - ((double)5/4) * dimension + 1}, LIGHTGRAY);
+void Game::DrawHoldShape() const{
+  DrawHoldShape(Vec2<double>{(double)6, (double)0}, player->canHold);
+}
+
+void Game::DrawHoldShape(Vec2<double> pos, bool canHold) const{
+  int dimension = player->shapes[hold]->GetDimension();
+  double posX = pos.GetX(), posY = pos.GetY();
+  Color c = LIGHTGRAY;
+  if(canHold) c = player->shapes[hold]->GetColor();
+  player->shapes[hold]->DrawOutOfBoard(Vec2<double>{(posX + dimension)/2, posY * -4 + ((double)1/4) *
+      (dimension * dimension) - ((double)5/4) * dimension + 1}, c);
 }
 
 void Game::DrawNextShapes() const{
@@ -329,7 +330,7 @@ void Game::DrawHold(Vec2<double> textPos, Vec2<double> rectPos) const{
 void Game::DrawNext() const{  
   int boardSize = board->GetWidth();	 
   board->DrawText("Next", Vec2<double>{(double)-(boardSize + 2), 2}, 1.0f/30, RAYWHITE);
-  DrawNext(Vec2<double>{(double)boardSize, (double)(-1/2.1)});	
+  DrawNext(Vec2<double>{(double)boardSize + 0.1, (double)(-1/2.1)});	
 }
 
 void Game::DrawNext(Vec2<double> pos) const{
@@ -358,7 +359,7 @@ void Game::DrawStats(int firstValue) const{
     y = firstValue + i * 3;
     numStr = TextFormat("%d", item->second);
     textWidth = MeasureText(numStr, screenHeight * 1/25);
-    xPos = screenPos.GetX() - cellSize*4 + (MeasureText(item->first.c_str(), screenHeight * 1/30) - textWidth)/2;
+    xPos = screenPos.GetX() - cellSize*4 + (double)(MeasureText(item->first.c_str(), screenHeight * 1/30) - textWidth)/2;
     yPos = screenPos.GetY() + (cellSize*(y + 1));
     ray_functions::DrawText((item->first).c_str(), screenPos - Vec2<int>{cellSize*4, -(cellSize*y)},
         screenHeight * 1/30, RAYWHITE);

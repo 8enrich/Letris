@@ -52,7 +52,7 @@ int ray_functions::GetKeyDown(int control){
 
 int ray_functions::GetAction(int control){
   auto keyPressed = GetKeyPressed();
-  for(int i = 0; i < 6; i++) if(IsKeyPressed(settings::controls[control][i])) return keySequence[i];
+  for(int i = 0; i < 7; i++) if(IsKeyPressed(settings::controls[control][i])) return keySequence[i];
   return keyPressed;
 }
 
