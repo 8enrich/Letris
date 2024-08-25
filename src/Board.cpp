@@ -138,6 +138,10 @@ void Board::DrawRectangleLinesEx(Vec2<double> pos, Vec2<double> size, float line
   ray_functions::DrawRectangleLinesEx(Vec2<double>(screenPos) + (pos * cellSize), size * cellSize, lineThickness * cellSize, color);
 }
 
+void Board::DrawRectangle(Vec2<double> pos,Vec2<double> size, Color color) const{
+  ray_functions::DrawRectangle(Vec2<double>(screenPos) + (pos * cellSize), size * cellSize, color);
+}
+
 void Board::DrawText(std::string text, Vec2<double> pos, float fontSize, Color color) const{
   int screenHeight = settings::screenHeight;
   ray_functions::DrawText(text.c_str(), Vec2<double>(screenPos) - (pos * cellSize),screenHeight * fontSize, color);

@@ -133,10 +133,10 @@ void Game::Draw(){
 }
 
 void Game::DrawBoard(){
-  board->Draw();
   DrawHold();
   DrawNext();
   DrawStats();
+  board->Draw();
 }
 
 void Game::Update(){
@@ -324,6 +324,7 @@ void Game::DrawHold() const{
 
 void Game::DrawHold(Vec2<double> textPos, Vec2<double> rectPos) const{
   board->DrawText("Hold", textPos, 1.0f/30, RAYWHITE);
+  board->DrawRectangle(rectPos, Vec2<double>{6, 4}, BLACK);
   board->DrawRectangleLinesEx(rectPos, Vec2<double>{6, 4}, 1.0f/2, RAYWHITE);
 }
 
@@ -334,6 +335,7 @@ void Game::DrawNext() const{
 }
 
 void Game::DrawNext(Vec2<double> pos) const{
+  board->DrawRectangle(pos, Vec2<double>{6, 12}, BLACK);
   board->DrawRectangleLinesEx(pos, Vec2<double>{(double)6, (double)12}, 1.0f/2, RAYWHITE);
 }
 
