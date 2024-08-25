@@ -4,7 +4,7 @@
 #include "Screen.hpp"
 #include "ButtonManager.hpp"
 #include "ScreenButton.hpp"
-#include "Button.hpp" 
+#include "Button.hpp"
 
 class Game : public Screen {
   public:
@@ -13,15 +13,30 @@ class Game : public Screen {
     int GetScore();
   private:
     Shape i, o, t, j, l, s, z;
+    Shape shapes[7];
   protected:
+    struct Player{
+      Shape *shape;
+      Shape **shapes;
+      int tickToFix;
+      int hold;
+      bool canHold;
+      int nextShapes[3];
+
+      Player(int tickToFix, int hold, bool canHold) :
+        tickToFix(tickToFix), hold(hold), canHold(canHold) 
+      {}
+    };
     int tickCount;
+    void CreatePlayerShapes();
+    void CreatePlayerShapes(Player*, Shape*);
     void Draw() override;
     virtual void Update();
-    void Update(Shape*&,int,int*,Shape*,int*);
-    void UpdateBoard(Shape*,int, int*);
-    void UpdateShape(Shape*&, int*, Shape*,int*);
+    void Update(Player*,int);
+    void UpdateBoard(Player*,int);
+    void UpdateShape(Player*);
     void UpdateShape(Shape*&,Shape*,int*);
-    virtual Shape*NextShape(Shape*,int*);
+    virtual Shape*NextShape(Player*);
     void FixShape(Shape*&);
     Shape *NewShape();
     Shape *NewShape(Shape*);
@@ -31,13 +46,10 @@ class Game : public Screen {
     int cleanedLines[4] = {0,0,0,0};
     Board *board;
     void Hold();
-    int hold;
-    bool canHold;
     void SwapShapeAndHold(int);
-    int nextShapes[3];
     void SetNextShapes();
-    void SetNextShapes(int*,Shape*);
-    void MoveNextShapes(Shape*, int*);
+    void SetNextShapes(Player*);
+    void MoveNextShapes(Player*);
     int score;
     void UpdateScore(int);
     void Score();
@@ -48,7 +60,7 @@ class Game : public Screen {
     void UpdateLevel();
     void DrawHoldShape();
     virtual void DrawNextShapes() const;
-    void DrawNextShapes(const Shape*,double, const int*) const;
+    void DrawNextShapes(Player*,double) const;
     virtual void DrawNext() const;
     void DrawNext(Vec2<double>) const;
     virtual void DrawHold() const;
@@ -57,11 +69,11 @@ class Game : public Screen {
     void DrawStats(int) const;
     void DrawBoard();
     bool HasLost();
-    int tickToFix;
     int maxTickToFix;
-    Shape *shape;
-    Shape shapes[7];
     ScreenButton Pause = ScreenButton("Pause", Vec2<double>{1 / 1.1, 1.0f / 25}, 1.0f / 20, PAUSE);
     std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);
+    Player *player;
 };
+
+

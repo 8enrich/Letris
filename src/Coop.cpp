@@ -1,19 +1,25 @@
 #include "../include/Coop.hpp"
-#include "../include/raylibFunctions.hpp"
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
 Coop::Coop(Board *board) :
   Game(board),
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
-  j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
-  shapes2{ i, o, t, j, l, s, z }
+  j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), 
+  z(Z_Shape(*board)),
+  shapes2{i, o, t, j, l, s, z},
+  player2(new Player(maxTickToFix, -1, true))
 {
-  shape2 = NewShape(shapes2);
-  SetPlayersShapes();
+  CreatePlayerShapes(player2, shapes2);
+  player2->shape = NewShape(*(player2->shapes));
+  SetPlayers();
   ResetShapes();
-  SetNextShapes(nextShapes2, shapes2);
-  tickToFix2 = maxTickToFix;
+  SetNextShapes(player2);
+}
+
+void Coop::SetPlayers(){
+  players[0] = player;
+  players[1] = player2;
 }
 
 void Coop::Tick(){
@@ -35,52 +41,46 @@ void Coop::Tick(){
   tickCount++;
 }
 
-void Coop::SetPlayersShapes(){
-  playersShapes[0] = &shape;
-  playersShapes[1] = &shape2;
-}
-
 void Coop::Draw(){
   ClearBackground(BLACK);
   buttonManager.Tick();
   DrawBoard();
   for(int i = 0; i < 2; i++){
-    (*playersShapes[i])->Draw();
+    (players[i]->shape)->Draw();
   }
   DrawNextShapes();
 }
 
-void Coop::ResetShapes(){
-  for(int i = 0; i < 2; i++) ResetShape(i, (*playersShapes[i]));
-}
-
 void Coop::Update(){
-  int index = (shape->GetDistanceUntilCollision() >= shape2->GetDistanceUntilCollision())? 0 : 1;
+  int index = ((player->shape)->GetDistanceUntilCollision() >= (player2->shape)->GetDistanceUntilCollision())? 0 : 1;
   for(int i = 0; i < 2; i++){
     UpdatePlayer(index);
-    (*playersShapes[1 - index])->MoveIfCollided();
+    (players[1 - index]->shape)->MoveIfCollided();
     index = 1 - index;
   }
 }
 
 void Coop::UpdatePlayer(int index){
   if(index){
-    Game::Update(shape2, 4, &tickToFix2, shapes2, nextShapes2);
+    Game::Update(player2, 4);
     return;
   }
   Game::Update();
 }
 
-Shape *Coop::NextShape(Shape *vector, int* nexts){
-  Shape *s = Game::NextShape(vector, nexts);
-  int index = (&(vector[0]) == &(shapes2[0]))? 1 : 0;
+Shape *Coop::NextShape(Player* player){
+  Shape *s = Game::NextShape(player);
+  int index = (&(player->shapes) == &(player2->shapes))? 1 : 0;
   ResetShape(index, s);
   return s;
 }
 
+void Coop::ResetShapes(){
+  for(int i = 0; i < 2; i++) ResetShape(i, players[i]->shape);
+}
+
 void Coop::ResetShape(int index, Shape*& s){
-  float values[2] = {1.0f/4, 3.0f/4};
-  s->ResetShape(values[index]);
+  s->ResetShape(positions[index]);
 }
 
 void Coop::DrawNext() const{
@@ -101,6 +101,6 @@ void Coop::DrawStats() const{
 
 void Coop::DrawNextShapes() const{
   double boardSize = (double) board->GetWidth();
-  Game::DrawNextShapes(shapes, -6, nextShapes);
-  Game::DrawNextShapes(shapes2, (2*boardSize + 6), nextShapes2);
+  Game::DrawNextShapes(player, -6);
+  Game::DrawNextShapes(player2, (2*boardSize + 6));
 }

@@ -7,19 +7,27 @@ Game::Game(Board *board) :
   board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3"),
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
-  shapes{ i, o, t, j, l, s, z }
+  shapes{ i, o, t, j, l, s, z },
+  maxTickToFix(30),
+  player(new Player(maxTickToFix, -1, true))
 {
+  CreatePlayerShapes();
   board->ResetBoardCells();
-  shape = NewShape();
+  player->shape = NewShape();
   SetNextShapes();
-  hold = -1;
-  canHold = true;
   score = 0;
   level = 0;
   speed = 15;
   cleanedLinesCount = 0;
-  maxTickToFix = 30;
-  tickToFix = maxTickToFix;
+}
+
+void Game::CreatePlayerShapes(){
+  CreatePlayerShapes(player, shapes);
+}
+
+void Game::CreatePlayerShapes(Player *player, Shape *vector){
+  player->shapes = new Shape*[7];
+  for (int i = 0; i < 7; ++i) player->shapes[i] = &vector[i];
 }
 
 void Game::Tick(){
@@ -49,18 +57,18 @@ bool Game::HasLost(){
 }
 
 Shape *Game::NewShape(){
-  return NewShape(shapes);
+  return NewShape(*(player->shapes));
 }
 
-Shape *Game::NewShape(Shape *vector){
-  return &vector[GetRandomValue(0, 6)];
+Shape *Game::NewShape(Shape *shapes){
+  return &shapes[GetRandomValue(0, 6)];
 }
 
-Shape *Game::NextShape(Shape *vector, int *nexts){
-  int next = nexts[0];
-  MoveNextShapes(vector, nexts);
-  vector[next].ResetShape();
-  return &vector[next];
+Shape *Game::NextShape(Player *player){
+  int next = player->nextShapes[0];
+  MoveNextShapes(player);
+  player->shapes[next]->ResetShape();
+  return player->shapes[next];
 }
 
 void Game::ClearLines(){
@@ -98,16 +106,16 @@ void Game::DropLine(int line) {
   }
 }
 
-void Game::UpdateShape(Shape*& s, int *tick, Shape *vector, int *nexts){
-  if (s->WillCollideDown()){
-    (*tick)--;
-    if(*tick > 0) return;
-    FixShape(s); 
-    s = NextShape(vector, nexts);
-    canHold = true;
+void Game::UpdateShape(Player *player){
+  if ((player->shape)->WillCollideDown()){
+    (player->tickToFix)--;
+    if((player->tickToFix) > 0) return;
+    FixShape(player->shape); 
+    player->shape = NextShape(player);
+    player->canHold = true;
   }
-  if(*tick > maxTickToFix || *tick <= 0) *tick = maxTickToFix;
-  if(*tick < maxTickToFix) (*tick)--;
+  if((player->tickToFix) > maxTickToFix || (player->tickToFix) <= 0) (player->tickToFix) = maxTickToFix;
+  if((player->tickToFix) < maxTickToFix) (player->tickToFix)--;
 }
 
 void Game::FixShape(Shape*& s){
@@ -128,9 +136,9 @@ void Game::Draw(){
   ClearBackground(BLACK);
   buttonManager.Tick();
   DrawBoard();
-  if(hold >= 0) DrawHoldShape();
+  if(player->hold >= 0) DrawHoldShape();
   DrawNextShapes();
-  shape->Draw();
+  (player->shape)->Draw();
 }
 
 void Game::DrawBoard(){
@@ -141,12 +149,12 @@ void Game::DrawBoard(){
 }
 
 void Game::Update(){
-  Update(shape, settings::db["CONTROL"], &tickToFix, shapes, nextShapes);
+  Update(player, settings::db["CONTROL"]);
 }
 
-void Game::Update(Shape *&s, int control, int *tick, Shape *vector, int *nexts){
-  UpdateBoard(s, control, tick);
-  UpdateShape(s, tick, vector, nexts);
+void Game::Update(Player *player, int control){
+  UpdateBoard(player, control);
+  UpdateShape(player);
   UpdateLevel();
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
@@ -155,32 +163,32 @@ void Game::Update(Shape *&s, int control, int *tick, Shape *vector, int *nexts){
   }
 }
 
-void Game::UpdateBoard(Shape *s, int control, int *tick){
-  if(!s->WillCollideDown() && !(tickCount % speed)){ s->Fall(); }
+void Game::UpdateBoard(Player *player, int control){
+  if(!(player->shape)->WillCollideDown() && !(tickCount % speed)){ (player->shape)->Fall(); }
   auto keyPressed = ray_functions::GetAction(control);
   int fallen;
   switch(keyPressed){
     case INSTANTFALL:
-      fallen = s->InstantFall();
+      fallen = (player->shape)->InstantFall();
       UpdateScore(2 * fallen);
-      *tick = 1;
+      (player->tickToFix) = 1;
       return;
     case ROTATECW:
-      if(s->HasSpaceToRotate()){
-        s->Rotate();
-        s->MoveIfCollided();
-        (*tick)++;
+      if((player->shape)->HasSpaceToRotate()){
+        (player->shape)->Rotate();
+        (player->shape)->MoveIfCollided();
+        (player->tickToFix)++;
       }
       break;
     case ROTATEACW:
-      if(s->HasSpaceToRotate()){
-        s->RotateAntiClockWise();
-        s->MoveIfCollided();
-        (*tick)++;
+      if((player->shape)->HasSpaceToRotate()){
+        (player->shape)->RotateAntiClockWise();
+        (player->shape)->MoveIfCollided();
+        (player->tickToFix)++;
       }
       break;
     case KEY_C:
-      if(canHold){ Hold(); }
+      if(player->canHold){ Hold(); }
       break;
     case KEY_ESCAPE:
       nextScreen = PAUSE;
@@ -192,20 +200,20 @@ void Game::UpdateBoard(Shape *s, int control, int *tick){
     auto keyDown = ray_functions::GetKeyDown(control);
     switch(keyDown){
       case RIGHT:
-        if (!s->WillCollideRight()){
-          s->MoveRight();
-          (*tick)++;
+        if (!(player->shape)->WillCollideRight()){
+          (player->shape)->MoveRight();
+          (player->tickToFix)++;
         }
         break;
       case LEFT:
-        if (!s->WillCollideLeft()) {
-          s->MoveLeft();
-          (*tick)++;
+        if (!(player->shape)->WillCollideLeft()) {
+          (player->shape)->MoveLeft();
+          (player->tickToFix)++;
         }
         break;
       case DOWN:
-        if (!s->WillCollideDown()){
-          s->MoveDown();
+        if (!(player->shape)->WillCollideDown()){
+          (player->shape)->MoveDown();
           UpdateScore(1);
         }
       default:
@@ -215,37 +223,37 @@ void Game::UpdateBoard(Shape *s, int control, int *tick){
 }
 
 void Game::Hold(){
-  canHold = false;
-  int index = shape->GetIndex();
-  if(hold >= 0){
+  player->canHold = false;
+  int index = (player->shape)->GetIndex();
+  if(player->hold >= 0){
     SwapShapeAndHold(index);
-    shape->ResetShape();
+    (player->shape)->ResetShape();
     return;
   }
-  hold = index;
-  shape = NextShape(shapes, nextShapes);
+  player->hold = index;
+  player->shape = NextShape(player);
 }
 
 void Game::SwapShapeAndHold(int index){
-  shape = &shapes[hold];
-  hold = index;
+  player->shape = player->shapes[player->hold];
+  player->hold = index;
 }
 
 void Game::SetNextShapes(){
-  SetNextShapes(nextShapes, shapes);
+  SetNextShapes(player);
 }
 
-void Game::SetNextShapes(int *nexts, Shape *vector){
-  for(int i = 0; i < 3; i++){ nexts[i] = NewShape(vector)->GetIndex(); }
+void Game::SetNextShapes(Player *player){
+  for(int i = 0; i < 3; i++){ player->nextShapes[i] = NewShape(*(player->shapes))->GetIndex(); }
 }
 
-void Game::MoveNextShapes(Shape *vector, int *nexts){
+void Game::MoveNextShapes(Player *player){
   for(int i = 0; i < 3; i++){
     if(i + 1 != 3){
-      nexts[i] = nexts[i + 1];
+      player->nextShapes[i] = player->nextShapes[i + 1];
       continue;
     }
-    nexts[i] = NewShape(vector)->GetIndex();
+    player->nextShapes[i] = NewShape(*(player->shapes))->GetIndex();
   }
 }
 
@@ -283,25 +291,25 @@ void Game::UpdateLevel(){
 }
 
 void Game::DrawHoldShape(){
-  int dimension = shapes[hold].GetDimension();
-  if(canHold){
-    shapes[hold].DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
+  int dimension = player->shapes[player->hold]->GetDimension();
+  if(player->canHold){
+    player->shapes[player->hold]->DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
         (dimension * dimension) - ((double)5/4) * dimension + 1});
     return;
   }
-  shapes[hold].DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
+  player->shapes[player->hold]->DrawOutOfBoard(Vec2<double>{((double)6 + dimension)/2, ((double)1/4) *
       (dimension * dimension) - ((double)5/4) * dimension + 1}, LIGHTGRAY);
 }
 
 void Game::DrawNextShapes() const{
   double boardSize = (double) board->GetWidth();
-  DrawNextShapes(shapes, (2*boardSize + 6), nextShapes);
+  DrawNextShapes(player, (2*boardSize + 6));
 }
 
-void Game::DrawNextShapes(const Shape *vector, double posX, const int *next) const{
+void Game::DrawNextShapes(Player *player, double posX) const{
   for(int i = 0; i < 3; i++){
-    int dimension = vector[next[i]].GetDimension();
-    vector[next[i]].DrawOutOfBoard(Vec2<double>{-(posX - dimension)/2, i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)});
+    int dimension = player->shapes[player->nextShapes[i]]->GetDimension();
+    player->shapes[player->nextShapes[i]]->DrawOutOfBoard(Vec2<double>{-(posX - dimension)/2, i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)});
   }
 }
 

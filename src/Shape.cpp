@@ -9,6 +9,7 @@ Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& 
   index(index),
   currentRotation(Rotation::UP)
 {}
+
 Shape::Shape(const Shape &other):
   shape_matrix(other.shape_matrix),
   dimension(other.dimension),
