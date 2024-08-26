@@ -92,7 +92,7 @@ int Coop::GetPlayerIndex(Player *player){
 
 void Coop::DrawNext() const{
   int boardSize = board->GetWidth();
-  board->DrawText("P1",Vec2<double>{(double)3, (double)2}, 1.0f/30, RAYWHITE);
+  board->DrawText("P1",Vec2<double>{(double)3, (double)2.1}, 1.0f/30, RAYWHITE);
   Game::DrawNext(Vec2<double>{(double)-6, (double)-0.47});
   board->DrawText("P2",Vec2<double>{(double)-12, (double)2}, 1.0f/30, RAYWHITE);
   Game::DrawNext(Vec2<double>{(double)boardSize + 0.1, (double)(-1/2.1)});

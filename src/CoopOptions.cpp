@@ -15,9 +15,8 @@ void CoopOptions::Draw(){
 
 void CoopOptions::CoopOptionsHandling(){
   for(int i = 0; i < readyButtons.size(); i++){
-    if(readyButtons[i]->isButtonClicked() && buttonManager.GetScreen() != NOTSCREEN){
+    if(readyButtons[i]->isButtonClicked()){
       clicked[i] = 1 - clicked[i];
-      buttonManager.ResetScreen();
       readyButtons[i]->Unclick();
     }
   }
