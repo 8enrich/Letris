@@ -28,7 +28,7 @@ namespace settings {
     {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z, KEY_C},
     {KEY_I, KEY_J, KEY_K, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
     {KEY_K, KEY_H, KEY_J, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
-    {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_Z, KEY_RIGHT_SHIFT}
+    {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT}
   };
   constexpr Vec2<int> screenSizes[5] = {{800, 600}, {1280, 720}, {1366, 768}, {1600, 900}, {1920, 1080}};
   void UpdateWindowSize(Vec2<int>);
@@ -39,6 +39,7 @@ namespace settings {
 enum Screens {
   GAME,
   COOP,
+  COOPOPTIONS,
   OPTIONS,
   EXIT,
   MENU,

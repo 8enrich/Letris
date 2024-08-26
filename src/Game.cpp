@@ -310,7 +310,8 @@ void Game::DrawNextShapes() const{
 void Game::DrawNextShapes(Player *player, double posX) const{
   for(int i = 0; i < 3; i++){
     int dimension = player->shapes[player->nextShapes[i]]->GetDimension();
-    player->shapes[player->nextShapes[i]]->DrawOutOfBoard(Vec2<double>{-(posX - dimension)/2, i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)});
+    player->shapes[player->nextShapes[i]]->DrawOutOfBoard(Vec2<double>{-(posX - dimension)/2, 
+      i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)});
   }
 }
 

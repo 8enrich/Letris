@@ -1,3 +1,4 @@
+#pragma once
 #include "Button.hpp"
 #include "ButtonManager.hpp"
 #include <memory>
