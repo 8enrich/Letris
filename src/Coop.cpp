@@ -62,7 +62,7 @@ void Coop::Update(){
 
 void Coop::UpdatePlayer(int index){
   if(index){
-    Game::Update(player2, 4);
+    Game::Update(player2, 5);
     return;
   }
   Game::Update();

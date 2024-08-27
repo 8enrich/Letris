@@ -11,7 +11,7 @@ namespace ray_functions {
   void DrawRectangleLinesEx(Vec2<double> pos, Vec2<double> widthHeight, int lineThickness, Color color);
   void DrawText(const char * text, Vec2<int> pos, int fontSize, Color Color);
   void DrawText(const char * text, Vec2<double> pos, int fontSize, Color Color);
-  constexpr int keySequence[7] = {ROTATECW, LEFT, DOWN, RIGHT, INSTANTFALL, ROTATEACW, HOLD};
+  constexpr int KeySequence[7] = {ROTATECW, LEFT, DOWN, RIGHT, INSTANTFALL, ROTATEACW, HOLD};
   int GetKeyDown(int);
   int GetAction(int);
   void DrawFormatedText(const char * text, Vec2<double> pos, float fontSize, Color color);

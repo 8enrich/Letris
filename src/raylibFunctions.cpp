@@ -46,13 +46,13 @@ void ray_functions::DrawText(const char * text, Vec2<double> pos, int fontSize, 
 }
 
 int ray_functions::GetKeyDown(int control){
-  for(int i = 1; i < 4; i++) if(IsKeyDown(settings::controls[control][i])) return keySequence[i];
+  for(int i = 1; i < 4; i++) if(IsKeyDown(settings::controls[control][i])) return KeySequence[i];
   return KEY_NULL;
 }
 
 int ray_functions::GetAction(int control){
   auto keyPressed = GetKeyPressed();
-  for(int i = 0; i < 7; i++) if(IsKeyPressed(settings::controls[control][i])) return keySequence[i];
+  for(int i = 0; i < 7; i++) if(IsKeyPressed(settings::controls[control][i])) return KeySequence[i];
   return keyPressed;
 }
 
