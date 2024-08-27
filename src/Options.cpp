@@ -190,6 +190,7 @@ void Options::OptionsHandling() {
     buttonManager->ResetScreen();
     OpenClose();
   }
+  if(GetKeyPressed() == KEY_ESCAPE) OpenClose();
 }
 
 void Options::GeneralButtonsHandling(){
