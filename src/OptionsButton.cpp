@@ -13,7 +13,7 @@ OptionsButton::OptionsButton(std::string buttonText, Vec2<double> buttonPosition
     std::vector<Button*> buttons;
     for (int i = 0, size = options.size(); i < size; i++) {
       if (options[i] == buttonText) currentSelectedOptionIndex = i;
-      buttons.push_back(new Button(options[i], {buttonPosition.GetX(), buttonPosition.GetY() + (i+1) * 1.0f/15}, fontSize));
+      buttons.push_back(new Button(options[i], {buttonPosition.GetX(), buttonPosition.GetY() + (i+1) * 1.0f/15}, fontSize, ButtonTypes::NULLBUTTON));
     }
     buttonOptions = new ButtonManager(buttons);
   }

@@ -6,12 +6,15 @@
 enum class ButtonTypes {
   SCREEN,
   OPTIONS,
+  VOLUME,
+  KEYBUTTON,
+  NULLBUTTON
 };
 
 class Button {
 public:
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type);
-  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize);
+  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color);
   void Draw();
   virtual void Tick();
   void Select();
@@ -27,6 +30,7 @@ public:
   bool isButtonClicked();
   void SetButtonText(std::string);
 protected:
+  Color color;
   virtual void Update();
   bool isButtonClickedByMouse();
   bool hasBorder;

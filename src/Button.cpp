@@ -3,20 +3,33 @@
 #include <raylib.h>
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type)
+  Button(buttonText, buttonPosition, fontSize, type, Color{0,0,0,0})
 {
   isSelected = false;
 }
 
-Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize)
+Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color):
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), color(color)
 {
   isSelected = false;
 }
 
 void Button::Draw(){
-  Color color = isSelected ? selectedColor : unselectedColor;
-  ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, color);
+  Rectangle rectangle;
+  int padding = 20;
+  rectangle.width = buttonWidthHeight.GetX() + padding;
+  rectangle.height = buttonWidthHeight.GetY() + padding;
+  rectangle.x = realButtonPosition.GetX() - padding/2;
+  rectangle.y = realButtonPosition.GetY() - padding/2;
+  if (isSelected) {
+    int hoveringPadding = 12;
+    rectangle.width += hoveringPadding;
+    rectangle.height += hoveringPadding;
+    rectangle.x -=hoveringPadding/2;
+    rectangle.y -=hoveringPadding/2;
+  }
+  DrawRectangleRounded(rectangle, 0.3, 0, RED);
+  ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, RAYWHITE);
 }
 
 void Button::Tick(){

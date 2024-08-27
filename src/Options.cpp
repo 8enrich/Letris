@@ -25,7 +25,7 @@ Options::Options() :
 void Options::CreateControlButtons(){
   for(int i = 0; i < 7; i++){
     controlButtons.push_back(new Button(keyToString[settings::controls[db["CONTROL"]][i]],
-        Vec2<double>{1.0f/2, 1/(2.4 - i * 0.15)}, fontSizes[1]));
+      Vec2<double>{1.0f/2, 1/(2.4 - i * 0.15)}, fontSizes[1], ButtonTypes::KEYBUTTON));
   }
   controlButton = new OptionsButton(selectedControl, Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1], controls);
   controlButtons.push_back(controlButton);
@@ -40,7 +40,7 @@ void Options::CreateGeneralButtons(){
 }
 
 void Options::CreateSoundButtons(){
-  masterVolumeButton = new Button("                                     ", Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1]);
+  masterVolumeButton = new Button("                                     ", Vec2<double>{1.0f / 2, 1.0f / 3}, fontSizes[1], ButtonTypes::VOLUME);
   volumeButtons = { masterVolumeButton };
   sound = new OptionsButton("Sound", Vec2<double>{3.0f / 4, 1.0f / 10}, fontSizes[0], volumeButtons);
 }
