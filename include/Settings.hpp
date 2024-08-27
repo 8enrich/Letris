@@ -23,16 +23,13 @@ namespace settings {
   extern Vec2<int> boardWidthHeight;
   extern int volume;
   extern std::vector<int> highscores;
-  constexpr KeyboardKey controls[4][6] = {
-    {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z},
-    {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z},
-    {KEY_I, KEY_J, KEY_K, KEY_L, KEY_SPACE, KEY_Z},
-    {KEY_K, KEY_H, KEY_J, KEY_L, KEY_SPACE, KEY_Z}
-  };
+  extern std::vector<std::vector<KeyboardKey>> controls;
+  extern std::unordered_map<KeyboardKey, std::string> keyToString;
   constexpr Vec2<int> screenSizes[5] = {{800, 600}, {1280, 720}, {1366, 768}, {1600, 900}, {1920, 1080}};
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();
+  void SetCustomControls();
 }
 
 enum Screens {
@@ -46,10 +43,11 @@ enum Screens {
 };
 
 enum Keys{
-  ROTATECW = -6,
+  ROTATECW = -7,
   LEFT,
   DOWN,
   RIGHT,
   INSTANTFALL,
   ROTATEACW,
+  HOLD,
 };

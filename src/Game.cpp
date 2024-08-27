@@ -4,18 +4,15 @@
 #include <raylib.h>
 
 Game::Game(Board *board) :
-  board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3")
+  board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3"),
+  i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
+  j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
+  shapes{ i, o, t, j, l, s, z },
+  hold(-1), canHold(true), score(0), level(0), speed(settings::fps * 0.86), cleanedLinesCount(0), maxTickToFix(30)
 {
   board->ResetBoardCells();
   shape = NewShape();
   SetNextShapes();
-  hold = -1;
-  canHold = true;
-  score = 0;
-  level = 0;
-  speed = 15;
-  cleanedLinesCount = 0;
-  maxTickToFix = 30;
   tickToFix = maxTickToFix;
 }
 
@@ -158,7 +155,7 @@ void Game::UpdateBoard(){
         tickToFix++;
       }
       break;
-    case KEY_C:
+    case HOLD:
       if(canHold){ Hold(); }
       break;
     case KEY_ESCAPE:
@@ -250,10 +247,7 @@ int Game::QuantityOfLines(){
 void Game::UpdateLevel(){
   if(cleanedLinesCount >= 10 * (level + 1) && level < 29){
     level++;
-    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29){
-      speed--;
-      maxTickToFix -= 2;
-    }
+    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
   }
 }
 
