@@ -34,6 +34,8 @@ namespace settings {
 
 enum Screens {
   GAME,
+  COOP,
+  COOPOPTIONS,
   OPTIONS,
   EXIT,
   MENU,

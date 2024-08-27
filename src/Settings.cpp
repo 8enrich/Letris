@@ -15,7 +15,8 @@ std::vector<std::vector<KeyboardKey>> settings::controls = {
   {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_I, KEY_J, KEY_K, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_K, KEY_H, KEY_J, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
-  {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z, KEY_C}
+  {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z, KEY_C},
+  {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT}
 };
 
 void settings::UpdateWindowSize(Vec2<int> newSize) {
@@ -43,10 +44,6 @@ void settings::UpdateBoardPosition(){
 
 void settings::FullScreen(){
   int display = GetCurrentMonitor();
-  screenWidth = GetMonitorWidth(display);
-  screenHeight = GetMonitorHeight(display);
-  db["WINDOW_WIDTH"] = screenWidth;
-  db["WINDOW_HEIGHT"] = screenHeight;
   settings::UpdateWindowSize(Vec2<int>{GetMonitorWidth(display), GetMonitorHeight(display)});
   ToggleBorderlessWindowed();
 }

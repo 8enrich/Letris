@@ -19,6 +19,7 @@ void ScreenManager::UpdateScreen() {
     if (!screens[actualScreen]) return;
     if (!entered) {
         if (actualScreen == OPTIONS) screens[actualScreen]->SetNextScreen(lastScreen);
+        if (lastScreen == COOP || lastScreen == GAME) screens[actualScreen]->SetNextScreen(lastScreen);
         if (actualScreen == GAMEOVER) SetScoreInGameOver();
         screens[actualScreen]->OpenClose();
         entered = true;
@@ -42,15 +43,26 @@ Screens ScreenManager::GetActualScreen() const {
 }
 
 void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
-    if (!entered && actualScreen == GAME){
-      board->ResetBoardSettings();
-      if (lastScreen == MENU || lastScreen == GAMEOVER) screens[GAME] = std::make_unique<Game>(board);
-      SetMusicVolume(screens[GAME]->GetMusic(), (float)settings::db["VOLUME"]/100);
+  if (!entered){
+    board->ResetBoardSettings();
+    if (lastScreen == MENU || lastScreen == GAMEOVER || lastScreen == COOPOPTIONS){
+      switch(actualScreen){
+        case GAME:
+          screens[actualScreen] = std::make_unique<Game>(board);
+          break;
+        case COOP:
+          screens[actualScreen] = std::make_unique<Coop>(board);
+          break;
+        default:
+          return;
+      }
     }
+    SetMusicVolume(screens[actualScreen]->GetMusic(), (float)settings::db["VOLUME"]/100);
+  }
 }
 
 void ScreenManager::SetScoreInGameOver(){
-  Screen *gameOverScreen = screens[GAMEOVER].get(), *gameScreen = screens[GAME].get();
+  Screen *gameOverScreen = screens[GAMEOVER].get(), *gameScreen = screens[lastScreen].get();
   GameOver *gameOver = dynamic_cast<GameOver*>(gameOverScreen);
   Game *game = dynamic_cast<Game*>(gameScreen);
   if(gameOver && game){

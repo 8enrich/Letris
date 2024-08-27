@@ -23,3 +23,8 @@ void Pause::OptionsHandling(){
     OpenClose();
   }
 }
+
+void Pause::OpenClose(){
+  Screen::OpenClose();
+  if(nextScreen == GAME || nextScreen == COOP) Continue.SetScreen(nextScreen);
+}

@@ -6,6 +6,7 @@
 class Pause : public Screen {
 public:
   void Tick() override;
+  void OpenClose() override;
 private:
   float x = (float)1/2, y = (float)1/2.5, fontSize = (float)1/20, lineDistance = (float)7/45;
   ScreenButton Continue = ScreenButton("Continue", Vec2<double>{x, y}, fontSize, GAME);

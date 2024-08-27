@@ -118,7 +118,7 @@ void Options::SetNewControl(string control){
   db["CONTROL"] = index;
   selectedControl = control;
   for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
-    controlButtons[i]->SetText(keyToString[settings::controls[index][i]]);
+    controlButtons[i]->SetButtonText(keyToString[settings::controls[index][i]]);
   }
 }
 
@@ -241,7 +241,7 @@ void Options::GetKeyboardInput(){
 void Options::ChangeControls(string stringKey, KeyboardKey key){
   SetControlsToActualControls();
   SwapSameControls(stringKey);
-  controlButtons[buttonClicked - 1]->SetText(stringKey);
+  controlButtons[buttonClicked - 1]->SetButtonText(stringKey);
   db["CUSTOM_CONTROLS"][buttonClicked - 1] = key;
   controlButton->SetCurrentSelectedOptionIndex(4);
   SetCustomControls();
@@ -257,7 +257,7 @@ void Options::SwapSameControls(string stringKey){
   for(int i = 0, size = controlButtons.size(); i < size - 1; i++){
     if(controlButtons[i]->GetText() == stringKey){
       db["CUSTOM_CONTROLS"][i] = settings::controls[db["CONTROL"]][buttonClicked - 1];
-      controlButtons[i]->SetText(controlButtons[buttonClicked - 1]->GetText());
+      controlButtons[i]->SetButtonText(controlButtons[buttonClicked - 1]->GetText());
     }
   }
 }

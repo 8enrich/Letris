@@ -72,6 +72,6 @@ double Button::GetMousePositionX(){
   return 0;
 }
 
-void Button::SetText(std::string newText){
-  buttonText = newText;
+void Button::SetButtonText(std::string buttonText){
+  this->buttonText = buttonText;
 }

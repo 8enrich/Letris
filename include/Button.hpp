@@ -25,7 +25,7 @@ public:
   void Unclick();
   double GetMousePositionX();
   bool isButtonClicked();
-  void SetText(std::string);
+  void SetButtonText(std::string);
 protected:
   virtual void Update();
   bool isButtonClickedByMouse();

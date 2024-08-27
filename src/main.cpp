@@ -5,7 +5,9 @@
 #include "../include/Game.hpp"
 #include "../include/Pause.hpp"
 #include "../include/GameOver.hpp"
+#include "../include/Coop.hpp"
 #include "../include/ScreenManager.hpp"
+#include "../include/CoopOptions.hpp"
 #include <raylib.h>
 #include <memory>
 #include <iostream>
@@ -24,6 +26,8 @@ int main() {
       settings::SetCustomControls();
       ScreenManager screenManager;
       screenManager.AddScreen(GAME, nullptr);
+      screenManager.AddScreen(COOP, nullptr);
+      screenManager.AddScreen(COOPOPTIONS, std::make_unique<CoopOptions>());
       screenManager.AddScreen(OPTIONS, std::make_unique<Options>());
       screenManager.AddScreen(EXIT, nullptr);
       screenManager.AddScreen(MENU, std::make_unique<Menu>());
