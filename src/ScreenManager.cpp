@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <memory>
 #include <raylib.h>
+#include <thread> // Necessário para std::this_thread::sleep_for
+#include <chrono>
 
 ScreenManager::ScreenManager() : actualScreen(MENU), lastScreen(EXIT), entered(false) {}
 
@@ -56,6 +58,7 @@ void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
         default:
           return;
       }
+      std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     SetMusicVolume(screens[actualScreen]->GetMusic(), (float)settings::db["VOLUME"]/100);
   }
