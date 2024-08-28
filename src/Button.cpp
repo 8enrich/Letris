@@ -3,33 +3,38 @@
 #include <raylib.h>
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
-  Button(buttonText, buttonPosition, fontSize, type, Color{0,0,0,0})
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type)
 {
+  isRectButton = false; 
   isSelected = false;
 }
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), color(color), isClicked(false)
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), color(color)
 {
+  isClicked = false;
   isSelected = false;
 }
 
+void Button::UpdateRectNotSelected(){
+    Vec2<double> pos = realButtonPosition - padding/2;
+    Vec2<float> widthHeight = buttonWidthHeight + padding;
+    rectangle = ray_functions::CreateRectangleVec(pos - hoveringPadding/2, widthHeight + hoveringPadding);
+}
+
+void Button::UpdateRectSelected(){
+  rectangle = ray_functions::CreateRectangleVec(Vec2{realButtonPosition - padding/2}, Vec2{buttonWidthHeight + padding});
+}
+
+void Button::DrawRectButton() {
+  !isSelected?UpdateRectSelected():UpdateRectNotSelected();
+  DrawRectangleRounded(rectangle, 0.3, 0, color);
+}
+
 void Button::Draw(){
-  Rectangle rectangle;
-  int padding = 20;
-  rectangle.width = buttonWidthHeight.GetX() + padding;
-  rectangle.height = buttonWidthHeight.GetY() + padding;
-  rectangle.x = realButtonPosition.GetX() - padding/2;
-  rectangle.y = realButtonPosition.GetY() - padding/2;
-  if (isSelected) {
-    int hoveringPadding = 12;
-    rectangle.width += hoveringPadding;
-    rectangle.height += hoveringPadding;
-    rectangle.x -=hoveringPadding/2;
-    rectangle.y -=hoveringPadding/2;
-  }
-  DrawRectangleRounded(rectangle, 0.3, 0, RED);
-  ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, RAYWHITE);
+  if(isRectButton) DrawRectButton();
+  else{textColor = isSelected ? selectedColor : unselectedColor;}
+  ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, textColor);
 }
 
 void Button::Tick(){

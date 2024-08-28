@@ -30,13 +30,21 @@ public:
   bool isButtonClicked();
   void SetButtonText(std::string);
 protected:
+  void DrawRectButton();
+  void UpdateRectNotSelected();
+  void UpdateRectSelected();
   Color color;
   virtual void Update();
   bool isButtonClickedByMouse();
+  bool isRectButton = true;
   bool hasBorder;
   bool isSelected;
   bool isClicked;
+  int hoveringPadding = 12;
+  int padding = 20;
+  Rectangle rectangle;
   Screens screen = NOTSCREEN;
+  Color textColor = RAYWHITE;
   Color selectedColor = RAYWHITE;
   Color unselectedColor = GRAY;
   std::string buttonText;

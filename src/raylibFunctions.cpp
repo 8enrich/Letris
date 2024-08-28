@@ -60,3 +60,4 @@ void ray_functions::DrawFormatedText(const char *text, Vec2<double> pos, float f
   int width = settings::screenWidth, height = settings::screenHeight;
   DrawText(text, width * pos.GetX() - MeasureText(text, height * fontSize)/2, height * pos.GetY(), height * fontSize, color);
 }
+

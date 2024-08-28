@@ -16,4 +16,14 @@ namespace ray_functions {
   int GetAction(int);
   void DrawFormatedText(const char * text, Vec2<double> pos, float fontSize, Color color);
   Vec2<double> FakePositionToRealPosition(Vec2<double> pos, std::string text, float fontSize);
+    
+  template<typename T, typename U>
+  Rectangle CreateRectangleVec(Vec2<T> pos, Vec2<U> widthHeight){
+    Rectangle rec;
+    rec.x = pos.GetX();
+    rec.y = pos.GetY();
+    rec.width = widthHeight.GetX();
+    rec.height = widthHeight.GetY();
+    return rec;
+  }
 }
