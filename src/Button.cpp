@@ -9,7 +9,7 @@ Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSi
 }
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), color(color)
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), color(color), isClicked(false)
 {
   isSelected = false;
 }
