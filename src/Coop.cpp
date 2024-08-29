@@ -15,7 +15,6 @@ Coop::Coop(Board *board) :
   ResetShapes();
   SetNextShapes(player2);
 }
-
 void Coop::SetPlayers(){
   players[0] = player;
   players[1] = player2;
@@ -42,6 +41,8 @@ void Coop::Tick(){
 
 void Coop::Draw(){
   ClearBackground(BLACK);
+  float scale = (GetScreenWidth() * 1.2)/(float)backgroundTexture->width;
+  DrawTextureEx(*backgroundTexture, Vector2{0, 0}, 0, scale, WHITE);
   buttonManager.Tick();
   DrawBoard();
   for(int i = 0; i < 2; i++){

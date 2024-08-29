@@ -5,10 +5,12 @@
 #include "ButtonManager.hpp"
 #include "ScreenButton.hpp"
 #include "Button.hpp"
+#include "raylib.h"
 
 class Game : public Screen {
   public:
     Game(Board *board);
+    ~Game();
     void Tick() override;
     int GetScore();
   private:
@@ -29,6 +31,7 @@ class Game : public Screen {
         for (int i = 0; i < 7; ++i) this->shapes[i] = &shapes[i];
       }
     };
+    Texture2D *backgroundTexture = nullptr;
     int tickCount;
     int hold;
     void Draw() override;

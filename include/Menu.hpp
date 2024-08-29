@@ -12,10 +12,10 @@ private:
   void OptionsHandling();
   void Draw() override;
   Texture2D *logoTexture = nullptr;
-  ScreenButton Solo = ScreenButton("Solo", Vec2<double>{1.0f / 8, 1.0f / 1.5}, 1.0f / 15, GAME, BLUE);
-  ScreenButton Coop = ScreenButton("Coop", Vec2<double>{3.0f / 8, 1.0f /1.5}, 1.0f / 15, COOPOPTIONS, DARKGREEN);
-  ScreenButton Options = ScreenButton("Options", Vec2<double>{5.0f / 8, 1.0f / 1.5}, 1.0f / 15, OPTIONS, DARKPURPLE);
-  ScreenButton Quit = ScreenButton("Quit", Vec2<double>{7.0f / 8, 1.0f / 1.5}, 1.0f / 15, EXIT, RED);
+  ScreenButton Solo = ScreenButton("Solo", Vec2<double>{1.0f / 8, 1.0f / 1.5}, 1.0f / 15, GAME, Color{11,229,248, 255});
+  ScreenButton Coop = ScreenButton("Coop", Vec2<double>{3.0f / 8, 1.0f /1.5}, 1.0f / 15, COOPOPTIONS, Color{122,207,89,255});
+  ScreenButton Options = ScreenButton("Options", Vec2<double>{5.0f / 8, 1.0f / 1.5}, 1.0f / 15, OPTIONS, Color{75, 6, 218, 255});
+  ScreenButton Quit = ScreenButton("Quit", Vec2<double>{7.0f / 8, 1.0f / 1.5}, 1.0f / 15, EXIT, Color{229, 50, 60, 255});
   const std::vector<Button*> buttons = { &Solo, &Coop, &Options, &Quit };
   ButtonManager buttonManager = ButtonManager(buttons);
 };

@@ -19,6 +19,7 @@ std::vector<std::vector<KeyboardKey>> settings::controls = {
   {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT}
 };
 
+Texture2D settings::skinTexture;
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
   screenHeight = newSize.GetY();

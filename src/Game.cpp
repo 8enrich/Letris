@@ -1,6 +1,7 @@
 #include "../include/Game.hpp"
 #include "../include/raylibFunctions.hpp"
 #include "../include/Settings.hpp"
+#include <new>
 #include <raylib.h>
 
 Game::Game(Board *board) :
@@ -9,13 +10,21 @@ Game::Game(Board *board) :
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
   shapes{ i, o, t, j, l, s, z },
   hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
-  player(new Player(maxTickToFix, true, shapes))
+  player(new Player(maxTickToFix, true, shapes)),
+  backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "relaxing-bg.png").c_str())))
+
 {
+  if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();
   player->shape = NewShape();
   SetNextShapes();
 }
+Game::~Game() {
+  UnloadTexture(*backgroundTexture);
+  delete backgroundTexture;
+  delete player;
 
+}
 void Game::Tick(){
   if(HasLost()){
     nextScreen = GAMEOVER;
@@ -120,6 +129,8 @@ void Game::FixShape(Shape*& s){
 
 void Game::Draw(){
   ClearBackground(BLACK);
+  float scale = (GetScreenWidth() * 1.2)/(float)backgroundTexture->width;
+  DrawTextureEx(*backgroundTexture, Vector2{0, 0}, 0, scale, WHITE);
   buttonManager.Tick();
   DrawBoard();
   if(hold >= 0) DrawHoldShape();

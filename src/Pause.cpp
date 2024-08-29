@@ -12,7 +12,7 @@ void Pause::Tick(){
 }
 
 void Pause::Draw(){
-  ClearBackground(BLACK);
+  DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Color{0,0,0,100});
   ray_functions::DrawFormatedText("PAUSED", Vec2<double>{(float)1/2, (float)1/5}, (float) 1/13, RAYWHITE);
 }
 

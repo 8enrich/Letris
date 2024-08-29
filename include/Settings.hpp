@@ -26,6 +26,7 @@ namespace settings {
   extern std::vector<std::vector<KeyboardKey>> controls;
   extern std::unordered_map<KeyboardKey, std::string> keyToString;
   constexpr Vec2<int> screenSizes[5] = {{800, 600}, {1280, 720}, {1366, 768}, {1600, 900}, {1920, 1080}};
+  extern Texture2D skinTexture;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();

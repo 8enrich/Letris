@@ -22,7 +22,7 @@ void Menu::Tick(){
 }
 
 void Menu::Draw(){
-  ClearBackground(Color{14, 15, 92});
+  ClearBackground(Color{41, 16, 122});
   float scale = (GetScreenWidth() * 0.5)/(float)(logoTexture->width);
   float x = 1.0f/2 * settings::screenWidth - (float)(logoTexture->width)/2 * scale;
   float y = 1.0f/3 * settings::screenHeight - (float)(logoTexture->height)/2 * scale;

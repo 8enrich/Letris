@@ -20,6 +20,7 @@
 int main() {
     InitAudioDevice();
     Window window{settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
+    settings::skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
     try{
       Board board{settings::boardPosition, settings::boardWidthHeight,
                                           settings::cellSize, settings::padding};
