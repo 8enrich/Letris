@@ -18,7 +18,6 @@
         90,
         67
     ],
-    "FPS": 30,
     "HIGHSCORES": [
         0,
         0,
@@ -28,7 +27,7 @@
     ],
     "LOG": "",
     "PADDING": 2,
-    "VOLUME": 10,
+    "VOLUME": 100,
     "WINDOWED": true,
     "WINDOW_HEIGHT": 600,
     "WINDOW_WIDTH": 800
