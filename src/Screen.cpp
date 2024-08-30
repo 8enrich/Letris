@@ -5,10 +5,12 @@ Screen::Screen() : Screen(""){};
 
 Screen::Screen(std::string musicPath) : musicPath(musicPath){
   if(IsAudioDeviceReady()){
-    if(musicPath != ""){music = LoadMusicStream(musicPath.c_str());}
-    if (IsMusicReady(music)){
-      PlayMusicStream(music);
-      SetMusicVolume(music, (float)settings::db["VOLUME"]/100);
+    if(musicPath != ""){
+      music = LoadMusicStream(musicPath.c_str());
+      if (IsMusicReady(music)){
+        PlayMusicStream(music);
+        SetMusicVolume(music, (float)settings::db["VOLUME"]/100);
+      }
     }
   }
 };
