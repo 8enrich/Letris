@@ -46,8 +46,9 @@ void Board::DrawCell(Vec2<int> pos, Color color) const{
   if(x >= 0 && x < width && y >= 0 && y < height){
     Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
     //ray_functions::DrawRectangle(topLeft, {cellSize - padding}, color);
-    DrawTextureEx((settings::skinTexture), Vector2{(float)topLeft.GetX(), (float)topLeft.GetY()}, 0, 
-                  ((settings::cellSize - padding))/(float)settings::skinTexture.width, color);
+    settings::skinTexture.width = cellSize;
+    settings::skinTexture.height = cellSize;
+    DrawTextureEx((settings::skinTexture), Vector2{(float)topLeft.GetX(), (float)topLeft.GetY()}, 0, 1, color);
     return;
   }
 }

@@ -129,8 +129,9 @@ void Game::FixShape(Shape*& s){
 
 void Game::Draw(){
   ClearBackground(BLACK);
-  float scale = (GetScreenWidth() * 1.2)/(float)backgroundTexture->width;
-  DrawTextureEx(*backgroundTexture, Vector2{0, 0}, 0, scale, WHITE);
+  backgroundTexture->width = GetScreenWidth();
+  backgroundTexture->height = GetScreenHeight();
+  DrawTextureEx(*backgroundTexture, Vector2{0, 0}, 0, 1, WHITE);
   buttonManager.Tick();
   DrawBoard();
   if(hold >= 0) DrawHoldShape();
