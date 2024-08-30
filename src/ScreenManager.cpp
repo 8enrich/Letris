@@ -57,7 +57,9 @@ void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
           return;
       }
     }
-    SetMusicVolume(screens[actualScreen]->GetMusic(), (float)settings::db["VOLUME"]/100);
+    Music music = screens[actualScreen]->GetMusic();
+    if(IsMusicReady(music) && IsMusicStreamPlaying(music))
+      SetMusicVolume(music, (float)settings::db["VOLUME"]/100);
   }
 }
 

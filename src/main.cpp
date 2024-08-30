@@ -34,7 +34,7 @@ int main() {
       screenManager.AddScreen(MENU, std::make_unique<Menu>());
       screenManager.AddScreen(PAUSE, std::make_unique<Pause>());
       screenManager.AddScreen(GAMEOVER, std::make_unique<GameOver>());
-      while(!IsWindowReady()){}
+      while(!IsWindowReady() && !IsAudioDeviceReady()){}
       if (!settings::db["WINDOWED"]) settings::FullScreen();
       while (!screenManager.ShouldClose()) {
           screenManager.ResetGameScreenIfNeeded(&board);

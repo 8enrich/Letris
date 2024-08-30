@@ -18,7 +18,7 @@ void Menu::Tick(){
   Draw();
   buttonManager.Tick();
   EndDrawing();
-  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
+  if(IsMusicReady(music) && IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
 }
 
 void Menu::Draw(){

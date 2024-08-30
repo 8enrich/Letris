@@ -16,7 +16,7 @@ Screen::Screen(std::string musicPath) : musicPath(musicPath){
 };
 
 Screen::~Screen() {
-  if(IsMusicStreamPlaying(music)){StopMusicStream(music);}
+  if(IsMusicReady(music) && IsMusicStreamPlaying(music)){StopMusicStream(music);}
   if(IsMusicReady(music)){UnloadMusicStream(music);}
 };
 void Screen::OpenClose() {

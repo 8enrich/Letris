@@ -26,7 +26,7 @@ void Coop::Tick(){
     OpenClose();
     return;
   }
-  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
+  if(IsMusicReady(music) && IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   BeginDrawing();
   Update();
   if(!HasLost()){
