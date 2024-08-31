@@ -73,7 +73,6 @@ void Board::Draw() const{
         DrawCell({iX, iY});
     }
   }
-  DrawBorder();
 }
 void Board::DrawBoardBackground() const {
   ray_functions::DrawRectangle(screenPos - (cellSize/2),

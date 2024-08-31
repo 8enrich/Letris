@@ -131,9 +131,10 @@ void Game::Draw(){
   ray_functions::DrawImage(backgroundTexture);
   buttonManager.Tick();
   DrawBoard();
+  (player->shape)->Draw();
+  board->DrawBorder();
   if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
-  (player->shape)->Draw();
 }
 
 void Game::DrawBoard(){
