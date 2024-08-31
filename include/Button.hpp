@@ -47,7 +47,7 @@ protected:
   virtual void Update();
   bool isButtonClickedByMouse();
   bool isClicked;
-  int hoveringPadding = 12, padding = 20;
+  int hoveringPadding = 20, padding = 27;
   Screens screen = NOTSCREEN;
   const Color selectedColor = RAYWHITE, unselectedColor = GRAY;
   Color color, textColor = selectedColor;
