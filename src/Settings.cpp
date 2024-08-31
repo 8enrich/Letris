@@ -39,6 +39,7 @@ void settings::UpdateBoardPosition(){
   boardPosition = {(int)((float)screenWidth/3.2), (int)(screenHeight/((float)60/7))};
   int y = boardPosition.GetY();
   cellSize = (int)(y * 0.33);
+  if(cellSize < 23) cellSize = 23;
   db["BOARD_POSITION"] = {boardPosition.GetX(), boardPosition.GetY()};
   db["CELLSIZE"] = cellSize;
 }
