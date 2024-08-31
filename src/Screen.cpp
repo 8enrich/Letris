@@ -3,7 +3,10 @@
 #include <raylib.h>
 Screen::Screen() : Screen(""){};
 
-Screen::Screen(std::string musicPath) : musicPath(musicPath){
+Screen::Screen(std::string musicPath) : 
+  musicPath(musicPath),
+  music{ 0 }
+{
   if(IsAudioDeviceReady()){
     if(musicPath != ""){
       music = LoadMusicStream(musicPath.c_str());
