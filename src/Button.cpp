@@ -15,7 +15,7 @@ Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSi
 Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName):
   buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
   image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
-  isSelected(false), isClicked(false), buttonWidthHeight({0, 0})
+  isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0})
 {}
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
@@ -51,10 +51,7 @@ void Button::DrawTextButton(){
 }
 
 void Button::DrawImageButton(){
-  Rectangle src = (Rectangle){0, 0, (float)image->width, (float)image->height};
-  Rectangle dest = (Rectangle){(float)realButtonPosition.GetX(), (float)realButtonPosition.GetY(), 
-    (float)buttonWidthHeight.GetX(), (float)buttonWidthHeight.GetY()};
-  DrawTexturePro(*image, src, dest, Vector2{0, 0},0, RAYWHITE);
+  ray_functions::DrawResizedImage(image, realButtonPosition, buttonWidthHeight);
 }
 
 void Button::Draw(){
@@ -69,7 +66,6 @@ void Button::Draw(){
       break;
     case ButtonStyles::IMAGE:
       DrawImageButton();
-
       break;
     default:
       break;
@@ -87,7 +83,7 @@ void Button::Update() {
     buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
     return;
   }
-  realButtonPosition = Vec2<double>{buttonPosition.GetX() * GetScreenWidth(), buttonPosition.GetY() * GetScreenHeight()};
+  realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition);
   buttonWidthHeight = Vec2<float>{GetScreenWidth()/25.0f, GetScreenWidth()/25.0f};
 }
 

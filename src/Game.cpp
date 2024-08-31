@@ -12,7 +12,6 @@ Game::Game(Board *board) :
   hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
   player(new Player(maxTickToFix, true, shapes)),
   backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "relaxing-bg.png").c_str())))
-
 {
   if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();
@@ -129,9 +128,7 @@ void Game::FixShape(Shape*& s){
 
 void Game::Draw(){
   ClearBackground(BLACK);
-  backgroundTexture->width = GetScreenWidth();
-  backgroundTexture->height = GetScreenHeight();
-  DrawTextureEx(*backgroundTexture, Vector2{0, 0}, 0, 1, WHITE);
+  ray_functions::DrawImage(backgroundTexture);
   buttonManager.Tick();
   DrawBoard();
   if(hold >= 0) DrawHoldShape();
