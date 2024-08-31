@@ -11,11 +11,19 @@ enum class ButtonTypes {
   NULLBUTTON
 };
 
+enum class ButtonStyles{
+  RECT,
+  TEXT,
+  IMAGE
+};
+
 class Button {
 public:
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type);
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color);
-  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, bool isRectangle);
+  Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName);
+  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style);
+  ~Button();
   void Draw();
   virtual void Tick();
   void Select();
@@ -32,18 +40,22 @@ public:
   ButtonTypes type;
 protected:
   void DrawRectButton();
+  void DrawTextButton();
+  void DrawImageButton();
   void UpdateRectNotSelected();
   void UpdateRectSelected();
+  Texture2D *image = nullptr;
   virtual void Update();
   bool isButtonClickedByMouse();
-  bool isRectButton, isSelected, isClicked;
+  bool isSelected, isClicked;
   int hoveringPadding = 12, padding = 20;
   Rectangle rectangle;
   Screens screen = NOTSCREEN;
   const Color selectedColor = RAYWHITE, unselectedColor = GRAY;
   Color color, textColor = selectedColor;
   std::string buttonText;
-  const float fontSize;
+  float fontSize;
   Vec2<float> buttonWidthHeight;
   Vec2<double> buttonPosition, realButtonPosition;
+  ButtonStyles style;
 };

@@ -3,19 +3,32 @@
 #include <raylib.h>
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
-  Button(buttonText, buttonPosition, fontSize, type, false)
+  Button(buttonText, buttonPosition, fontSize, type, ButtonStyles::TEXT)
 {}
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color):
-  Button(buttonText, buttonPosition, fontSize, type, true)
+  Button(buttonText, buttonPosition, fontSize, type, ButtonStyles::RECT)
 {
   this->color = color;
 }
 
-Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, bool isRectButton):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), isRectButton(isRectButton),
+Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName):
+  buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
+  image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
+  isSelected(false), isClicked(false), buttonWidthHeight({0, 0})
+{}
+
+Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), style(style),
   isClicked(false), isSelected(false), rectangle{0}, buttonWidthHeight({0, 0}), realButtonPosition(0, 0)
 {}
+
+Button::~Button(){
+  if(image){
+    UnloadTexture(*image);
+    delete image;
+  }
+}
 
 void Button::UpdateRectNotSelected(){
     Vec2<double> pos = realButtonPosition - padding/2;
@@ -32,10 +45,33 @@ void Button::DrawRectButton() {
   DrawRectangleRounded(rectangle, 0.3, 0, color);
 }
 
-void Button::Draw(){
-  if(isRectButton) DrawRectButton();
-  else{textColor = isSelected ? selectedColor : unselectedColor;}
+void Button::DrawTextButton(){
   ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, textColor);
+}
+
+void Button::DrawImageButton(){
+  Rectangle src = (Rectangle){0, 0, (float)image->width, (float)image->height};
+  Rectangle dest = (Rectangle){(float)realButtonPosition.GetX(), (float)realButtonPosition.GetY(), 
+    (float)buttonWidthHeight.GetX(), (float)buttonWidthHeight.GetY()};
+  DrawTexturePro(*image, src, dest, Vector2{0, 0},0, RAYWHITE);
+}
+
+void Button::Draw(){
+  switch(style){
+    case ButtonStyles::RECT:
+      DrawRectButton();
+      DrawTextButton();
+      break;
+    case ButtonStyles::TEXT:
+      textColor = isSelected ? selectedColor : unselectedColor;
+      DrawTextButton();
+      break;
+    case ButtonStyles::IMAGE:
+      DrawImageButton();
+      break;
+    default:
+      break;
+  }
 }
 
 void Button::Tick(){
@@ -44,8 +80,13 @@ void Button::Tick(){
 }
 
 void Button::Update() {
-  realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
-  buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
+  if(style != ButtonStyles::IMAGE){
+    realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
+    buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
+    return;
+  }
+  realButtonPosition = Vec2<double>{buttonPosition.GetX() * GetScreenWidth(), buttonPosition.GetY() * GetScreenHeight()};
+  buttonWidthHeight = Vec2<float>{GetScreenWidth()/25.0f, GetScreenWidth()/25.0f};
 }
 
 std::string Button::GetText() {
