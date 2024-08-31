@@ -26,6 +26,7 @@ public:
   ~Button();
   void Draw();
   virtual void Tick();
+  bool isSelected;
   void Select();
   void Unselect();
   Screens Click();
@@ -47,7 +48,7 @@ protected:
   Texture2D *image = nullptr;
   virtual void Update();
   bool isButtonClickedByMouse();
-  bool isSelected, isClicked;
+  bool isClicked;
   int hoveringPadding = 12, padding = 20;
   Rectangle rectangle;
   Screens screen = NOTSCREEN;

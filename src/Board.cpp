@@ -76,18 +76,20 @@ void Board::DrawCellAnyLocal(Vec2<double> pos, Color color) const{
 }
 
 void Board::Draw() const{
-  DrawBorder();
+  DrawBoardBackground();
   for (int iY = 0; iY < height; ++iY){
     for (int iX = 0; iX < width; ++iX){
       if(CellExists({iX, iY}))
         DrawCell({iX, iY});
     }
   }
+  DrawBorder();
 }
-
-void Board::DrawBorder() const{
+void Board::DrawBoardBackground() const {
   ray_functions::DrawRectangle(screenPos - (cellSize/2),
       Vec2<int>{width*cellSize, height*cellSize} + cellSize, BLACK);
+}
+void Board::DrawBorder() const{
   ray_functions::DrawRectangleLinesEx(screenPos - (cellSize/2),
       Vec2<int>{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }

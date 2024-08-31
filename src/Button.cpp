@@ -31,17 +31,18 @@ Button::~Button(){
 }
 
 void Button::UpdateRectNotSelected(){
-    Vec2<double> pos = realButtonPosition - padding/2;
-    Vec2<float> widthHeight = buttonWidthHeight + padding;
-    rectangle = ray_functions::CreateRectangleVec(pos - hoveringPadding/2, widthHeight + hoveringPadding);
-}
-
-void Button::UpdateRectSelected(){
   rectangle = ray_functions::CreateRectangleVec(Vec2{realButtonPosition - padding/2}, Vec2{buttonWidthHeight + padding});
 }
 
+void Button::UpdateRectSelected(){
+  Vec2<double> pos = realButtonPosition - padding/2;
+  Vec2<float> widthHeight = buttonWidthHeight + padding;
+  rectangle = ray_functions::CreateRectangleVec(pos - hoveringPadding/2, widthHeight + hoveringPadding);
+
+}
+
 void Button::DrawRectButton() {
-  !isSelected?UpdateRectSelected():UpdateRectNotSelected();
+  isSelected?UpdateRectSelected():UpdateRectNotSelected();
   DrawRectangleRounded(rectangle, 0.3, 0, color);
 }
 
@@ -68,6 +69,7 @@ void Button::Draw(){
       break;
     case ButtonStyles::IMAGE:
       DrawImageButton();
+
       break;
     default:
       break;
@@ -94,10 +96,12 @@ std::string Button::GetText() {
 }
 void Button::Select(){
   isSelected = true;
+  SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
 }
 
 void Button::Unselect(){
   isSelected = false;
+  SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 }
 
 Screens Button::Click(){

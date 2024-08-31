@@ -24,6 +24,7 @@ Screen::~Screen() {
 };
 void Screen::OpenClose() {
   shouldClose = !shouldClose;
+  SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 }
 
 bool Screen::ShouldClose(){
