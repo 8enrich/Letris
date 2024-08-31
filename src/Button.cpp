@@ -5,6 +5,7 @@
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
   buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type)
 {
+  isClicked = false;
   isRectButton = false; 
   isSelected = false;
 }

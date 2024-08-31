@@ -54,10 +54,8 @@ Options::~Options(){
 }
 
 
-void Options::deleteButtonVector(vector<Button*> vector){
-  for(int i = 0; i < vector.size(); i++){
-    delete vector[i];
-  }
+void Options::deleteButtonVector(vector<Button*> buttons){
+  for (Button* button : buttons) { delete button; }
 }
 
 void Options::Tick(){

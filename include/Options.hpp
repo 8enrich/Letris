@@ -18,7 +18,7 @@ private:
   void CreateControlButtons();
   void CreateGeneralButtons();
   void CreateSoundButtons();
-  void deleteButtonVector(std::vector<Button*> vector);
+  void deleteButtonVector(std::vector<Button*> buttons);
   void OptionsHandling();
   void Draw() override;
   void DrawGeneral();
