@@ -3,19 +3,19 @@
 #include <raylib.h>
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type)
-{
-  isClicked = false;
-  isRectButton = false; 
-  isSelected = false;
-}
+  Button(buttonText, buttonPosition, fontSize, type, false)
+{}
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), color(color)
+  Button(buttonText, buttonPosition, fontSize, type, true)
 {
-  isClicked = false;
-  isSelected = false;
+  this->color = color;
 }
+
+Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, bool isRectButton):
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), isRectButton(isRectButton),
+  isClicked(false), isSelected(false), rectangle{0}, buttonWidthHeight({0, 0}), realButtonPosition(0, 0)
+{}
 
 void Button::UpdateRectNotSelected(){
     Vec2<double> pos = realButtonPosition - padding/2;

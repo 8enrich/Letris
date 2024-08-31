@@ -15,12 +15,12 @@ class Button {
 public:
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type);
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color);
+  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, bool isRectangle);
   void Draw();
   virtual void Tick();
   void Select();
   void Unselect();
   Screens Click();
-  ButtonTypes type;
   bool isMouseHoveringButton();
   bool isMouseHoveringVec(Vec2<double>, Vec2<double>);
   Vec2<double> GetButtonPosition();
@@ -29,27 +29,21 @@ public:
   double GetMousePositionX();
   bool isButtonClicked();
   void SetButtonText(std::string);
+  ButtonTypes type;
 protected:
   void DrawRectButton();
   void UpdateRectNotSelected();
   void UpdateRectSelected();
-  Color color;
   virtual void Update();
   bool isButtonClickedByMouse();
-  bool isRectButton = true;
-  bool hasBorder;
-  bool isSelected;
-  bool isClicked;
-  int hoveringPadding = 12;
-  int padding = 20;
+  bool isRectButton, isSelected, isClicked;
+  int hoveringPadding = 12, padding = 20;
   Rectangle rectangle;
   Screens screen = NOTSCREEN;
-  Color textColor = RAYWHITE;
-  Color selectedColor = RAYWHITE;
-  Color unselectedColor = GRAY;
+  const Color selectedColor = RAYWHITE, unselectedColor = GRAY;
+  Color color, textColor = selectedColor;
   std::string buttonText;
-  float fontSize;
+  const float fontSize;
   Vec2<float> buttonWidthHeight;
-  Vec2<double> buttonPosition;
-  Vec2<double> realButtonPosition;
+  Vec2<double> buttonPosition, realButtonPosition;
 };
