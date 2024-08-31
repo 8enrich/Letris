@@ -48,6 +48,7 @@ void Coop::Draw(){
   for(int i = 0; i < 2; i++){
     (players[i]->shape)->Draw();
   }
+  board->DrawBorder();
   DrawNextShapes();
   if(hold >= 0) DrawHoldShape();  
 }
