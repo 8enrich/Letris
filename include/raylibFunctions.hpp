@@ -23,14 +23,5 @@ namespace ray_functions {
   void DrawImage(Texture2D *image);
   void DrawScaledImage(Texture2D *image, Vec2<double> pos, float scale);
   Vec2<float> RealImagePosition(Texture2D *image, Vec2<double> pos, float scale);
-    
-  template<typename T, typename U>
-  Rectangle CreateRectangleVec(Vec2<T> pos, Vec2<U> widthHeight){
-    Rectangle rec;
-    rec.x = pos.GetX();
-    rec.y = pos.GetY();
-    rec.width = widthHeight.GetX();
-    rec.height = widthHeight.GetY();
-    return rec;
-  }
+  
 }

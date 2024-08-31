@@ -75,7 +75,7 @@ class Game : public Screen {
     void DrawBoard();
     bool HasLost();
     int maxTickToFix;
-    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.05, 1.0f/100}, PAUSE, "pause.png");
+    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, "pause.png");
     std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);
     Player *player;

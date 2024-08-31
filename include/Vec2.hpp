@@ -29,7 +29,7 @@ public:
   
   Vec2 operator-(const Vec2& rhs) const { return {x - rhs.x, y - rhs.y}; }
   Vec2 operator-(const T rhs) const { return {x - rhs, y - rhs}; } 
-  Vec2& operator-=(const Vec2& rhs){ *this = *this - rhs; }
+  Vec2& operator-=(const Vec2& rhs){ return *this = *this - rhs; }
 
   Vec2 operator*(const Vec2& rhs) const { return {x * rhs.x, y * rhs.y}; }
 
@@ -38,6 +38,7 @@ public:
   Vec2& operator*=(const Vec2& rhs){ *this = *this * rhs; }
 
   explicit operator Vec2<double>() const { return Vec2<double>{static_cast<double>(x), static_cast<double>(y)}; }
+  explicit operator Vec2<float>() const { return Vec2<float>{static_cast<float>(x), static_cast<float>(y)}; }
 
 private:
   T x;

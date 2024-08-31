@@ -43,14 +43,11 @@ protected:
   void DrawRectButton();
   void DrawTextButton();
   void DrawImageButton();
-  void UpdateRectNotSelected();
-  void UpdateRectSelected();
   Texture2D *image = nullptr;
   virtual void Update();
   bool isButtonClickedByMouse();
   bool isClicked;
   int hoveringPadding = 12, padding = 20;
-  Rectangle rectangle;
   Screens screen = NOTSCREEN;
   const Color selectedColor = RAYWHITE, unselectedColor = GRAY;
   Color color, textColor = selectedColor;

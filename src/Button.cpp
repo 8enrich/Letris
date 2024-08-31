@@ -20,7 +20,7 @@ Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileNa
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
   buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), style(style),
-  isClicked(false), isSelected(false), rectangle{0}, buttonWidthHeight({0, 0}), realButtonPosition(0, 0)
+  isClicked(false), isSelected(false), buttonWidthHeight({0, 0}), realButtonPosition(0, 0)
 {}
 
 Button::~Button(){
@@ -30,20 +30,15 @@ Button::~Button(){
   }
 }
 
-void Button::UpdateRectNotSelected(){
-  rectangle = ray_functions::CreateRectangleVec(Vec2{realButtonPosition - padding/2}, Vec2{buttonWidthHeight + padding});
-}
-
-void Button::UpdateRectSelected(){
-  Vec2<double> pos = realButtonPosition - padding/2;
-  Vec2<float> widthHeight = buttonWidthHeight + padding;
-  rectangle = ray_functions::CreateRectangleVec(pos - hoveringPadding/2, widthHeight + hoveringPadding);
-
-}
-
 void Button::DrawRectButton() {
-  isSelected?UpdateRectSelected():UpdateRectNotSelected();
-  DrawRectangleRounded(rectangle, 0.3, 0, color);
+  Vec2<float> pos = Vec2<float>(realButtonPosition) - padding/2.0f;
+  Vec2<float> size = buttonWidthHeight + padding;
+  if(isSelected){
+    size += hoveringPadding;
+    pos -= hoveringPadding/2.0f;
+  }
+  Rectangle rect = {pos.GetX(), pos.GetY(), size.GetX(), size.GetY()};
+  DrawRectangleRounded(rect, 0.3, 0, color);
 }
 
 void Button::DrawTextButton(){
@@ -51,6 +46,10 @@ void Button::DrawTextButton(){
 }
 
 void Button::DrawImageButton(){
+  if(isSelected){
+    ray_functions::DrawResizedImage(image, realButtonPosition - hoveringPadding/2.0f, buttonWidthHeight + hoveringPadding);
+    return;
+  }
   ray_functions::DrawResizedImage(image, realButtonPosition, buttonWidthHeight);
 }
 

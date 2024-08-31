@@ -19,7 +19,7 @@ void ray_functions::DrawFormatedRectangle(Vec2<double> pos, Vec2<double> widthHe
 
 Vec2<double> ray_functions::FakePositionToRealPosition(Vec2<double> pos, std::string text, float fontSize){
   int width = settings::screenWidth, height = settings::screenHeight;
-  return {width * pos.GetX() - MeasureText(text.c_str(), height * fontSize)/2, height * pos.GetY()};
+  return {width * pos.GetX() - (float)MeasureText(text.c_str(), height * fontSize)/2, height * pos.GetY()};
 }
 
 Vec2<double> ray_functions::FakePositionToRealPosition(Vec2<double> pos){
@@ -64,7 +64,7 @@ int ray_functions::GetAction(int control){
 
 void ray_functions::DrawFormatedText(const char *text, Vec2<double> pos, float fontSize, Color color){
   int width = settings::screenWidth, height = settings::screenHeight;
-  DrawText(text, width * pos.GetX() - MeasureText(text, height * fontSize)/2, height * pos.GetY(), height * fontSize, color);
+  DrawText(text, width * pos.GetX() - (float)MeasureText(text, height * fontSize)/2, height * pos.GetY(), height * fontSize, color);
 }
 
 void ray_functions::DrawResizedImage(Texture2D *image, Vec2<double> pos, Vec2<float> size){
