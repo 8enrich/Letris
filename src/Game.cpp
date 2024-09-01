@@ -233,6 +233,7 @@ void Game::MoveIfKeyDown(Player *player, int control){
 
 void Game::Hold(Player *player){
   player->canHold = false;
+  player->tickToFix = maxTickToFix;
   int index = (player->shape)->GetIndex();
   if(hold >= 0){
     SwapShapeAndHold(index, player);
