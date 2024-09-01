@@ -1,10 +1,7 @@
 #include "../include/ScreenManager.hpp"
-#include <iostream>
 #include <unordered_map>
 #include <memory>
 #include <raylib.h>
-#include <thread> // Necessário para std::this_thread::sleep_for
-#include <chrono>
 
 ScreenManager::ScreenManager() : actualScreen(MENU), lastScreen(EXIT), entered(false) {}
 
@@ -20,7 +17,7 @@ void ScreenManager::SetScreen(Screens type) {
 void ScreenManager::UpdateScreen() {
     if (!screens[actualScreen]) return;
     if (!entered) {
-        if (actualScreen == OPTIONS) screens[actualScreen]->SetNextScreen(lastScreen);
+        if (actualScreen == OPTIONS || actualScreen == STATS) screens[actualScreen]->SetNextScreen(lastScreen);
         if (lastScreen == COOP || lastScreen == GAME) screens[actualScreen]->SetNextScreen(lastScreen);
         if (actualScreen == GAMEOVER) SetScoreInGameOver();
         screens[actualScreen]->OpenClose();

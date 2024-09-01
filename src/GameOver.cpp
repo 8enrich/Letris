@@ -18,14 +18,9 @@ void GameOver::Draw(){
 }
 
 void GameOver::DrawScores(){
-  ray_functions::DrawFormatedText("Score:", Vec2<double>{1.0f/4, 1/3.2}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText(TextFormat("%d", score), Vec2<double>{1.0f/4, 1/2.6}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("HighScores:", Vec2<double>{3.0f/4, 1/3.2}, fontSize, RAYWHITE);
-  for(int i = 0; i < 5; i++){
-    ray_functions::DrawFormatedText(TextFormat("%d", settings::highscores[i]), Vec2<double>{3.0f/4, (1 + 0.17 *(i + 1))/3.2},
-        fontSize, RAYWHITE);
-  }
-  if(hasNewHighscore) ray_functions::DrawFormatedText("New HighScore!", Vec2<double>{1.0f/4, 1/1.8}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText("Score:", Vec2<double>{1.0f/2, 1/3.2}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText(TextFormat("%d", score), Vec2<double>{1.0f/2, 1/2.6}, fontSize, RAYWHITE);
+  if(hasNewHighscore) ray_functions::DrawFormatedText("New HighScore!", Vec2<double>{1.0f/2, 1/1.8}, fontSize, RAYWHITE);
 }
 
 void GameOver::OptionsHandling(){

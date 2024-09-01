@@ -8,6 +8,7 @@
 #include "../include/Coop.hpp"
 #include "../include/ScreenManager.hpp"
 #include "../include/CoopOptions.hpp"
+#include "../include/Stats.hpp"
 #include <raylib.h>
 #include <memory>
 #include <iostream>
@@ -34,6 +35,7 @@ int main() {
       screenManager.AddScreen(MENU, std::make_unique<Menu>());
       screenManager.AddScreen(PAUSE, std::make_unique<Pause>());
       screenManager.AddScreen(GAMEOVER, std::make_unique<GameOver>());
+      screenManager.AddScreen(STATS, std::make_unique<Stats>());
       while(!IsWindowReady() && !IsAudioDeviceReady()){}
       if (!settings::db["WINDOWED"]) settings::FullScreen();
       while (!screenManager.ShouldClose()) {
