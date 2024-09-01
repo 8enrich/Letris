@@ -58,7 +58,7 @@ void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
         default:
           return;
       }
-      std::this_thread::sleep_for(std::chrono::seconds(1));
+
     }
     Music music = screens[actualScreen]->GetMusic();
     if(IsMusicReady(music) && IsMusicStreamPlaying(music))
