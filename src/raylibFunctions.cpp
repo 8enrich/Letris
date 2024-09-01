@@ -19,8 +19,14 @@ void ray_functions::DrawFormatedRectangle(Vec2<double> pos, Vec2<double> widthHe
 
 Vec2<double> ray_functions::FakePositionToRealPosition(Vec2<double> pos, std::string text, float fontSize){
   int width = settings::screenWidth, height = settings::screenHeight;
-  return {width * pos.GetX() - MeasureText(text.c_str(), height * fontSize)/2, height * pos.GetY()};
+  return {width * pos.GetX() - (float)MeasureText(text.c_str(), height * fontSize)/2, height * pos.GetY()};
 }
+
+Vec2<double> ray_functions::FakePositionToRealPosition(Vec2<double> pos){
+  int width = settings::screenWidth, height = settings::screenHeight;
+  return {width * pos.GetX(), height * pos.GetY()};
+}
+
 void ray_functions::DrawRectangleLinesEx(Vec2<int> pos, Vec2<int> widthHeight, int lineThickness, Color color){
   assert((pos >= 0 && pos < Vec2<int>{GetScreenWidth(), GetScreenHeight()}));
   assert(lineThickness > 0);
@@ -58,5 +64,35 @@ int ray_functions::GetAction(int control){
 
 void ray_functions::DrawFormatedText(const char *text, Vec2<double> pos, float fontSize, Color color){
   int width = settings::screenWidth, height = settings::screenHeight;
-  DrawText(text, width * pos.GetX() - MeasureText(text, height * fontSize)/2, height * pos.GetY(), height * fontSize, color);
+  DrawText(text, width * pos.GetX() - (float)MeasureText(text, height * fontSize)/2, height * pos.GetY(), height * fontSize, color);
+}
+
+void ray_functions::DrawResizedImage(Texture2D *image, Vec2<double> pos, Vec2<float> size){
+  DrawResizedImage(image, pos, size, WHITE);
+}
+
+void ray_functions::DrawResizedImage(Texture2D *image, Vec2<double> pos, Vec2<float> size, Color color){
+  image->width = size.GetX();
+  image->height = size.GetY();
+  DrawTextureEx(*image, Vector2{(float)pos.GetX(), (float)pos.GetY()}, 0, 1, color);
+}
+
+void ray_functions::DrawResizedImage(Texture2D *image, Vec2<double> pos, float size, Color color){
+  DrawResizedImage(image, pos, {size, size}, color);
+}
+
+void ray_functions::DrawImage(Texture2D *image){
+  DrawResizedImage(image, {0, 0}, {(float)GetScreenWidth(),(float)GetScreenHeight()});
+}
+
+void ray_functions::DrawScaledImage(Texture2D *image, Vec2<double> pos, float scale){
+  float finalScale = (GetScreenWidth() * scale)/(float)(image->width);
+  Vec2<float> finalPos = RealImagePosition(image, pos, finalScale);
+  DrawTextureEx(*image, Vector2{finalPos.GetX(), finalPos.GetY()}, 0, finalScale, WHITE);
+}
+
+Vec2<float> ray_functions::RealImagePosition(Texture2D *image, Vec2<double> pos, float scale){
+  float x = pos.GetX() * settings::screenWidth - (float)image->width/2 * scale;
+  float y = pos.GetY() * settings::screenHeight - (float)image->height/2 * scale;
+  return {x, y};
 }

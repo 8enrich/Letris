@@ -5,10 +5,12 @@
 #include "ButtonManager.hpp"
 #include "ScreenButton.hpp"
 #include "Button.hpp"
+#include "raylib.h"
 
 class Game : public Screen {
   public:
     Game(Board *board);
+    ~Game();
     void Tick() override;
     int GetScore();
   private:
@@ -29,6 +31,7 @@ class Game : public Screen {
         for (int i = 0; i < 7; ++i) this->shapes[i] = &shapes[i];
       }
     };
+    Texture2D *backgroundTexture = nullptr;
     int tickCount;
     int hold;
     void Draw() override;
@@ -72,7 +75,7 @@ class Game : public Screen {
     void DrawBoard();
     bool HasLost();
     int maxTickToFix;
-    ScreenButton Pause = ScreenButton("Pause", Vec2<double>{1 / 1.1, 1.0f / 25}, 1.0f / 20, PAUSE);
+    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, "pause.png");
     std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);
     Player *player;

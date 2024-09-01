@@ -60,7 +60,9 @@ void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
       }
       std::this_thread::sleep_for(std::chrono::seconds(1));
     }
-    SetMusicVolume(screens[actualScreen]->GetMusic(), (float)settings::db["VOLUME"]/100);
+    Music music = screens[actualScreen]->GetMusic();
+    if(IsMusicReady(music) && IsMusicStreamPlaying(music))
+      SetMusicVolume(music, (float)settings::db["VOLUME"]/100);
   }
 }
 

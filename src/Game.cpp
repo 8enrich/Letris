@@ -1,6 +1,7 @@
 #include "../include/Game.hpp"
 #include "../include/raylibFunctions.hpp"
 #include "../include/Settings.hpp"
+#include <new>
 #include <raylib.h>
 
 Game::Game(Board *board) :
@@ -8,21 +9,28 @@ Game::Game(Board *board) :
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
   shapes{ i, o, t, j, l, s, z },
-  hold(-1), score(0), level(0), speed(settings::fps * 0.86), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
-  player(new Player(maxTickToFix, true, shapes))
+  hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
+  player(new Player(maxTickToFix, true, shapes)),
+  backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "relaxing-bg.png").c_str())))
 {
+  if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();
   player->shape = NewShape();
   SetNextShapes();
 }
+Game::~Game() {
+  UnloadTexture(*backgroundTexture);
+  delete backgroundTexture;
+  delete player;
 
+}
 void Game::Tick(){
   if(HasLost()){
     nextScreen = GAMEOVER;
     OpenClose();
     return;
   }
-  if(IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
+  if(IsMusicReady(music) && IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   BeginDrawing();
   Game::Update();
   if(!HasLost()){
@@ -120,11 +128,13 @@ void Game::FixShape(Shape*& s){
 
 void Game::Draw(){
   ClearBackground(BLACK);
+  ray_functions::DrawImage(backgroundTexture);
   buttonManager.Tick();
   DrawBoard();
+  (player->shape)->Draw();
+  board->DrawBorder();
   if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
-  (player->shape)->Draw();
 }
 
 void Game::DrawBoard(){
@@ -275,7 +285,7 @@ int Game::QuantityOfLines(){
 }
 
 void Game::UpdateLevel(){
-  if(cleanedLinesCount >= 10 * (level + 1) && level < 29){
+  if(cleanedLinesCount >= 10 * (level + 1)){
     level++;
     if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
   }

@@ -45,8 +45,7 @@ void Board::DrawCell(Vec2<int> pos, Color color) const{
 
   if(x >= 0 && x < width && y >= 0 && y < height){
     Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-    ray_functions::DrawRectangle(topLeft, {cellSize - padding}, color);
-    return;
+    ray_functions::DrawResizedImage(&(settings::skinTexture), Vec2<double>(topLeft), cellSize, color);
   }
 }
 
@@ -56,20 +55,18 @@ void Board::DrawOffCell(Vec2<int> pos, Color color) const{
 
   if(x >= 0 && x < width && y >= 0 && y < height){
     Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-    ray_functions::DrawRectangleLinesEx(topLeft, {cellSize - padding}, padding, color);
-    return;
+    ray_functions::DrawResizedImage(&(settings::skinTexture), Vec2<double>(topLeft), cellSize, color);
   }
 }
 
 void Board::DrawCellAnyLocal(Vec2<double> pos, Color color) const{
   double doubleCellSize = (double) cellSize;
   Vec2<double> topLeft = Vec2<double>(screenPos) + padding + (pos * doubleCellSize);
-  ray_functions::DrawRectangle(topLeft, Vec2<double>{doubleCellSize - padding}, color);
-  return;
+  ray_functions::DrawResizedImage(&(settings::skinTexture), Vec2<double>(topLeft), cellSize, color);
 }
 
 void Board::Draw() const{
-  DrawBorder();
+  DrawBoardBackground();
   for (int iY = 0; iY < height; ++iY){
     for (int iX = 0; iX < width; ++iX){
       if(CellExists({iX, iY}))
@@ -77,10 +74,11 @@ void Board::Draw() const{
     }
   }
 }
-
-void Board::DrawBorder() const{
+void Board::DrawBoardBackground() const {
   ray_functions::DrawRectangle(screenPos - (cellSize/2),
       Vec2<int>{width*cellSize, height*cellSize} + cellSize, BLACK);
+}
+void Board::DrawBorder() const{
   ray_functions::DrawRectangleLinesEx(screenPos - (cellSize/2),
       Vec2<int>{width*cellSize, height*cellSize} + cellSize, cellSize/2, RAYWHITE);
 }

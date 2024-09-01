@@ -3,20 +3,72 @@
 #include <raylib.h>
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type)
+  Button(buttonText, buttonPosition, fontSize, type, ButtonStyles::TEXT)
+{}
+
+Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color):
+  Button(buttonText, buttonPosition, fontSize, type, ButtonStyles::RECT)
 {
-  isSelected = false;
+  this->color = color;
 }
 
-Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize):
-  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize)
-{
-  isSelected = false;
+Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName):
+  buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
+  image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
+  isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0})
+{}
+
+Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
+  buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), style(style),
+  isClicked(false), isSelected(false), buttonWidthHeight({0, 0}), realButtonPosition(0, 0)
+{}
+
+Button::~Button(){
+  if(image){
+    UnloadTexture(*image);
+    delete image;
+  }
+}
+
+void Button::DrawRectButton() {
+  Vec2<float> pos = Vec2<float>(realButtonPosition) - padding/2.0f;
+  Vec2<float> size = buttonWidthHeight + padding;
+  if(isSelected){
+    size += hoveringPadding;
+    pos -= hoveringPadding/2.0f;
+  }
+  Rectangle rect = {pos.GetX(), pos.GetY(), size.GetX(), size.GetY()};
+  DrawRectangleRounded(rect, 0.3, 0, color);
+}
+
+void Button::DrawTextButton(){
+  ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, textColor);
+}
+
+void Button::DrawImageButton(){
+  if(isSelected){
+    ray_functions::DrawResizedImage(image, realButtonPosition - hoveringPadding/2.0f, buttonWidthHeight + hoveringPadding);
+    return;
+  }
+  ray_functions::DrawResizedImage(image, realButtonPosition, buttonWidthHeight);
 }
 
 void Button::Draw(){
-  Color color = isSelected ? selectedColor : unselectedColor;
-  ray_functions::DrawFormatedText(buttonText.c_str(), buttonPosition, fontSize, color);
+  switch(style){
+    case ButtonStyles::RECT:
+      DrawRectButton();
+      DrawTextButton();
+      break;
+    case ButtonStyles::TEXT:
+      textColor = isSelected ? selectedColor : unselectedColor;
+      DrawTextButton();
+      break;
+    case ButtonStyles::IMAGE:
+      DrawImageButton();
+      break;
+    default:
+      break;
+  }
 }
 
 void Button::Tick(){
@@ -25,8 +77,13 @@ void Button::Tick(){
 }
 
 void Button::Update() {
-  realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
-  buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
+  if(style != ButtonStyles::IMAGE){
+    realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition, buttonText, fontSize);
+    buttonWidthHeight = Vec2<float>{(float)MeasureText(buttonText.c_str(), fontSize*settings::screenHeight), (float)fontSize * settings::screenHeight}; 
+    return;
+  }
+  realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition);
+  buttonWidthHeight = Vec2<float>{GetScreenWidth()/25.0f, GetScreenWidth()/25.0f};
 }
 
 std::string Button::GetText() {
@@ -34,10 +91,12 @@ std::string Button::GetText() {
 }
 void Button::Select(){
   isSelected = true;
+  SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
 }
 
 void Button::Unselect(){
   isSelected = false;
+  SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 }
 
 Screens Button::Click(){

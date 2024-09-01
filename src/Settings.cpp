@@ -19,6 +19,7 @@ std::vector<std::vector<KeyboardKey>> settings::controls = {
   {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT}
 };
 
+Texture2D settings::skinTexture;
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
   screenHeight = newSize.GetY();
@@ -38,6 +39,7 @@ void settings::UpdateBoardPosition(){
   boardPosition = {(int)((float)screenWidth/3.2), (int)(screenHeight/((float)60/7))};
   int y = boardPosition.GetY();
   cellSize = (int)(y * 0.33);
+  if(cellSize < 23) cellSize = 23;
   db["BOARD_POSITION"] = {boardPosition.GetX(), boardPosition.GetY()};
   db["CELLSIZE"] = cellSize;
 }

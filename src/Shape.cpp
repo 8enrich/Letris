@@ -1,4 +1,6 @@
 #include "../include/Shape.hpp"
+#include "raylib.h"
+#include <new>
 
 Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& board, int index) :
   shape_matrix(shape_matrix),
@@ -8,7 +10,10 @@ Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& 
   board(board),
   index(index),
   currentRotation(Rotation::UP)
-{}
+{
+}
+
+Shape::~Shape(){}
 
 Shape::Shape(const Shape &other):
   shape_matrix(other.shape_matrix),
@@ -37,7 +42,7 @@ int Shape::GetIndex() const{
 }
 
 void Shape::Draw() const {
-  Color offColor = Color{color.r, color.g, color.b, 150};
+  Color offColor = Color{color.r, color.g, color.b, 90};
   int distanceFromTheGround;
   for (int y = 0; y < dimension; ++y){
     for (int x = 0; x < dimension; ++x) {

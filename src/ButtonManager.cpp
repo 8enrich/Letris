@@ -1,6 +1,7 @@
 #include "../include/ButtonManager.hpp"
 #include "../include/OptionsButton.hpp"
 #include "../include/ScreenButton.hpp"
+#include <iostream>
 #include <raylib.h>
 
 ButtonManager::ButtonManager(std::vector<Button*> buttons): buttons(buttons) {}
@@ -22,9 +23,9 @@ int ButtonManager::GetButtonIndex(Button *buttonTarget) {
 }
 
 void ButtonManager::MouseHandling(Button* button){
-  if (!button->isMouseHoveringButton()){
-    button->Unselect();
-    return;
+    if (!button->isMouseHoveringButton()){
+      if(button->isSelected) button->Unselect();
+      return;
   }
   currentSelectedButtonIndex = GetButtonIndex(button);
   button->Select();

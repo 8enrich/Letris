@@ -18,7 +18,7 @@ private:
   void CreateControlButtons();
   void CreateGeneralButtons();
   void CreateSoundButtons();
-  void deleteButtonVector(std::vector<Button*> vector);
+  void deleteButtonVector(std::vector<Button*> buttons);
   void OptionsHandling();
   void Draw() override;
   void DrawGeneral();
@@ -50,7 +50,7 @@ private:
   const float fontSizes[2] = {1.0f/20, 1.0f/30};
   const std::vector<std::string> columns = {"Rotate CW","Left","Down","Right","Instant Fall","Rotate ACW", "Hold"};
   const std::vector<std::string> controls = {"Right hand", "Arrows", "Left hand", "Vim Mode", "Custom"};
-  const std::vector<std::string> screenSizes = {"800x600", "1280x720", "1366x768", "1600x900", "1920x1080"};
+  const std::vector<std::string> screenSizes = {"1024x576", "1280x720", "1366x768", "1600x900", "1920x1080"};
   const std::vector<std::string> screenModes = {"Window", "FullScreen"};
   std::string selectedResolution;
   std::string selectedScreenMode;

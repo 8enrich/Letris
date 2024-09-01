@@ -6,18 +6,30 @@
 enum class ButtonTypes {
   SCREEN,
   OPTIONS,
+  VOLUME,
+  KEYBUTTON,
+  NULLBUTTON
+};
+
+enum class ButtonStyles{
+  RECT,
+  TEXT,
+  IMAGE
 };
 
 class Button {
 public:
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type);
-  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize);
+  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color);
+  Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName);
+  Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style);
+  ~Button();
   void Draw();
   virtual void Tick();
+  bool isSelected;
   void Select();
   void Unselect();
   Screens Click();
-  ButtonTypes type;
   bool isMouseHoveringButton();
   bool isMouseHoveringVec(Vec2<double>, Vec2<double>);
   Vec2<double> GetButtonPosition();
@@ -26,18 +38,22 @@ public:
   double GetMousePositionX();
   bool isButtonClicked();
   void SetButtonText(std::string);
+  ButtonTypes type;
 protected:
+  void DrawRectButton();
+  void DrawTextButton();
+  void DrawImageButton();
+  Texture2D *image = nullptr;
   virtual void Update();
   bool isButtonClickedByMouse();
-  bool hasBorder;
-  bool isSelected;
   bool isClicked;
+  int hoveringPadding = 20, padding = 27;
   Screens screen = NOTSCREEN;
-  Color selectedColor = RAYWHITE;
-  Color unselectedColor = GRAY;
+  const Color selectedColor = RAYWHITE, unselectedColor = GRAY;
+  Color color, textColor = selectedColor;
   std::string buttonText;
   float fontSize;
   Vec2<float> buttonWidthHeight;
-  Vec2<double> buttonPosition;
-  Vec2<double> realButtonPosition;
+  Vec2<double> buttonPosition, realButtonPosition;
+  ButtonStyles style;
 };

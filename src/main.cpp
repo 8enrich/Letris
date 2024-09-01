@@ -20,6 +20,7 @@
 int main() {
     InitAudioDevice();
     Window window{settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
+    settings::skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
     try{
       Board board{settings::boardPosition, settings::boardWidthHeight,
                                           settings::cellSize, settings::padding};
@@ -33,7 +34,7 @@ int main() {
       screenManager.AddScreen(MENU, std::make_unique<Menu>());
       screenManager.AddScreen(PAUSE, std::make_unique<Pause>());
       screenManager.AddScreen(GAMEOVER, std::make_unique<GameOver>());
-      while(!IsWindowReady()){}
+      while(!IsWindowReady() && !IsAudioDeviceReady()){}
       if (!settings::db["WINDOWED"]) settings::FullScreen();
       while (!screenManager.ShouldClose()) {
           screenManager.ResetGameScreenIfNeeded(&board);
