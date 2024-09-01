@@ -3,15 +3,20 @@
 #include "../include/Settings.hpp"
 #include <new>
 #include <raylib.h>
+#include <string>
 
 Game::Game(Board *board) :
-  board(board), Screen(std::string(ASSETS_PATH)+"tetris.mp3"),
+  board(board), Screen(std::string(ASSETS_PATH)+"gameplay.mp3"),
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
   shapes{ i, o, t, j, l, s, z },
   hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
   player(new Player(maxTickToFix, true, shapes)),
-  backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "relaxing-bg.png").c_str())))
+  backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "relaxing-bg.png").c_str()))),
+  clearLineSound(LoadSound((std::string(ASSETS_PATH)+ "clear.wav").c_str())),
+  moveShapeSound(LoadSound((std::string(ASSETS_PATH)+ "move.wav").c_str())),
+  gameOverSound(LoadSound((std::string(ASSETS_PATH)+"gameover.wav").c_str())),
+  fixShapeSound(LoadSound((std::string(ASSETS_PATH)+"fix.wav").c_str()))
 {
   if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();
@@ -45,7 +50,7 @@ void Game::Tick(){
 
 bool Game::HasLost(){
   for(int x = 0, width = board->GetWidth(); x < width; x++){
-    if(board->CellExists({x, 0})){ return true; }
+    if(board->CellExists({x, 0})){ PlaySound(gameOverSound); return true;}
   }
   return false;
 }
@@ -71,6 +76,7 @@ void Game::ClearLines(){
     for (int x = 0; x < width; x++){
       if(!board->CellExists({x, y})){ break; }
       if(x + 1 != width){ continue; }
+      PlaySound(clearLineSound);
       for (int i = 0; i < width; i++){ board->RemoveCell({i, y}); }
       cleanedLines[index++] = y;
     }
@@ -104,7 +110,8 @@ void Game::UpdateShape(Player *player){
   if ((player->shape)->WillCollideDown()){
     (player->tickToFix)--;
     if((player->tickToFix) > 0) return;
-    FixShape(player->shape); 
+    FixShape(player->shape);
+    PlaySound(fixShapeSound);
     player->shape = NextShape(player);
     player->canHold = true;
   }
@@ -205,12 +212,14 @@ void Game::MoveIfKeyDown(Player *player, int control){
       if (!(player->shape)->WillCollideRight()){
         (player->shape)->MoveRight();
         (player->tickToFix)++;
+        PlaySound(moveShapeSound);
       }
       break;
     case LEFT:
       if (!(player->shape)->WillCollideLeft()) {
         (player->shape)->MoveLeft();
         (player->tickToFix)++;
+        PlaySound(moveShapeSound);
       }
       break;
     case DOWN:

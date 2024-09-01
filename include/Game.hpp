@@ -12,7 +12,7 @@ class Game : public Screen {
     Game(Board *board);
     ~Game();
     void Tick() override;
-    int GetScore();
+  int GetScore();
   private:
     Shape i, o, t, j, l, s, z;
     Shape shapes[7];
@@ -31,6 +31,10 @@ class Game : public Screen {
         for (int i = 0; i < 7; ++i) this->shapes[i] = &shapes[i];
       }
     };
+    Sound clearLineSound;
+    Sound moveShapeSound;
+    Sound fixShapeSound;
+    Sound gameOverSound;
     Texture2D *backgroundTexture = nullptr;
     int tickCount;
     int hold;
