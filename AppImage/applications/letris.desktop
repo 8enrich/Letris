@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Letris
+Comment=A Open-Source Tetris Clone
+Exec=letris
+Icon=letris
+Categories=Game

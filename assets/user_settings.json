@@ -1,15 +1,23 @@
 {
     "BOARD_POSITION": [
-        426,
-        89
+        320,
+        67
     ],
     "BOARD_RESOLUTION": [
         10,
         20
     ],
-    "CELLSIZE": 29,
+    "CELLSIZE": 23,
     "CONTROL": 0,
-    "FPS": 30,
+    "CUSTOM_CONTROLS": [
+        87,
+        65,
+        83,
+        68,
+        32,
+        90,
+        67
+    ],
     "HIGHSCORES": [
         0,
         0,
@@ -17,9 +25,10 @@
         0,
         0
     ],
+    "LOG": "",
     "PADDING": 2,
-    "VOLUME": 0,
-    "WINDOWED": false,
-    "WINDOW_HEIGHT": 768,
-    "WINDOW_WIDTH": 1366
+    "VOLUME": 100,
+    "WINDOWED": true,
+    "WINDOW_HEIGHT": 576,
+    "WINDOW_WIDTH": 1024
 }

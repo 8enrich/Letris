@@ -24,9 +24,6 @@ public:
   void DrawCellAnyLocal(Vec2<double> pos, Color color) const;
   void Draw() const;
   void DrawBorder() const;
-  void DrawHold() const;
-  void DrawNext() const;
-  void DrawStats(int, int, int) const;
   bool CellExists(Vec2<int> pos) const;
   int GetWidth() const;
   int GetHeight() const; 
@@ -34,6 +31,12 @@ public:
   Color GetCellColor(Vec2<int> pos);
   void ResetBoardCells();
   void ResetBoardSettings();
+  Vec2<int> GetScreenPos();
+  int GetCellsize();
+  void DrawRectangleLinesEx(Vec2<double>,Vec2<double>,float,Color) const;
+  void DrawRectangle(Vec2<double>,Vec2<double>, Color) const;
+  void DrawText(std::string,Vec2<double>,float,Color) const;
+  void DrawBoardBackground() const;
 private:
   std::vector<Cell> cells;
   const int width, height, padding;

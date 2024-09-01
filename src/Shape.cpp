@@ -1,4 +1,6 @@
 #include "../include/Shape.hpp"
+#include "raylib.h"
+#include <new>
 
 Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& board, int index) :
   shape_matrix(shape_matrix),
@@ -8,7 +10,11 @@ Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& 
   board(board),
   index(index),
   currentRotation(Rotation::UP)
-{}
+{
+}
+
+Shape::~Shape(){}
+
 Shape::Shape(const Shape &other):
   shape_matrix(other.shape_matrix),
   dimension(other.dimension),
@@ -36,7 +42,7 @@ int Shape::GetIndex() const{
 }
 
 void Shape::Draw() const {
-  Color offColor = Color{color.r, color.g, color.b, 150};
+  Color offColor = Color{color.r, color.g, color.b, 90};
   int distanceFromTheGround;
   for (int y = 0; y < dimension; ++y){
     for (int x = 0; x < dimension; ++x) {
@@ -50,11 +56,16 @@ void Shape::Draw() const {
   }
 }
 
+
 void Shape::DrawOutOfBoard(Vec2<double> pos) const{
+  DrawOutOfBoard(pos, color);
+}
+
+void Shape::DrawOutOfBoard(Vec2<double> pos, Color c) const{
   for(int y = 0; y < dimension; ++y){
     for(int x = 0; x < dimension; ++x){
       bool cell = GetShapeRotation(x, y, Rotation::UP);
-      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2<int>{x, y}) - pos, color);
+      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2<int>{x, y}) - pos, c);
     }
   }
 }
@@ -149,6 +160,10 @@ bool Shape::HasSpaceToRotate() const{
   return GetCollidedCellX(rightAddVector, highestCell) - GetCollidedCellX(leftAddVector, highestCell) > dimension;
 }
 
+int Shape::GetDistanceUntilCollision() const{
+  return GetDistanceUntilCollision(downAddVector);
+}
+
 int Shape::GetDistanceUntilCollision(Vec2<int> addVector) const{
   int factor = 1;
   Vec2<int> pos;
@@ -193,12 +208,16 @@ Vec2<int> Shape::GetHighestCell() const{
   return Vec2<int>{0, 0};
 }
 
-void Shape::ResetShape(){
-  ResetBoardPos();
+void Shape::ResetShape(float value){
+  SetBoardPos(value);
   ResetRotation();
 }
 
-void Shape::ResetBoardPos(){ boardPos = Vec2<int>{(board.GetWidth() - dimension)/2, 0}; }
+void Shape::ResetShape(){ ResetShape(1.0f/2); }
+
+void Shape::SetBoardPos(float value){
+  boardPos = Vec2<int>{(int)((board.GetWidth() - dimension) * value), 0};
+}
 
 void Shape::ResetRotation(){ currentRotation = Rotation(Rotation::UP); }
 

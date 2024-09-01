@@ -12,7 +12,7 @@ void Pause::Tick(){
 }
 
 void Pause::Draw(){
-  ClearBackground(BLACK);
+  DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Color{0,0,0,150});
   ray_functions::DrawFormatedText("PAUSED", Vec2<double>{(float)1/2, (float)1/5}, (float) 1/13, RAYWHITE);
 }
 
@@ -22,4 +22,9 @@ void Pause::OptionsHandling(){
     buttonManager.ResetScreen();
     OpenClose();
   }
+}
+
+void Pause::OpenClose(){
+  Screen::OpenClose();
+  if(nextScreen == GAME || nextScreen == COOP) Continue.SetScreen(nextScreen);
 }

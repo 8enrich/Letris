@@ -3,6 +3,7 @@
 #include "Board.hpp"
 #include "Game.hpp"
 #include "GameOver.hpp"
+#include "Coop.hpp"
 #include <raylib.h>
 #include <memory>
 #include <unordered_map>
