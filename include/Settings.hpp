@@ -42,6 +42,7 @@ enum Screens {
   MENU,
   PAUSE,
   GAMEOVER,
+  STATS,
   NOTSCREEN,
 };
 

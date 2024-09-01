@@ -46,6 +46,7 @@ protected:
   Texture2D *image = nullptr;
   virtual void Update();
   bool isButtonClickedByMouse();
+  Sound hoveringSound;
   bool isClicked;
   int hoveringPadding = 20, padding = 27;
   Screens screen = NOTSCREEN;

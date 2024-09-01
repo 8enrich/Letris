@@ -1,6 +1,7 @@
 #include "../include/Button.hpp"
 #include "../include/raylibFunctions.hpp"
 #include <raylib.h>
+#include <string>
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type):
   Button(buttonText, buttonPosition, fontSize, type, ButtonStyles::TEXT)
@@ -15,12 +16,14 @@ Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSi
 Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName):
   buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
   image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
-  isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0})
+  isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0}),
+  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str()))
 {}
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
   buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), style(style),
-  isClicked(false), isSelected(false), buttonWidthHeight({0, 0}), realButtonPosition(0, 0)
+  isClicked(false), isSelected(false), buttonWidthHeight({0, 0}), realButtonPosition(0, 0),
+  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str()))
 {}
 
 Button::~Button(){
@@ -92,6 +95,7 @@ std::string Button::GetText() {
 void Button::Select(){
   isSelected = true;
   SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+  PlaySound(hoveringSound);
 }
 
 void Button::Unselect(){

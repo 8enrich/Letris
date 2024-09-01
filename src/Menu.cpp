@@ -2,8 +2,10 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 #include <string>
+
 Menu::Menu() :
-  logoTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "logo.png").c_str())))
+  logoTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "logo.png").c_str()))),
+  Screen(std::string(ASSETS_PATH)+"menu.mp3")
 {
   if(!logoTexture) throw std::bad_alloc();
 }

@@ -28,7 +28,7 @@ void ButtonManager::MouseHandling(Button* button){
       return;
   }
   currentSelectedButtonIndex = GetButtonIndex(button);
-  button->Select();
+  if(!button->isSelected) button->Select();
   if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = buttons[currentSelectedButtonIndex]->Click();
   if(typeid(*button) == typeid(Button)){
     if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
