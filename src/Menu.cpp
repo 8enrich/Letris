@@ -39,14 +39,17 @@ void Menu::OptionsHandling(){
 
 void Menu::Intro(){
   std::vector<std::string> texts = {"A dabzr & 8enrich production", "Sound by Daniel Santos & Art by José Iramar"};
+  Sound intro = LoadSound((std::string(ASSETS_PATH)+ "intro.mp3").c_str());
+  PlaySound(intro);
   bool tip = false;
   for(int i = 0; i < 3; i++){
     int colorA = 0;
     float posY = 1.0f/2;
-    for(int j = 0; j < 138; j++){
+    for(int j = 0; j < 350; j++){
       int key = GetKeyPressed();
       if(key == KEY_ENTER){
         isFirstEntrance = false;
+        StopSound(intro);
         return;
       }
       if(key != KEY_NULL) tip = true;
@@ -57,12 +60,13 @@ void Menu::Intro(){
       if(i < 2) ray_functions::DrawFormatedText(texts[i].c_str(), Vec2<double>{1.0f/2, 1.0f/2}, 1.0f/20, color);
       else ray_functions::DrawScaledImage(logoTexture, {1.0f/2, posY}, 0.5);
       EndDrawing();
-      if(j < 64){
-        colorA+=4;
+      if(!i && j < 115) continue;
+      if(j < 250){
+        colorA+=2;
         if(colorA > 255) colorA = 255;
       }
       else{
-        colorA-=4;
+        colorA-=3;
         if(colorA < 0) colorA = 0;
       }
       if(j > 31 && posY > 1.0f/3) posY-=0.00158;
