@@ -15,6 +15,7 @@ Menu::~Menu(){
   delete logoTexture;
 }
 void Menu::Tick(){
+  if(isFirstEntrance) Intro();
   OptionsHandling();
   BeginDrawing();
   Draw();
@@ -34,4 +35,38 @@ void Menu::OptionsHandling(){
     buttonManager.ResetScreen();
     OpenClose();
   }
+}
+
+void Menu::Intro(){
+  std::vector<std::string> texts = {"A dabzr & 8enrich production", "Sound by Daniel Santos & Art by José Iramar"};
+  bool tip = false;
+  for(int i = 0; i < 3; i++){
+    int colorA = 0;
+    float posY = 1.0f/2;
+    for(int j = 0; j < 138; j++){
+      int key = GetKeyPressed();
+      if(key == KEY_ENTER){
+        isFirstEntrance = false;
+        return;
+      }
+      if(key != KEY_NULL) tip = true;
+      Color color = Color{255, 255, 255, (unsigned char) colorA};
+      BeginDrawing();
+      ClearBackground(BLACK);
+      if(tip) ray_functions::DrawFormatedText("Press Enter to Skip ->", Vec2<double>{1.0f/1.15, 1.0f/1.1}, 1.0f/30, RAYWHITE);
+      if(i < 2) ray_functions::DrawFormatedText(texts[i].c_str(), Vec2<double>{1.0f/2, 1.0f/2}, 1.0f/20, color);
+      else ray_functions::DrawScaledImage(logoTexture, {1.0f/2, posY}, 0.5);
+      EndDrawing();
+      if(j < 64){
+        colorA+=4;
+        if(colorA > 255) colorA = 255;
+      }
+      else{
+        colorA-=4;
+        if(colorA < 0) colorA = 0;
+      }
+      if(j > 31 && posY > 1.0f/3) posY-=0.00158;
+    }
+  }
+  isFirstEntrance = false;
 }

@@ -19,4 +19,6 @@ private:
   ScreenButton Stats = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, STATS, "stats.png");
   const std::vector<Button*> buttons = { &Solo, &Coop, &Options, &Quit, &Stats };
   ButtonManager buttonManager = ButtonManager(buttons);
+  bool isFirstEntrance = true;
+  void Intro();
 };
