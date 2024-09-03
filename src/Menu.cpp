@@ -41,35 +41,31 @@ void Menu::Intro(){
   std::vector<std::string> texts = {"A dabzr & 8enrich production", "Sound by Daniel Santos & Art by José Iramar"};
   Sound intro = LoadSound((std::string(ASSETS_PATH)+ "intro.mp3").c_str());
   PlaySound(intro);
-  bool tip = false;
+  int value = 0;
+  Color tipColor = Color{255, 255, 255, 0};
+  Color color = Color{255, 255, 255, 0};
+  float posY = 1.0f/2;
   for(int i = 0; i < 3; i++){
-    int colorA = 0;
-    float posY = 1.0f/2;
-    for(int j = 0; j < 350; j++){
+    if(i) value = 115 + (i - 1) * 100;
+    for(int j = 0; j < 340 - value; j++){
       int key = GetKeyPressed();
       if(key == KEY_ENTER){
         isFirstEntrance = false;
         StopSound(intro);
         return;
       }
-      if(key != KEY_NULL) tip = true;
-      Color color = Color{255, 255, 255, (unsigned char) colorA};
+      if(key != KEY_NULL) tipColor.a = 255;
       BeginDrawing();
       ClearBackground(BLACK);
-      if(tip) ray_functions::DrawFormatedText("Press Enter to Skip ->", Vec2<double>{1.0f/1.15, 1.0f/1.1}, 1.0f/30, RAYWHITE);
+      ray_functions::DrawFormatedText("Press Enter to Skip ->", Vec2<double>{1.0f/1.15, 1.0f/1.1}, 1.0f/30, tipColor);
       if(i < 2) ray_functions::DrawFormatedText(texts[i].c_str(), Vec2<double>{1.0f/2, 1.0f/2}, 1.0f/20, color);
       else ray_functions::DrawScaledImage(logoTexture, {1.0f/2, posY}, 0.5);
       EndDrawing();
+      if(tipColor.a != 0 && tipColor.a > 3)tipColor.a-=3;
       if(!i && j < 115) continue;
-      if(j < 250){
-        colorA+=2;
-        if(colorA > 255) colorA = 255;
-      }
-      else{
-        colorA-=3;
-        if(colorA < 0) colorA = 0;
-      }
-      if(j > 31 && posY > 1.0f/3) posY-=0.00158;
+      if(j < 240 - value && color.a < 254) color.a+=2;
+      else if (color.a >= 3) color.a-=3;
+      if(i == 2 && j > 20 && posY > 1.0f/3) posY-=0.0016;
     }
   }
   isFirstEntrance = false;
