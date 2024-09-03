@@ -6,13 +6,17 @@
 #include <string>
 
 Game::Game(Board *board) :
+  Game(board, settings::soloBgImage, settings::db["CONTROL"])
+{}
+
+Game::Game(Board *board, int bgImage, int control) :
   board(board), Screen(std::string(ASSETS_PATH)+"gameplay.mp3"),
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
   shapes{ i, o, t, j, l, s, z },
   hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
-  player(new Player(maxTickToFix, true, shapes)),
-  backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "relaxing-bg.png").c_str()))),
+  player(new Player(maxTickToFix, true, shapes, control)),
+  backgroundTexture(settings::bgImages[bgImage]),
   clearLineSound(LoadSound((std::string(ASSETS_PATH)+ "clear.wav").c_str())),
   moveShapeSound(LoadSound((std::string(ASSETS_PATH)+ "move.wav").c_str())),
   gameOverSound(LoadSound((std::string(ASSETS_PATH)+"gameover.wav").c_str())),
@@ -152,11 +156,11 @@ void Game::DrawBoard(){
 }
 
 void Game::Update(){
-  Update(player, settings::db["CONTROL"]);
+  Update(player);
 }
 
-void Game::Update(Player *player, int control){
-  UpdateBoard(player, control);
+void Game::Update(Player *player){
+  UpdateBoard(player);
   UpdateShape(player);
   UpdateLevel();
   if(buttonManager.GetScreen() != NOTSCREEN) {
@@ -166,14 +170,14 @@ void Game::Update(Player *player, int control){
   }
 }
 
-void Game::UpdateBoard(Player *player, int control){
+void Game::UpdateBoard(Player *player){
   if(!(player->shape)->WillCollideDown() && !(tickCount % speed)){ (player->shape)->Fall(); }
-  MoveIfKeyPressed(player, control);
-  if (!(tickCount%3)) MoveIfKeyDown(player, control);
+  MoveIfKeyPressed(player);
+  if (!(tickCount%3)) MoveIfKeyDown(player);
 }
 
-void Game::MoveIfKeyPressed(Player *player, int control){
-  auto keyPressed = ray_functions::GetAction(control);
+void Game::MoveIfKeyPressed(Player *player){  
+  auto keyPressed = ray_functions::GetAction(player->control);
   int fallen;
   switch(keyPressed){
     case INSTANTFALL:
@@ -205,8 +209,8 @@ void Game::MoveIfKeyPressed(Player *player, int control){
   }
 }
 
-void Game::MoveIfKeyDown(Player *player, int control){
-  auto keyDown = ray_functions::GetKeyDown(control);
+void Game::MoveIfKeyDown(Player *player){
+  auto keyDown = ray_functions::GetKeyDown(player->control);
   switch(keyDown){
     case RIGHT:
       if (!(player->shape)->WillCollideRight()){

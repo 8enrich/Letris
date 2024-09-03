@@ -11,13 +11,21 @@ Vec2<int> settings::boardWidthHeight {settings::db["BOARD_RESOLUTION"][0], setti
 int settings::volume = settings::db["VOLUME"];
 std::vector<int> settings::highscores = settings::db["HIGHSCORES"];
 std::vector<std::vector<KeyboardKey>> settings::controls = {
-  {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z, KEY_C},
+  {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_LEFT_SHIFT, KEY_C},
   {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_I, KEY_J, KEY_K, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_K, KEY_H, KEY_J, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z, KEY_C},
-  {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT}
+  {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT},
+  {KEY_S, KEY_Z, KEY_X, KEY_C, KEY_LEFT_SHIFT, KEY_D, KEY_F},
+  {KEY_I, KEY_J, KEY_K, KEY_L, KEY_N, KEY_O, KEY_P}
 };
+
+std::vector<Texture2D*> settings::bgImages;
+int settings::soloBgImage = db["SOLOBGIMAGE"]; 
+int settings::coopBgImage = db["COOPBGIMAGE"];
+int settings::p1Control = db["P1CONTROL"];
+int settings::p2Control = db["P2CONTROL"];
 
 Texture2D settings::skinTexture;
 void settings::UpdateWindowSize(Vec2<int> newSize) {
@@ -52,6 +60,17 @@ void settings::FullScreen(){
 
 void settings::SetCustomControls(){
   for(int i = 0; i < 7; i++) settings::controls[4][i] = settings::db["CUSTOM_CONTROLS"][i];
+}
+
+void settings::SetTextures(){
+  skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
+  SetBgTextures();
+}
+
+void settings::SetBgTextures(){
+  for(int i = 0; i < bgImagesNames.size(); i++){
+    bgImages.push_back(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + bgImagesNames[i]).c_str())));
+  }
 }
 
 std::unordered_map<KeyboardKey, std::string> settings::keyToString = {

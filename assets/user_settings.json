@@ -8,7 +8,8 @@
         20
     ],
     "CELLSIZE": 23,
-    "CONTROL": 0,
+    "CONTROL": 1,
+    "COOPBGIMAGE": 0,
     "CUSTOM_CONTROLS": [
         87,
         65,
@@ -25,8 +26,11 @@
         0,
         0
     ],
-    "LOG": "",
+    "LOG": [],
+    "P1CONTROL": 0,
+    "P2CONTROL": 7,
     "PADDING": 2,
+    "SOLOBGIMAGE": 0,
     "VOLUME": 100,
     "WINDOWED": true,
     "WINDOW_HEIGHT": 576,

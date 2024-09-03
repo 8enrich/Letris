@@ -10,6 +10,7 @@
 class Game : public Screen {
   public:
     Game(Board *board);
+    Game(Board *board, int bgImage, int control);
     ~Game();
     void Tick() override;
   int GetScore();
@@ -23,9 +24,10 @@ class Game : public Screen {
       int tickToFix;
       bool canHold;
       int nextShapes[3];
+      int control;
 
-      Player(int tickToFix, bool canHold, Shape *shapes) :
-        tickToFix(tickToFix), canHold(canHold) 
+      Player(int tickToFix, bool canHold, Shape *shapes, int control) :
+        tickToFix(tickToFix), canHold(canHold), control(control) 
       {
         this->shapes = new Shape*[7];
         for (int i = 0; i < 7; ++i) this->shapes[i] = &shapes[i];
@@ -40,8 +42,8 @@ class Game : public Screen {
     int hold;
     void Draw() override;
     virtual void Update();
-    void Update(Player*,int);
-    void UpdateBoard(Player*,int);
+    void Update(Player*);
+    void UpdateBoard(Player*);
     void UpdateShape(Player*);
     void UpdateShape(Shape*&,Shape*,int*);
     virtual Shape*NextShape(Player*);
@@ -79,13 +81,13 @@ class Game : public Screen {
     void DrawBoard();
     bool HasLost();
     int maxTickToFix;
-    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, "pause.png");
+    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, "pause.png", Vec2<double>{25, 25});
     std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);
     Player *player;
     virtual void ResetShape(Player*);
-    void MoveIfKeyPressed(Player*,int);
-    void MoveIfKeyDown(Player*,int);
+    void MoveIfKeyPressed(Player*);
+    void MoveIfKeyDown(Player*);
 };
 
 

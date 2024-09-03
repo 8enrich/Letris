@@ -21,7 +21,7 @@
 int main() {
     InitAudioDevice();
     Window window{settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-    settings::skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
+    settings::SetTextures();
     try{
       Board board{settings::boardPosition, settings::boardWidthHeight,
                                           settings::cellSize, settings::padding};
@@ -44,7 +44,7 @@ int main() {
       }
     }
     catch(std::exception& e){
-      settings::db["LOG"] = e.what();
+      settings::db["LOG"].push_back(e.what());
     }
     std::ofstream o(std::string(ASSETS_PATH)+ "user_settings.json");
     o << std::setw(4) << settings::db << std::endl;

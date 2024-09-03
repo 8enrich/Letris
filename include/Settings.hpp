@@ -26,11 +26,19 @@ namespace settings {
   extern std::vector<std::vector<KeyboardKey>> controls;
   extern std::unordered_map<KeyboardKey, std::string> keyToString;
   constexpr Vec2<int> screenSizes[5] = {{1024, 576}, {1280, 720}, {1366, 768}, {1600, 900}, {1920, 1080}};
+  const std::vector<std::string> bgImagesNames = {"relaxing-bg.png"};
   extern Texture2D skinTexture;
+  extern std::vector<Texture2D*> bgImages;
+  extern int soloBgImage;
+  extern int coopBgImage;
+  extern int p1Control;
+  extern int p2Control;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();
   void SetCustomControls();
+  void SetTextures();
+  void SetBgTextures();
 }
 
 enum Screens {

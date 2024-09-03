@@ -13,11 +13,11 @@ Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSi
   this->color = color;
 }
 
-Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName):
+Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName, Vec2<double> size):
   buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
   image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
   isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0}),
-  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str()))
+  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str())), size(size)
 {}
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
@@ -86,7 +86,7 @@ void Button::Update() {
     return;
   }
   realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition);
-  buttonWidthHeight = Vec2<float>{GetScreenWidth()/25.0f, GetScreenWidth()/25.0f};
+  buttonWidthHeight = Vec2<float>{GetScreenWidth()/(float)size.GetX(), GetScreenWidth()/(float)size.GetY()};
 }
 
 std::string Button::GetText() {
@@ -137,4 +137,8 @@ double Button::GetMousePositionX(){
 
 void Button::SetButtonText(std::string buttonText){
   this->buttonText = buttonText;
+}
+
+void Button::SetImage(Texture2D *image){
+  this->image = image;
 }

@@ -13,8 +13,8 @@ ScreenButton::ScreenButton(std::string buttonText, Vec2<double> buttonPosition, 
 }
 
 
-ScreenButton::ScreenButton(Vec2<double> buttonPosition, Screens screen, std::string fileName):
-  Button(buttonPosition, ButtonTypes::SCREEN, fileName)
+ScreenButton::ScreenButton(Vec2<double> buttonPosition, Screens screen, std::string fileName, Vec2<double> size):
+  Button(buttonPosition, ButtonTypes::SCREEN, fileName, size)
 {
   this->screen = screen;
 }
