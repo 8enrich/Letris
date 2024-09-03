@@ -21,11 +21,12 @@
 int main() {
     InitAudioDevice();
     Window window{settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-    settings::SetTextures();
     try{
       Board board{settings::boardPosition, settings::boardWidthHeight,
                                           settings::cellSize, settings::padding};
       settings::SetCustomControls();
+      settings::SetTextures();
+      settings::SetSounds();
       ScreenManager screenManager;
       screenManager.AddScreen(GAME, nullptr);
       screenManager.AddScreen(COOP, nullptr);

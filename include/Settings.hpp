@@ -33,6 +33,7 @@ namespace settings {
   extern int coopBgImage;
   extern int p1Control;
   extern int p2Control;
+  extern Sound hoveringSound;
   struct Skin{
     Texture2D *image;
     Color recolors;
@@ -53,6 +54,7 @@ namespace settings {
   void SetTextures();
   void SetSkinTextures();
   void SetBgTextures();
+  void SetSounds();
 }
 
 enum Screens {

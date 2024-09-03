@@ -17,13 +17,13 @@ Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileNa
   buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
   image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
   isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0}),
-  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str())), size(size)
+  hoveringSound(settings::hoveringSound), size(size)
 {}
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
   buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), style(style),
   isClicked(false), isSelected(false), buttonWidthHeight({0, 0}), realButtonPosition(0, 0),
-  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str()))
+  hoveringSound(settings::hoveringSound)
 {}
 
 Button::~Button(){

@@ -30,6 +30,8 @@ int settings::p1Control = db["P1CONTROL"];
 int settings::p2Control = db["P2CONTROL"];
 
 Texture2D settings::skinTexture;
+Sound settings::hoveringSound;
+
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
   screenHeight = newSize.GetY();
@@ -70,6 +72,7 @@ void settings::SetTextures(){
 }
 
 void settings::SetSkinTextures(){
+  skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
   Texture2D *image;
   Skin s;
   for(int i = 0; i < skinNames.size(); i++){
@@ -83,6 +86,10 @@ void settings::SetBgTextures(){
   for(int i = 0; i < bgImagesNames.size(); i++){
     bgImages.push_back(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + bgImagesNames[i]).c_str())));
   }
+}
+
+void settings::SetSounds(){
+  hoveringSound = LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str());
 }
 
 std::unordered_map<KeyboardKey, std::string> settings::keyToString = {
