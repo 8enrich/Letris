@@ -22,6 +22,8 @@ std::vector<std::vector<KeyboardKey>> settings::controls = {
 };
 
 std::vector<Texture2D*> settings::bgImages;
+std::vector<settings::Skin> settings::skins;
+
 int settings::soloBgImage = db["SOLOBGIMAGE"]; 
 int settings::coopBgImage = db["COOPBGIMAGE"];
 int settings::p1Control = db["P1CONTROL"];
@@ -63,8 +65,18 @@ void settings::SetCustomControls(){
 }
 
 void settings::SetTextures(){
-  skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
+  SetSkinTextures();
   SetBgTextures();
+}
+
+void settings::SetSkinTextures(){
+  Texture2D *image;
+  Skin s;
+  for(int i = 0; i < skinNames.size(); i++){
+    image = new Texture2D(LoadTexture((std::string(ASSETS_PATH) + skinNames[i]).c_str()));
+    s = Skin(image, {255, 255, 255, 255}),
+    skins.push_back(s);
+  }
 }
 
 void settings::SetBgTextures(){

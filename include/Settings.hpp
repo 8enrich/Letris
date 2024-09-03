@@ -33,11 +33,25 @@ namespace settings {
   extern int coopBgImage;
   extern int p1Control;
   extern int p2Control;
+  struct Skin{
+    Texture2D *image;
+    Color recolors;
+
+    Skin(){}
+
+    Skin(Texture2D *image, Color color){
+      this->image = image;
+      this->recolors = color;
+    }
+  };
+  const std::vector<std::string> skinNames = {"skin0.png", "skin1.png"};
+  extern std::vector<Skin> skins;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();
   void SetCustomControls();
   void SetTextures();
+  void SetSkinTextures();
   void SetBgTextures();
 }
 
