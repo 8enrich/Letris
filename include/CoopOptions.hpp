@@ -19,28 +19,32 @@ class CoopOptions : public Screen{
     void ReadyButtonsHandling();
     void ControlButtonsHandling();
     void BgSelectorHandling();
+    void Close(Screens screen);
     const float fontSize = 1.0f/30;
-    const std::vector<std::string> optionsP1 = {"W A S D SPACE LSHIFT C", "S Z X C LSHIFT D F"};
-    const std::vector<std::string> optionsP2 = {"^ < > v ENTER RCTRL RSHIFT", "I J K L N O P"};
+    const std::vector<std::string> 
+      controlOptions[2] = {
+        {"W A S D SPACE LSHIFT C", "S Z X C LSHIFT D F"}, 
+        {"^ < > v ENTER RCTRL RSHIFT", "I J K L N O P"}
+      },
+      readyStr = {"Not Ready", "Ready!"},
+      imagesName = {"Calm river"};
     std::unordered_map<std::string, int> controlsIndexes = {
       {"W A S D SPACE LSHIFT C", 0},
       {"S Z X C LSHIFT D F", 6},
       {"^ < > v ENTER RCTRL RSHIFT", 5},
       {"I J K L N O P", 7}
     };
-    const std::vector<std::string> readyStr = {"Not Ready", "Ready!"};
-    const std::vector<std::string> imagesName = {"Calm river"};
-    std::string selectedControlP1;
-    std::string selectedControlP2;
+    std::string selectedControls[2];
     bool clicked[2] = {false, false};
-    OptionsButton *controlP1 = nullptr;
-    OptionsButton *controlP2 = nullptr;
-    ScreenButton readyP1 = ScreenButton(readyStr[0], Vec2<double>{0.15, 1.0f/8}, fontSize, COOP);
-    ScreenButton readyP2 = ScreenButton(readyStr[0], Vec2<double>{0.85, 1.0f/8}, fontSize, COOP);
-    ScreenButton backgroundSelector = ScreenButton(Vec2<double>{0.37, 1.0f/2}, COOP,
-                                                   settings::bgImagesNames[settings::coopBgImage], Vec2<double>{4, 8});
-    const std::vector<Button*> readyButtons = { &readyP1, &readyP2 };
+    OptionsButton *controlButtons[2] = {nullptr, nullptr};
+    ScreenButton 
+    readyButtons[2] = {
+      ScreenButton(readyStr[0], Vec2<double>{0.15, 1.0f/8}, fontSize, COOP), 
+      ScreenButton(readyStr[0], Vec2<double>{0.85, 1.0f/8}, fontSize, COOP)
+    },
+    backgroundSelector = ScreenButton(Vec2<double>{0.37, 1.0f/2}, COOP, settings::bgImagesNames[settings::coopBgImage], 
+      Vec2<double>{4, 8});
     std::vector<Button*> buttons;
-    int bgImageIndex = 0;
     ButtonManager *buttonManager = nullptr;
+    int bgImageIndex = settings::coopBgImage, bgImagesSize = settings::bgImagesNames.size();
 };

@@ -1,28 +1,26 @@
 #include "../include/CoopOptions.hpp"
 #include "../include/AllocError.hpp"
 #include "raylib.h"
+#include <string>
 
 using namespace settings;
 using namespace std;
 
 CoopOptions::CoopOptions(){
+
   for (const auto& pair : controlsIndexes) {
-    if (pair.second == db["P1CONTROL"]) {
-      selectedControlP1 = pair.first;
-      break;
-    }
+    if (pair.second == db["P1CONTROL"]) selectedControls[0] = pair.first;
+    if (pair.second == db["P2CONTROL"]) selectedControls[1] = pair.first;
   }
-  for (const auto& pair : controlsIndexes) {
-    if (pair.second == db["P2CONTROL"]) {
-      selectedControlP2 = pair.first;
-      break;
-    }
+  for(int i = 0; i < 2; i++){
+    controlButtons[i] = new OptionsButton(selectedControls[i], Vec2<double>{0.15 + i * 0.70, 1/1.5}, fontSize, controlOptions[i]);
+    if(!controlButtons[i]) throw AllocError("CoopOptions", "controlButtons[" + to_string(i) + "]");
   }
-  controlP1 = new OptionsButton(selectedControlP1, Vec2<double>{0.15, 1/1.5}, fontSize, optionsP1);
-  if(!controlP1) throw AllocError("CoopOptions", "controlP1");
-  controlP2 = new OptionsButton(selectedControlP2, Vec2<double>{0.85, 1/1.5}, fontSize, optionsP2);
-  if(!controlP2) throw AllocError("CoopOptions", "controlP2");
-  buttons = {&readyP1, &readyP2, controlP1, controlP2, &backgroundSelector };
+  for(int i = 0; i < 2; i++){
+    buttons.push_back(&(readyButtons[i]));
+    buttons.push_back(controlButtons[i]);
+  }
+  buttons.push_back(&backgroundSelector);
   buttonManager = new ButtonManager(buttons);
   if(!buttonManager) throw AllocError("CoopOptions", "buttonManager");
 }
@@ -33,12 +31,7 @@ void CoopOptions::Tick(){
   Draw();
   buttonManager->Tick();
   EndDrawing();
-  if(GetKeyPressed() == KEY_ESCAPE){
-    nextScreen = MENU;
-    OpenClose();
-    clicked[0] = false;
-    clicked[1] = false;
-  }
+  if(GetKeyPressed() == KEY_ESCAPE) Close(MENU);
 }
 
 void CoopOptions::Draw(){
@@ -49,46 +42,44 @@ void CoopOptions::Draw(){
 }
 
 void CoopOptions::CoopOptionsHandling(){
-  for(int i = 0; i < readyButtons.size(); i++) readyButtons[i]->SetButtonText(readyStr[clicked[i]]);
+  for(int i = 0; i < 2; i++) readyButtons[i].SetButtonText(readyStr[clicked[i]]);
   ReadyButtonsHandling();
   ControlButtonsHandling();
   BgSelectorHandling();
 }
 
 void CoopOptions::ReadyButtonsHandling(){
-  for(int i = 0; i < readyButtons.size(); i++){
-    if(readyButtons[i]->isButtonClicked()){
+  for(int i = 0; i < 2; i++){
+    if(readyButtons[i].isButtonClicked()){
       clicked[i] = 1 - clicked[i];
-      readyButtons[i]->Unclick();
+      readyButtons[i].Unclick();
     }
   }
-  if(clicked[0] == clicked[1] && clicked[0]){
-    nextScreen = COOP;
-    OpenClose();
-    clicked[0] = false;
-    clicked[1] = false;
-  }
+  if(clicked[0] == clicked[1] && clicked[0]) Close(COOP);
 }
 
 void CoopOptions::ControlButtonsHandling(){
-  string controlString = controlP1->GetText();
-  if (selectedControlP1 != controlString){
-    db["P1CONTROL"] = controlsIndexes[controlString];
-    selectedControlP1 = controlString;
-  }
-  controlString = controlP2->GetText();
-  if (selectedControlP2 != controlString){
-    db["P2CONTROL"] = controlsIndexes[controlString];
-    selectedControlP2 = controlString;
+  string playersControls[2] = {"P1CONTROL", "P2CONTROL"};
+  string controlString;
+  for(int i = 0; i < 2; i++){
+    controlString = controlButtons[i]->GetText();
+    db[playersControls[i]] = controlsIndexes[controlString];
+    selectedControls[i] = controlString;
   }
 }
 
 void CoopOptions::BgSelectorHandling(){
   if(backgroundSelector.isButtonClicked()){
-    bgImageIndex= (bgImageIndex + 1)%bgImagesNames.size();
+    bgImageIndex = (bgImageIndex + 1)%bgImagesSize;
     backgroundSelector.SetImage(bgImages[bgImageIndex]);
     backgroundSelector.Unclick();
     coopBgImage = bgImageIndex;
     db["COOPBGIMAGE"] = bgImageIndex;
   }
+}
+
+void CoopOptions::Close(Screens screen){
+  nextScreen = screen;
+  OpenClose();
+  for(int i = 0; i < 2; i++) clicked[i] = false;
 }
