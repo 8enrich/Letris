@@ -8,21 +8,26 @@ using namespace std;
 
 CoopOptions::CoopOptions(){
 
-  for (const auto& pair : controlsIndexes) {
-    if (pair.second == db["P1CONTROL"]) selectedControls[0] = pair.first;
-    if (pair.second == db["P2CONTROL"]) selectedControls[1] = pair.first;
-  }
   for(int i = 0; i < 2; i++){
+    for (const auto& pair : controlsIndexes) {
+      if (pair.second == db[playersControls[i]]){
+        selectedControls[i] = pair.first;
+        break;
+      }
+    }
     controlButtons[i] = new OptionsButton(selectedControls[i], Vec2<double>{0.15 + i * 0.70, 1/1.5}, fontSize, controlOptions[i]);
     if(!controlButtons[i]) throw AllocError("CoopOptions", "controlButtons[" + to_string(i) + "]");
-  }
-  for(int i = 0; i < 2; i++){
     buttons.push_back(&(readyButtons[i]));
     buttons.push_back(controlButtons[i]);
   }
   buttons.push_back(&backgroundSelector);
   buttonManager = new ButtonManager(buttons);
   if(!buttonManager) throw AllocError("CoopOptions", "buttonManager");
+}
+
+CoopOptions::~CoopOptions(){
+  for(int i = 0; i < 2; i++) delete controlButtons[i];
+  delete buttonManager;
 }
 
 void CoopOptions::Tick(){
@@ -51,7 +56,7 @@ void CoopOptions::CoopOptionsHandling(){
 void CoopOptions::ReadyButtonsHandling(){
   for(int i = 0; i < 2; i++){
     if(readyButtons[i].isButtonClicked()){
-      clicked[i] = 1 - clicked[i];
+      clicked[i] = !clicked[i];
       readyButtons[i].Unclick();
     }
   }
@@ -59,7 +64,6 @@ void CoopOptions::ReadyButtonsHandling(){
 }
 
 void CoopOptions::ControlButtonsHandling(){
-  string playersControls[2] = {"P1CONTROL", "P2CONTROL"};
   string controlString;
   for(int i = 0; i < 2; i++){
     controlString = controlButtons[i]->GetText();

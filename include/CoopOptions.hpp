@@ -12,6 +12,7 @@
 class CoopOptions : public Screen{
   public:
     CoopOptions();
+    ~CoopOptions();
     void Tick() override;
   private:
     void Draw() override;
@@ -28,6 +29,7 @@ class CoopOptions : public Screen{
       },
       readyStr = {"Not Ready", "Ready!"},
       imagesName = {"Calm river"};
+    const std::string playersControls[2] = {"P1CONTROL", "P2CONTROL"};
     std::unordered_map<std::string, int> controlsIndexes = {
       {"W A S D SPACE LSHIFT C", 0},
       {"S Z X C LSHIFT D F", 6},
@@ -38,12 +40,12 @@ class CoopOptions : public Screen{
     bool clicked[2] = {false, false};
     OptionsButton *controlButtons[2] = {nullptr, nullptr};
     ScreenButton 
-    readyButtons[2] = {
-      ScreenButton(readyStr[0], Vec2<double>{0.15, 1.0f/8}, fontSize, COOP), 
-      ScreenButton(readyStr[0], Vec2<double>{0.85, 1.0f/8}, fontSize, COOP)
-    },
-    backgroundSelector = ScreenButton(Vec2<double>{0.37, 1.0f/2}, COOP, settings::bgImagesNames[settings::coopBgImage], 
-      Vec2<double>{4, 8});
+      readyButtons[2] = {
+        ScreenButton(readyStr[0], Vec2<double>{0.15, 1.0f/8}, fontSize, COOP), 
+        ScreenButton(readyStr[0], Vec2<double>{0.85, 1.0f/8}, fontSize, COOP)
+      },
+      backgroundSelector = ScreenButton(Vec2<double>{0.37, 1.0f/2}, COOP, settings::bgImagesNames[settings::coopBgImage], 
+        Vec2<double>{4, 8});
     std::vector<Button*> buttons;
     ButtonManager *buttonManager = nullptr;
     int bgImageIndex = settings::coopBgImage, bgImagesSize = settings::bgImagesNames.size();
