@@ -3,12 +3,12 @@
 #include <raylib.h>
 
 Coop::Coop(Board *board) :
-  Game(board, settings::coopBgImage, settings::db["P1CONTROL"]),
+  Game(board, settings::coopBgImage, settings::db["COOPCONTROLS"][0]),
   i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
   j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), 
   z(Z_Shape(*board)),
   shapes{i, o, t, j, l, s, z},
-  player2(new Player(maxTickToFix, true, shapes, settings::db["P2CONTROL"]))
+  player2(new Player(maxTickToFix, true, shapes, settings::db["COOPCONTROLS"][1]))
 {
   player2->shape = NewShape(*(player2->shapes));
   SetPlayers();

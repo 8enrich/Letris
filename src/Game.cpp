@@ -17,10 +17,10 @@ Game::Game(Board *board, int bgImage, int control) :
   hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
   player(new Player(maxTickToFix, true, shapes, control)),
   backgroundTexture(settings::bgImages[bgImage]),
-  clearLineSound(LoadSound((std::string(ASSETS_PATH)+ "clear.wav").c_str())),
-  moveShapeSound(LoadSound((std::string(ASSETS_PATH)+ "move.wav").c_str())),
-  gameOverSound(LoadSound((std::string(ASSETS_PATH)+"gameover.wav").c_str())),
-  fixShapeSound(LoadSound((std::string(ASSETS_PATH)+"fix.wav").c_str()))
+  clearLineSound(settings::clearLineSound),
+  moveShapeSound(settings::moveShapeSound),
+  gameOverSound(settings::gameOverSound),
+  fixShapeSound(settings::fixShapeSound)
 {
   if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();

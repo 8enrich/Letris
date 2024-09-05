@@ -10,7 +10,7 @@ CoopOptions::CoopOptions(){
 
   for(int i = 0; i < 2; i++){
     for (const auto& pair : controlsIndexes) {
-      if (pair.second == db[playersControls[i]]){
+      if (pair.second == coopControls[i]){
         selectedControls[i] = pair.first;
         break;
       }
@@ -67,7 +67,7 @@ void CoopOptions::ControlButtonsHandling(){
   string controlString;
   for(int i = 0; i < 2; i++){
     controlString = controlButtons[i]->GetText();
-    db[playersControls[i]] = controlsIndexes[controlString];
+    db["COOPCONTROLS"][i] = controlsIndexes[controlString];
     selectedControls[i] = controlString;
   }
 }
@@ -77,7 +77,6 @@ void CoopOptions::BgSelectorHandling(){
     bgImageIndex = (bgImageIndex + 1)%bgImagesSize;
     backgroundSelector.SetImage(bgImages[bgImageIndex]);
     backgroundSelector.Unclick();
-    coopBgImage = bgImageIndex;
     db["COOPBGIMAGE"] = bgImageIndex;
   }
 }

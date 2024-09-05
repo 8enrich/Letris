@@ -29,7 +29,6 @@ class CoopOptions : public Screen{
       },
       readyStr = {"Not Ready", "Ready!"},
       imagesName = {"Calm river"};
-    const std::string playersControls[2] = {"P1CONTROL", "P2CONTROL"};
     std::unordered_map<std::string, int> controlsIndexes = {
       {"W A S D SPACE LSHIFT C", 0},
       {"S Z X C LSHIFT D F", 6},

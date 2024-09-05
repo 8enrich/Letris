@@ -10,6 +10,10 @@
     "CELLSIZE": 23,
     "CONTROL": 1,
     "COOPBGIMAGE": 0,
+    "COOPCONTROLS": [
+        0,
+        5
+    ],
     "CUSTOM_CONTROLS": [
         87,
         65,
@@ -27,8 +31,6 @@
         0
     ],
     "LOG": [],
-    "P1CONTROL": 0,
-    "P2CONTROL": 7,
     "PADDING": 2,
     "SOLOBGIMAGE": 0,
     "VOLUME": 100,

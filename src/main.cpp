@@ -24,9 +24,7 @@ int main() {
     try{
       Board board{settings::boardPosition, settings::boardWidthHeight,
                                           settings::cellSize, settings::padding};
-      settings::SetCustomControls();
-      settings::SetTextures();
-      settings::SetSounds();
+      settings::SetSettings();
       ScreenManager screenManager;
       screenManager.AddScreen(GAME, nullptr);
       screenManager.AddScreen(COOP, nullptr);

@@ -22,15 +22,19 @@ std::vector<std::vector<KeyboardKey>> settings::controls = {
 };
 
 std::vector<Texture2D*> settings::bgImages;
-std::vector<settings::Skin> settings::skins;
 
-int settings::soloBgImage = db["SOLOBGIMAGE"]; 
-int settings::coopBgImage = db["COOPBGIMAGE"];
-int settings::p1Control = db["P1CONTROL"];
-int settings::p2Control = db["P2CONTROL"];
+int settings::soloBgImage = settings::db["SOLOBGIMAGE"]; 
+int settings::coopBgImage = settings::db["COOPBGIMAGE"];
+std::vector<int> settings::coopControls = settings::db["COOPCONTROLS"];
 
-Texture2D settings::skinTexture;
-Sound settings::hoveringSound;
+std::vector<Texture2D*> settings::skinImages;
+settings::Skin settings::skin = skins[1];
+
+Sound settings::hoveringSound, 
+      settings::clearLineSound, 
+      settings::moveShapeSound, 
+      settings::gameOverSound, 
+      settings::fixShapeSound;
 
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
@@ -62,6 +66,12 @@ void settings::FullScreen(){
   ToggleBorderlessWindowed();
 }
 
+void settings::SetSettings(){
+  SetCustomControls();
+  SetTextures();
+  SetSounds();
+}
+
 void settings::SetCustomControls(){
   for(int i = 0; i < 7; i++) settings::controls[4][i] = settings::db["CUSTOM_CONTROLS"][i];
 }
@@ -72,24 +82,25 @@ void settings::SetTextures(){
 }
 
 void settings::SetSkinTextures(){
-  skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
-  Texture2D *image;
-  Skin s;
-  for(int i = 0; i < skinNames.size(); i++){
-    image = new Texture2D(LoadTexture((std::string(ASSETS_PATH) + skinNames[i]).c_str()));
-    s = Skin(image, {255, 255, 255, 255}),
-    skins.push_back(s);
-  }
+  SetTexturesVec(skinImageNames, &skinImages);
 }
 
 void settings::SetBgTextures(){
-  for(int i = 0; i < bgImagesNames.size(); i++){
-    bgImages.push_back(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + bgImagesNames[i]).c_str())));
+  SetTexturesVec(bgImagesNames, &bgImages);
+}
+
+void settings::SetTexturesVec(std::vector<std::string> names, std::vector<Texture2D*> *images){
+  for(int i = 0; i < names.size(); i++){
+    images->push_back(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + names[i]).c_str())));
   }
 }
 
 void settings::SetSounds(){
   hoveringSound = LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str());
+  clearLineSound = LoadSound((std::string(ASSETS_PATH)+ "clear.wav").c_str());
+  moveShapeSound = LoadSound((std::string(ASSETS_PATH)+ "move.wav").c_str());
+  gameOverSound = LoadSound((std::string(ASSETS_PATH)+"gameover.wav").c_str());
+  fixShapeSound = LoadSound((std::string(ASSETS_PATH)+"fix.wav").c_str());
 }
 
 std::unordered_map<KeyboardKey, std::string> settings::keyToString = {

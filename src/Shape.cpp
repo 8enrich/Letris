@@ -30,7 +30,7 @@ Vec2<int> Shape::GetBoardPos() const{
 }
 
 Color Shape::GetColor() const{
-  return color;
+  return settings::recolors[settings::skin.recolor][index];
 }
 
 int Shape::GetDimension() const{
@@ -42,7 +42,6 @@ int Shape::GetIndex() const{
 }
 
 void Shape::Draw() const {
-  Color offColor = Color{color.r, color.g, color.b, 90};
   int distanceFromTheGround;
   for (int y = 0; y < dimension; ++y){
     for (int x = 0; x < dimension; ++x) {
@@ -50,7 +49,7 @@ void Shape::Draw() const {
       if (cell) {
         distanceFromTheGround = GetDistanceUntilCollision(downAddVector);
         board.DrawCell(boardPos + Vec2<int>{x, y}, color);
-        board.DrawOffCell(boardPos + Vec2<int>{x, y + distanceFromTheGround}, offColor);
+        board.DrawOffCell(boardPos + Vec2<int>{x, y + distanceFromTheGround}, color);
       }
     }
   }

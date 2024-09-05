@@ -20,7 +20,7 @@ public:
   void SetCell(Vec2<int> pos, Color c);
   void DrawCell(Vec2<int> pos) const;
   void DrawCell(Vec2<int> pos, Color color) const;
-  void DrawOffCell(Vec2<int> pos, Color color) const;
+    void DrawOffCell(Vec2<int> pos, Color color) const;
   void DrawCellAnyLocal(Vec2<double> pos, Color color) const;
   void Draw() const;
   void DrawBorder() const;

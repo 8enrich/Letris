@@ -27,34 +27,37 @@ namespace settings {
   extern std::unordered_map<KeyboardKey, std::string> keyToString;
   constexpr Vec2<int> screenSizes[5] = {{1024, 576}, {1280, 720}, {1366, 768}, {1600, 900}, {1920, 1080}};
   const std::vector<std::string> bgImagesNames = {"relaxing-bg.png"};
-  extern Texture2D skinTexture;
   extern std::vector<Texture2D*> bgImages;
   extern int soloBgImage;
   extern int coopBgImage;
-  extern int p1Control;
-  extern int p2Control;
-  extern Sound hoveringSound;
+  extern std::vector<int> coopControls;
+  extern Sound hoveringSound, clearLineSound, moveShapeSound, gameOverSound, fixShapeSound;
+  const std::vector<std::string> skinImageNames = {"skin0.png", "skin1.png"};
+  extern std::vector<Texture2D*> skinImages;
+  const std::vector<Color> recolors[7] = {{WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE}};
   struct Skin{
-    Texture2D *image;
-    Color recolors;
+    int image;
+    int recolor;
 
     Skin(){}
 
-    Skin(Texture2D *image, Color color){
+    Skin(int image, int color){
       this->image = image;
-      this->recolors = color;
+      this->recolor = color;
     }
   };
-  const std::vector<std::string> skinNames = {"skin0.png", "skin1.png"};
-  extern std::vector<Skin> skins;
+  const std::vector<Skin> skins = {Skin(0, 0), Skin(1, 0)};
+  extern Skin skin;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();
+  void SetSettings();
   void SetCustomControls();
   void SetTextures();
   void SetSkinTextures();
   void SetBgTextures();
   void SetSounds();
+  void SetTexturesVec(std::vector<std::string> names, std::vector<Texture2D*> *images);
 }
 
 enum Screens {

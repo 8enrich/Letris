@@ -45,24 +45,19 @@ void Board::DrawCell(Vec2<int> pos, Color color) const{
 
   if(x >= 0 && x < width && y >= 0 && y < height){
     Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-    ray_functions::DrawResizedImage(&(settings::skinTexture), Vec2<double>(topLeft), cellSize, color);
+    ray_functions::DrawResizedImage(settings::skinImages[settings::skin.image], Vec2<double>(topLeft), cellSize, color);
   }
 }
 
 void Board::DrawOffCell(Vec2<int> pos, Color color) const{
-  const int x = pos.GetX();
-  const int y = pos.GetY();
-
-  if(x >= 0 && x < width && y >= 0 && y < height){
-    Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-    ray_functions::DrawResizedImage(&(settings::skinTexture), Vec2<double>(topLeft), cellSize, color);
-  }
+  color.a = 90;
+  DrawCell(pos, color);
 }
 
 void Board::DrawCellAnyLocal(Vec2<double> pos, Color color) const{
   double doubleCellSize = (double) cellSize;
   Vec2<double> topLeft = Vec2<double>(screenPos) + padding + (pos * doubleCellSize);
-  ray_functions::DrawResizedImage(&(settings::skinTexture), Vec2<double>(topLeft), cellSize, color);
+  ray_functions::DrawResizedImage(settings::skinImages[settings::skin.image], Vec2<double>(topLeft), cellSize, settings::recolors[settings::skin.recolor][0]);
 }
 
 void Board::Draw() const{
