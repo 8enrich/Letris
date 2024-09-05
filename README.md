@@ -81,15 +81,10 @@ Once the dependencies are installed, follow these steps to build the game:
 
 ```bash
 git clone https://github.com/8enrich/Letris.git # Clone the repository
-
 cd Letris # Enter the repository
-
 mkdir build && cd build # Create and navigate to the build directory
-
 cmake -S .. # Configure the project with CMake
-
 make # Build the game binary
-
 ./letris # Run the game
 ```
 
