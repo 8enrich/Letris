@@ -49,13 +49,13 @@ For Ubuntu/Debian, you can run:
 ```bash
 sudo apt install build-essential git cmake
 ```
-For Arch Linux you can run
-```bash
-sudo pacman -S git base-devel cmake
-```
 For Fedora you can run
 ```
 sudo dnf install -y gcc gcc-c++ make git cmake
+```
+For Arch Linux you can run
+```bash
+sudo pacman -S git base-devel cmake
 ```
 #### Required libraries
 
