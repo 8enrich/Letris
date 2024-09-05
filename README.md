@@ -23,9 +23,59 @@ Letris is an open-source Tetris clone developed in C++ using [raylib](https://gi
 - **Customizable Settings**: Adjust game settings to your preference.
 - **High Score Tracking**: Keep track of your best scores.
 
+
 ## Installation
 
-in progress
+### Windows
+To download the latest Windows version, click [here](https://github.com/8enrich/Letris/releases).
+
+#### Running the game from the ZIP
+1. Download and unzip the latest release.
+2. Run the executable inside the folder.
+
+#### Running the game from the Installer
+1. Download the installer (.exe).
+2. Follow the on-screen instructions to install the game.
+
+### Linux
+Currently, there is no pre-built Linux binary available. However, you can compile the game from source.
+
+#### Compiling the Game on Linux
+You will need to install some build dependencies, such as CMake and X11 development libraries. For Ubuntu/Debian, you can run:
+
+```bash
+sudo apt-get install -y \
+  cmake \
+  libasound2-dev \
+  libx11-dev \
+  libxrandr-dev \
+  libxi-dev \
+  libgl1-mesa-dev \
+  libglu1-mesa-dev \
+  libxcursor-dev \
+  libxinerama-dev \
+  libwayland-dev \
+  libxkbcommon-dev
+```
+
+Once the dependencies are installed, follow these steps to build the game:
+
+```bash
+git clone https://github.com/8enrich/Letris.git # Clone the repository
+
+cd Letris # Enter the repository
+
+mkdir build && cd build # Create and navigate to the build directory
+
+cmake -S .. # Configure the project with CMake
+
+make # Build the game binary
+
+./letris # Run the game
+```
+
+Feel free to customize further, but this should make it more structured and clear!
+
 
 ## Usage
 
