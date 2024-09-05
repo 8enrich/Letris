@@ -19,13 +19,13 @@ public:
     S_Shape,
     Z_Shape
   };
-  Shape(const bool* shape_matrix, int dimension, Color color, const Board& board, const int index);
+  Shape(const bool* shape_matrix, int dimension, const Board& board, const int index, const int skin);
   Shape(const Shape& other);
 	Shape& operator=(const Shape &other){return *this = Shape(other);}
   ~Shape();
-  void Draw() const;
-  void DrawOutOfBoard(Vec2<double>) const;
-  void DrawOutOfBoard(Vec2<double>, Color) const;
+  void Draw(int imageIndex) const;
+  void DrawOutOfBoard(Vec2<double>, int) const;
+  void DrawOutOfBoard(Vec2<double>, Color, int) const;
   void Rotate();
   void RotateAntiClockWise();
   void Fall();
@@ -73,83 +73,76 @@ private:
 
 class I_Shape : public Shape{
   public:
-    I_Shape(const Board& board);
+    I_Shape(const Board& board, const int skin);
   private:
     static constexpr bool shape_matrix[] = {0, 0, 0, 0,
                                             1, 1, 1, 1,
                                             0, 0, 0, 0,
                                             0, 0, 0, 0};
     static constexpr int dimension = 4;
-    static constexpr Color color = SKYBLUE;
     static constexpr int index = indexes::I_Shape;
 };
   
 class O_Shape : public Shape{
   public:
-    O_Shape(const Board& board);
+    O_Shape(const Board& board, const int skin);
   private:
     static constexpr bool shape_matrix[] = {1, 1,
                                             1, 1};
     static constexpr int dimension = 2;
-    static constexpr Color color = YELLOW;
     static constexpr int index = indexes::O_Shape;
 };
 
 class T_Shape : public Shape{
   public:
-    T_Shape(const Board& board);
+    T_Shape(const Board& board, const int skin);
   private:
     static constexpr bool shape_matrix[] = {0, 1, 0, 
                                             1, 1, 1,
                                             0, 0, 0};
     static constexpr int dimension = 3;
-    static constexpr Color color = MAGENTA;
     static constexpr int index = indexes::T_Shape;
 };
 
 class J_Shape : public Shape{
   public:
-    J_Shape(const Board& board);
+    J_Shape(const Board& board, const int skin);
   private:
     static constexpr bool shape_matrix[] = {1, 0, 0, 
                                             1, 1, 1,
                                             0, 0, 0};
     static constexpr int dimension = 3;
-    static constexpr Color color = DARKBLUE;
     static constexpr int index = indexes::J_Shape;
 };
 
 class L_Shape : public Shape{
   public:
-    L_Shape(const Board& board);
+    L_Shape(const Board& board, const int skin);
   private:
     static constexpr bool shape_matrix[] = {0, 0, 1, 
                                             1, 1, 1,
                                             0, 0, 0};
     static constexpr int dimension = 3;
-    static constexpr Color color = ORANGE;
     static constexpr int index = indexes::L_Shape;
 };
 class S_Shape : public Shape{
   public:
-    S_Shape(const Board& board);
+    S_Shape(const Board& board, const int skin);
   private:
     static constexpr bool shape_matrix[] = {0, 1, 1, 
                                             1, 1, 0,
                                             0, 0, 0};
     static constexpr int dimension = 3;
-    static constexpr Color color = GREEN;
     static constexpr int index = indexes::S_Shape;
 };
 
 class Z_Shape : public Shape {
   public:
-    Z_Shape(const Board& board);
+    Z_Shape(const Board& board, const int skin);
   private:
     static constexpr bool shape_matrix[] = {1, 1, 0, 
                                             0, 1, 1,
                                             0, 0, 0};
     static constexpr int dimension = 3;
-    static constexpr Color color = RED;
     static constexpr int index = indexes::Z_Shape;
 };

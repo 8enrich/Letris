@@ -10,7 +10,7 @@
 class Game : public Screen {
   public:
     Game(Board *board);
-    Game(Board *board, int bgImage, int control);
+    Game(Board *board, int bgImage, int control, int skin);
     ~Game();
     void Tick() override;
   int GetScore();
@@ -25,9 +25,10 @@ class Game : public Screen {
       bool canHold;
       int nextShapes[3];
       int control;
+      int skin;
 
-      Player(int tickToFix, bool canHold, Shape *shapes, int control) :
-        tickToFix(tickToFix), canHold(canHold), control(control) 
+      Player(int tickToFix, bool canHold, Shape *shapes, int control, int skin) :
+        tickToFix(tickToFix), canHold(canHold), control(control), skin(skin) 
       {
         this->shapes = new Shape*[7];
         for (int i = 0; i < 7; ++i) this->shapes[i] = &shapes[i];
@@ -47,7 +48,7 @@ class Game : public Screen {
     void UpdateShape(Player*);
     void UpdateShape(Shape*&,Shape*,int*);
     virtual Shape*NextShape(Player*);
-    void FixShape(Shape*&);
+    void FixShape(Player*);
     Shape *NewShape();
     Shape *NewShape(Shape*);
     void ClearLines();
@@ -69,7 +70,7 @@ class Game : public Screen {
     int cleanedLinesCount;
     void UpdateLevel();
     void DrawHoldShape() const;
-    void DrawHoldShape(Vec2<double>,bool) const;
+    void DrawHoldShape(Vec2<double>, bool) const;
     virtual void DrawNextShapes() const;
     void DrawNextShapes(Player*,double) const;
     virtual void DrawNext() const;

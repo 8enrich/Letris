@@ -4,17 +4,23 @@
 #include <string>
 #include <unordered_map>
 #include <iostream>
-Board::Cell::Cell() : doExists(false), c(WHITE) {}
+Board::Cell::Cell() : doExists(false), c(WHITE), imageIndex(0){}
 void Board::Cell::Remove() { doExists = false; }
 bool Board::Cell::Exists() const { return doExists;}
-void Board::Cell::SetColor(Color color) {
+void Board::Cell::SetColor(Color color, int imageIndex) {
   c = color;
   doExists = true;
+  this->imageIndex = settings::skins[imageIndex].image;
 }
 
 Color Board::Cell::GetColor() const{
   return c;
 }
+
+int Board::Cell::GetImageIndex() const{
+  return imageIndex;
+}
+
 Board::Board (Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padding) :
     screenPos(screenPos), width(widthHeight.GetX()), height(widthHeight.GetY()), cellSize(cellSize), padding(padding)
   {
@@ -27,37 +33,43 @@ Board::Board (Vec2<int> screenPos, Vec2<int> widthHeight, int cellSize, int padd
         std::cerr << "Erro ao redimensionar o vetor cells: " << e.what() << std::endl;
     }
   }
-  
+
 void Board::SetCell(Vec2<int> pos, Color c){
+  SetCell(pos, c, GetCell(pos - Vec2<int>{0, 1})->GetImageIndex());
+}
+
+void Board::SetCell(Vec2<int> pos, Color c, int imageIndex){
   const int x = pos.GetX();
   const int y = pos.GetY();
   if(x >= 0 && y >= 0 && x < width && y < height)
-    GetCell(pos)->SetColor(c);
+    GetCell(pos)->SetColor(c, imageIndex);
 }
 void Board::DrawCell(Vec2<int> pos) const{
   Color c = GetCell(pos)->GetColor();
-  DrawCell(pos, c);
+  int i = GetCell(pos)->GetImageIndex();
+  DrawCell(pos, c, i);
 }
 
-void Board::DrawCell(Vec2<int> pos, Color color) const{
+void Board::DrawCell(Vec2<int> pos, Color color, int imageIndex) const{
   const int x = pos.GetX();
   const int y = pos.GetY();
 
   if(x >= 0 && x < width && y >= 0 && y < height){
     Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-    ray_functions::DrawResizedImage(settings::skinImages[settings::skin.image], Vec2<double>(topLeft), cellSize, color);
+    ray_functions::DrawResizedImage(settings::skinImages[settings::skins[imageIndex].image], Vec2<double>(topLeft), cellSize, color);
   }
 }
 
-void Board::DrawOffCell(Vec2<int> pos, Color color) const{
-  color.a = 90;
-  DrawCell(pos, color);
+void Board::DrawOffCell(Vec2<int> pos, Color color, int imageIndex) const{
+  Color offColor = color;
+  offColor.a = 90;
+  DrawCell(pos, offColor, imageIndex);
 }
 
-void Board::DrawCellAnyLocal(Vec2<double> pos, Color color) const{
+void Board::DrawCellAnyLocal(Vec2<double> pos, Color color, int imageIndex) const{
   double doubleCellSize = (double) cellSize;
   Vec2<double> topLeft = Vec2<double>(screenPos) + padding + (pos * doubleCellSize);
-  ray_functions::DrawResizedImage(settings::skinImages[settings::skin.image], Vec2<double>(topLeft), cellSize, settings::recolors[settings::skin.recolor][0]);
+  ray_functions::DrawResizedImage(settings::skinImages[settings::skins[imageIndex].image], topLeft, cellSize, color);
 }
 
 void Board::Draw() const{

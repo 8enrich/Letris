@@ -6,16 +6,16 @@
 #include <string>
 
 Game::Game(Board *board) :
-  Game(board, settings::soloBgImage, settings::db["CONTROL"])
+  Game(board, settings::soloBgImage, settings::db["CONTROL"], settings::db["SKIN"])
 {}
 
-Game::Game(Board *board, int bgImage, int control) :
+Game::Game(Board *board, int bgImage, int control, int skin) :
   board(board), Screen(std::string(ASSETS_PATH)+"gameplay.mp3"),
-  i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
-  j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
+  i(I_Shape(*board, skin)), o(O_Shape(*board, skin)), t(T_Shape(*board, skin)),
+  j(J_Shape(*board, skin)), l(L_Shape(*board, skin)), s(S_Shape(*board, skin)), z(Z_Shape(*board, skin)),
   shapes{ i, o, t, j, l, s, z },
   hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
-  player(new Player(maxTickToFix, true, shapes, control)),
+  player(new Player(maxTickToFix, true, shapes, control, skin)),
   backgroundTexture(settings::bgImages[bgImage]),
   clearLineSound(settings::clearLineSound),
   moveShapeSound(settings::moveShapeSound),
@@ -114,7 +114,7 @@ void Game::UpdateShape(Player *player){
   if ((player->shape)->WillCollideDown()){
     (player->tickToFix)--;
     if((player->tickToFix) > 0) return;
-    FixShape(player->shape);
+    FixShape(player);
     PlaySound(fixShapeSound);
     player->shape = NextShape(player);
     player->canHold = true;
@@ -123,7 +123,8 @@ void Game::UpdateShape(Player *player){
   if((player->tickToFix) < maxTickToFix) (player->tickToFix)--;
 }
 
-void Game::FixShape(Shape*& s){
+void Game::FixShape(Player *player){
+  Shape *s = player->shape;
   Vec2<int> cellPosition;
   int dimension = s->GetDimension();
   for (int x = 0; x < dimension; ++x){
@@ -131,7 +132,7 @@ void Game::FixShape(Shape*& s){
       bool cell = s->GetShapeRotation(x, y);
       if(cell){
         cellPosition = s->GetBoardPos() + Vec2<int>{x, y};
-        board->SetCell(cellPosition, s->GetColor());
+        board->SetCell(cellPosition, s->GetColor(), player->skin);
       }
     }
   }
@@ -142,7 +143,7 @@ void Game::Draw(){
   ray_functions::DrawImage(backgroundTexture);
   buttonManager.Tick();
   DrawBoard();
-  (player->shape)->Draw();
+  (player->shape)->Draw(player->skin);
   board->DrawBorder();
   if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
@@ -315,7 +316,7 @@ void Game::DrawHoldShape(Vec2<double> pos, bool canHold) const{
   Color c = LIGHTGRAY;
   if(canHold) c = player->shapes[hold]->GetColor();
   player->shapes[hold]->DrawOutOfBoard(Vec2<double>{(posX + dimension)/2, posY * -4 + ((double)1/4) *
-      (dimension * dimension) - ((double)5/4) * dimension + 1}, c);
+      (dimension * dimension) - ((double)5/4) * dimension + 1}, c, player->skin);
 }
 
 void Game::DrawNextShapes() const{
@@ -327,7 +328,7 @@ void Game::DrawNextShapes(Player *player, double posX) const{
   for(int i = 0; i < 3; i++){
     int dimension = player->shapes[player->nextShapes[i]]->GetDimension();
     player->shapes[player->nextShapes[i]]->DrawOutOfBoard(Vec2<double>{-(posX - dimension)/2, 
-      i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)});
+      i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)}, player->skin);
   }
 }
 

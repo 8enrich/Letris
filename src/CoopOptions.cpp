@@ -7,7 +7,6 @@ using namespace settings;
 using namespace std;
 
 CoopOptions::CoopOptions(){
-
   for(int i = 0; i < 2; i++){
     for (const auto& pair : controlsIndexes) {
       if (pair.second == coopControls[i]){

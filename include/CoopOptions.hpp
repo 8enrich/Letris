@@ -1,3 +1,4 @@
+#include "Board.hpp"
 #include "Button.hpp"
 #include "ButtonManager.hpp"
 #include "Screen.hpp"
@@ -28,7 +29,9 @@ class CoopOptions : public Screen{
         {"^ < > v ENTER RCTRL RSHIFT", "I J K L N O P"}
       },
       readyStr = {"Not Ready", "Ready!"},
-      imagesName = {"Calm river"};
+      imagesName = {
+        "Calm river","Night forest", "Afternoon", "Gray smell"
+      };
     std::unordered_map<std::string, int> controlsIndexes = {
       {"W A S D SPACE LSHIFT C", 0},
       {"S Z X C LSHIFT D F", 6},
