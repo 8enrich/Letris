@@ -30,11 +30,11 @@ Letris is an open-source Tetris clone developed in C++ using [raylib](https://gi
 To download the latest Windows version, click [here](https://github.com/8enrich/Letris/releases).
 
 ### Running the game from the ZIP
-1. Download and unzip the latest release.
-2. Run the executable inside the folder.
+1. Download Letris-Windows-amd64.zip from the latest release and unzip it.
+2. Run the executable (letris.exe) inside the folder.
 
 ### Running the game from the Installer
-1. Download the installer (.exe).
+1. Download the installer (letris-amd64-Windows.exe).
 2. Follow the on-screen instructions to install the game.
 
 ## Linux
