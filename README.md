@@ -38,9 +38,16 @@ To download the latest Windows version, click [here](https://github.com/8enrich/
 2. Follow the on-screen instructions to install the game.
 
 ## Linux
-Currently, there is no pre-built Linux binary available. However, you can compile the game from source.
+### Installing the .deb Package
+
+To download the latest version for Ubuntu/Debian, click [here](https://github.com/8enrich/Letris/releases/download/0.1v/letris.deb).
+
+Simply run the .deb file and follow the installation instructions. The package is compatible with GLIBC_2.27 and higher (was compiled in Ubuntu 18.04 LTS).
 
 ### Compiling the Game
+
+If you're using a non-Ubuntu/Debian based distribution, you can compile the code yourself. You'll need a relatively recent version of CMake, which can be downloaded [here](https://cmake.org/files/LatestRelease/) or found in your distribution's package manager.
+
 #### Build tools
 
 You will need to install some build tools, such as GCC, Make, Git and CMake 
