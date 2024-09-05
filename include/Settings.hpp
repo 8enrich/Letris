@@ -39,6 +39,7 @@ namespace settings {
   const std::vector<Color> recolors[7] = {
     {SKYBLUE, YELLOW, MAGENTA, DARKBLUE, ORANGE, GREEN, RED}, 
     {WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE},
+    {Color{235, 151, 202, 255}, Color{199, 155, 235, 255}, Color{155, 188, 235, 255}, Color{150, 235, 228, 255}, Color{235, 235, 156, 255}, Color{200, 150, 230, 255}, Color{235, 199, 151, 255}},
   };
   struct Skin{
     int image;
@@ -49,7 +50,7 @@ namespace settings {
       this->recolor = color;
     }
   };
-  const std::vector<Skin> skins = {Skin(0, 0), Skin(1, 1), Skin(2, 0)};
+  const std::vector<Skin> skins = {Skin(0, 0), Skin(1, 1), Skin(2, 0), Skin(2, 2)};
   extern Skin skin;
   extern std::vector<Skin> coopSkins;
   void UpdateWindowSize(Vec2<int>);

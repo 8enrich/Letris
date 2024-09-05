@@ -34,7 +34,7 @@ class CoopOptions : public Screen{
       imagesName = {
         "Calm river","Night forest", "Afternoon", "Gray smell"
       },
-      skinNames = {"Letris", "Retro", "Minimalist"};
+      skinNames = {"Letris", "Retro", "Minimalist", "Pastel"};
     std::unordered_map<std::string, int> controlsIndexes = {
       {"W A S D SPACE LSHIFT C", 0},
       {"S Z X C LSHIFT D F", 6},
