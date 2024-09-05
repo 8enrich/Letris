@@ -6,7 +6,9 @@
 using namespace settings;
 using namespace std;
 
-CoopOptions::CoopOptions(){
+CoopOptions::CoopOptions():
+  board({(int)(screenWidth * 0.15) - 3 * cellSize, (int)(screenHeight * 0.20)}, {6, 6}, cellSize, padding)
+{
   for(int i = 0; i < 2; i++){
     for (const auto& pair : controlsIndexes) {
       if (pair.second == coopControls[i]){
@@ -34,6 +36,10 @@ void CoopOptions::Tick(){
   BeginDrawing();
   Draw();
   buttonManager->Tick();
+  int posX = (int)(screenWidth * 0.15) - 3 * cellSize;
+  if(board.GetScreenPos().GetX() != posX) board.ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
+  board.Draw();
+  board.DrawBorder();
   EndDrawing();
   if(GetKeyPressed() == KEY_ESCAPE) Close(MENU);
 }

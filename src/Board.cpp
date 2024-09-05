@@ -119,8 +119,12 @@ const Board::Cell *Board::GetCell(Vec2<int> pos) const{
 }
 
 void Board::ResetBoardSettings(){
-  cellSize = settings::cellSize;
-  screenPos = settings::boardPosition;
+  ResetBoardSettings(settings::cellSize, settings::boardPosition);
+}
+
+void Board::ResetBoardSettings(int cellSize, Vec2<int> screenPos){
+  this->cellSize = cellSize;
+  this->screenPos = screenPos;
 }
 
 void Board::ResetBoardCells(){

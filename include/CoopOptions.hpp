@@ -51,4 +51,5 @@ class CoopOptions : public Screen{
     std::vector<Button*> buttons;
     ButtonManager *buttonManager = nullptr;
     int bgImageIndex = settings::coopBgImage, bgImagesSize = settings::bgImagesNames.size();
+    Board board;
 };

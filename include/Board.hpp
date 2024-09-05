@@ -34,6 +34,7 @@ public:
   Color GetCellColor(Vec2<int> pos);
   void ResetBoardCells();
   void ResetBoardSettings();
+  void ResetBoardSettings(int cellSize, Vec2<int> screenPos);
   Vec2<int> GetScreenPos();
   int GetCellsize();
   void DrawRectangleLinesEx(Vec2<double>,Vec2<double>,float,Color) const;
