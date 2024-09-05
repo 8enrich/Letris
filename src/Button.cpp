@@ -142,3 +142,7 @@ void Button::SetButtonText(std::string buttonText){
 void Button::SetImage(Texture2D *image){
   this->image = image;
 }
+
+void Button::SetColor(Color color){
+  this->color = color;
+}

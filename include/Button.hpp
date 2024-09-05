@@ -40,6 +40,7 @@ public:
   void SetButtonText(std::string);
   ButtonTypes type;
   void SetImage(Texture2D *image);
+  void SetColor(Color color);
 protected:
   void DrawRectButton();
   void DrawTextButton();
