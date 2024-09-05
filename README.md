@@ -12,22 +12,6 @@
   <a href="https://github.com/8enrich/Letris/actions"><img src="https://img.shields.io/github/actions/workflow/status/8enrich/Letris/cmake-multi-platform.yml" alt="Build Status" /></a>
 </p>
 
-# Table of Contents
-
-- [Description](#description)
-- [Features](#features)
-- [Installation](#installation)
-  * [Windows](#windows)
-    + [Running the game from the ZIP](#running-the-game-from-the-zip)
-    + [Running the game from the Installer](#running-the-game-from-the-installer)
-  * [Linux](#linux)
-    + [Compiling the Game](#compiling-the-game)
-- [Usage](#usage)
-- [License](#license)
-- [Contact](#contact)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 # Description
 
 Letris is an open-source Tetris clone developed in C++ using [raylib](https://github.com/raysan5/raylib) and [nlohmann/json](https://github.com/nlohmann/json). It features a simple and minimalistic design, aiming to capture the essence of the classic game with modern touches.
