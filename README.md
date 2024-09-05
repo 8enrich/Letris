@@ -12,11 +12,27 @@
   <a href="https://github.com/8enrich/Letris/actions"><img src="https://img.shields.io/github/actions/workflow/status/8enrich/Letris/cmake-multi-platform.yml" alt="Build Status" /></a>
 </p>
 
-## Description
+# Table of Contents
+
+- [Description](#description)
+- [Features](#features)
+- [Installation](#installation)
+  * [Windows](#windows)
+    + [Running the game from the ZIP](#running-the-game-from-the-zip)
+    + [Running the game from the Installer](#running-the-game-from-the-installer)
+  * [Linux](#linux)
+    + [Compiling the Game](#compiling-the-game)
+- [Usage](#usage)
+- [License](#license)
+- [Contact](#contact)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+# Description
 
 Letris is an open-source Tetris clone developed in C++ using [raylib](https://github.com/raysan5/raylib) and [nlohmann/json](https://github.com/nlohmann/json). It features a simple and minimalistic design, aiming to capture the essence of the classic game with modern touches.
 
-## Features
+# Features
 
 - **Minimalistic Design**: A clean and straightforward user interface.
 - **Cross-Platform**: Compatible with multiple operating systems.
@@ -24,38 +40,57 @@ Letris is an open-source Tetris clone developed in C++ using [raylib](https://gi
 - **High Score Tracking**: Keep track of your best scores.
 
 
-## Installation
+# Installation
 
-### Windows
+## Windows
 To download the latest Windows version, click [here](https://github.com/8enrich/Letris/releases).
 
-#### Running the game from the ZIP
+### Running the game from the ZIP
 1. Download and unzip the latest release.
 2. Run the executable inside the folder.
 
-#### Running the game from the Installer
+### Running the game from the Installer
 1. Download the installer (.exe).
 2. Follow the on-screen instructions to install the game.
 
-### Linux
+## Linux
 Currently, there is no pre-built Linux binary available. However, you can compile the game from source.
 
-#### Compiling the Game on Linux
-You will need to install some build dependencies, such as CMake and X11 development libraries. For Ubuntu/Debian, you can run:
+### Compiling the Game
+#### Build tools
+
+You will need to install some build tools, such as GCC, Make, Git and CMake 
+
+For Ubuntu/Debian, you can run:
+```bash
+sudo apt install build-essential git cmake
+```
+For Arch Linux you can run
+```bash
+sudo pacman -S git base-devel cmake
+```
+For Fedora you can run
+```
+sudo dnf install -y gcc gcc-c++ make git cmake
+```
+#### Required libraries
+
+[Some libraries are required by raylib](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux) for displaying graphics and audio correctly (ALSA, OpenGL/Mesa and X11)
+
+For Ubuntu/Debian you can run: 
 
 ```bash
-sudo apt-get install -y \
-  cmake \
-  libasound2-dev \
-  libx11-dev \
-  libxrandr-dev \
-  libxi-dev \
-  libgl1-mesa-dev \
-  libglu1-mesa-dev \
-  libxcursor-dev \
-  libxinerama-dev \
-  libwayland-dev \
-  libxkbcommon-dev
+sudo apt install libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
+```
+For Fedora you can run:
+
+```bash
+sudo dnf install alsa-lib-devel mesa-libGL-devel libX11-devel libXrandr-devel libXi-devel libXcursor-devel libXinerama-devel libatomic
+```
+For Arch Linux you can run:
+
+```bash
+sudo pacman -S alsa-lib mesa libx11 libxrandr libxi libxcursor libxinerama
 ```
 
 Once the dependencies are installed, follow these steps to build the game:
@@ -77,15 +112,15 @@ make # Build the game binary
 Feel free to customize further, but this should make it more structured and clear!
 
 
-## Usage
+# Usage
 
 in progress
 
-## License
+# License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Contact
+# Contact
 
 For any inquiries or support, please open an issue on the [GitHub repository](https://github.com/8enrich/Letris).
 .
