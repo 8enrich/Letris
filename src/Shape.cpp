@@ -53,6 +53,15 @@ void Shape::Draw(int imageIndex) const {
   }
 }
 
+void Shape::DrawSkin(int imageIndex) const {
+  for (int y = 0; y < dimension; ++y){
+    for (int x = 0; x < dimension; ++x) {
+      bool cell = GetShapeRotation(x, y, Rotation::DOWN);
+      if (cell) board.DrawCell(boardPos + Vec2<int>{x, y}, color, imageIndex);
+    }
+  }
+}
+
 void Shape::DrawOutOfBoard(Vec2<double> pos, int imageIndex) const{
   DrawOutOfBoard(pos, color, imageIndex);
 }

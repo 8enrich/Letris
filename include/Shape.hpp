@@ -26,6 +26,7 @@ public:
   void Draw(int imageIndex) const;
   void DrawOutOfBoard(Vec2<double>, int) const;
   void DrawOutOfBoard(Vec2<double>, Color, int) const;
+  void DrawSkin(int imageIndex) const;
   void Rotate();
   void RotateAntiClockWise();
   void Fall();

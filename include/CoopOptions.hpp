@@ -5,6 +5,7 @@
 #include "OptionsButton.hpp"
 #include "ScreenButton.hpp"
 #include "Settings.hpp"
+#include "Shape.hpp"
 #include <raylib.h>
 #include <string>
 #include <unordered_map>
@@ -19,6 +20,7 @@ class CoopOptions : public Screen{
     void Draw() override;
     void CoopOptionsHandling();
     void ReadyButtonsHandling();
+    void SkinSelectorHandling();
     void ControlButtonsHandling();
     void BgSelectorHandling();
     void Close(Screens screen);
@@ -31,7 +33,8 @@ class CoopOptions : public Screen{
       readyStr = {"Not Ready", "Ready!"},
       imagesName = {
         "Calm river","Night forest", "Afternoon", "Gray smell"
-      };
+      },
+      skinNames = {"Letris", "Retro", "Minimalist"};
     std::unordered_map<std::string, int> controlsIndexes = {
       {"W A S D SPACE LSHIFT C", 0},
       {"S Z X C LSHIFT D F", 6},
@@ -39,8 +42,11 @@ class CoopOptions : public Screen{
       {"I J K L N O P", 7}
     };
     std::string selectedControls[2];
+    std::string selectedSkin = skinNames[settings::db["COOPSKINS"][0]];
     bool clicked[2] = {false, false};
-    OptionsButton *controlButtons[2] = {nullptr, nullptr};
+    OptionsButton 
+      *controlButtons[2] = {nullptr, nullptr},
+      skinSelector = OptionsButton(selectedSkin, Vec2<double>{0.15, 0.41}, fontSize, skinNames);
     ScreenButton 
       readyButtons[2] = {
         ScreenButton(readyStr[0], Vec2<double>{0.15, 1.0f/8}, fontSize, COOP), 
@@ -52,4 +58,5 @@ class CoopOptions : public Screen{
     ButtonManager *buttonManager = nullptr;
     int bgImageIndex = settings::coopBgImage, bgImagesSize = settings::bgImagesNames.size();
     Board board;
+    Shape *shape = nullptr;
 };

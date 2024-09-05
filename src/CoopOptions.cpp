@@ -7,8 +7,10 @@ using namespace settings;
 using namespace std;
 
 CoopOptions::CoopOptions():
-  board({(int)(screenWidth * 0.15) - 3 * cellSize, (int)(screenHeight * 0.20)}, {6, 6}, cellSize, padding)
+  board({(int)(screenWidth * 0.15) - 2 * cellSize, (int)(screenHeight * 0.20)}, {4, 5}, cellSize, padding),
+  shape(new L_Shape(board, db["COOPSKINS"][0]))
 {
+  shape->Fall();
   for(int i = 0; i < 2; i++){
     for (const auto& pair : controlsIndexes) {
       if (pair.second == coopControls[i]){
@@ -22,6 +24,7 @@ CoopOptions::CoopOptions():
     buttons.push_back(controlButtons[i]);
   }
   buttons.push_back(&backgroundSelector);
+  buttons.push_back(&skinSelector);
   buttonManager = new ButtonManager(buttons);
   if(!buttonManager) throw AllocError("CoopOptions", "buttonManager");
 }
@@ -29,6 +32,7 @@ CoopOptions::CoopOptions():
 CoopOptions::~CoopOptions(){
   for(int i = 0; i < 2; i++) delete controlButtons[i];
   delete buttonManager;
+  delete shape;
 }
 
 void CoopOptions::Tick(){
@@ -36,10 +40,11 @@ void CoopOptions::Tick(){
   BeginDrawing();
   Draw();
   buttonManager->Tick();
-  int posX = (int)(screenWidth * 0.15) - 3 * cellSize;
+  int posX = (int)(screenWidth * 0.15) - 2 * cellSize;
   if(board.GetScreenPos().GetX() != posX) board.ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
   board.Draw();
   board.DrawBorder();
+  shape->DrawSkin(db["COOPSKINS"][0]);
   EndDrawing();
   if(GetKeyPressed() == KEY_ESCAPE) Close(MENU);
 }
@@ -54,6 +59,7 @@ void CoopOptions::Draw(){
 void CoopOptions::CoopOptionsHandling(){
   for(int i = 0; i < 2; i++) readyButtons[i].SetButtonText(readyStr[clicked[i]]);
   ReadyButtonsHandling();
+  SkinSelectorHandling();
   ControlButtonsHandling();
   BgSelectorHandling();
 }
@@ -66,6 +72,20 @@ void CoopOptions::ReadyButtonsHandling(){
     }
   }
   if(clicked[0] == clicked[1] && clicked[0]) Close(COOP);
+}
+
+void CoopOptions::SkinSelectorHandling(){
+  string skinString;
+  int skinIndex = 0;
+  for(int i = 0; i < 2; i++){
+    skinString = skinSelector.GetText();
+    for(; skinIndex < skinNames.size(); skinIndex++) if(skinNames[skinIndex] == skinString) break;
+    db["COOPSKINS"][0] = skinIndex;
+    selectedSkin = skinString;
+    delete shape;
+    shape = new L_Shape(board, db["COOPSKINS"][0]);
+    shape->Fall();
+  }
 }
 
 void CoopOptions::ControlButtonsHandling(){
