@@ -44,21 +44,21 @@ void GameOver::SetScore(int newScore){
 }
 
 void GameOver::SetHighscores(){
-  SetRanking(&settings::highscores, &hasNewHighscore, 0, &score); 
+  SetRanking(settings::highscores, hasNewHighscore, 0, score); 
 }
 
-void GameOver::SetRanking(std::vector<int> *vector, bool *hasNew, int index, int *value){
+void GameOver::SetRanking(std::vector<int> &vector, bool &hasNew, int index, int &value){
   const std::string keys[2] = {"HIGHSCORES", "HIGHLEVELS"};
   for(int i = 0; i < 5; i++){
-    if(*value == (*vector)[i]) break;
-    if(*value > (*vector)[i]){
+    if(value == vector[i]) break;
+    if(value > vector[i]){
       for(int j = 4; j > i; j--){
-        (*vector)[j] = (*vector)[j - 1];
-        settings::db[keys[index]][j] = (*vector)[j];
+        vector[j] = vector[j - 1];
+        settings::db[keys[index]][j] = vector[j];
       }
-      (*vector)[i] = *value;
-      *hasNew = true;
-      settings::db[keys[index]][i] = (*vector)[i];
+      vector[i] = value;
+      hasNew = true;
+      settings::db[keys[index]][i] = vector[i];
       break;
     }
   }
@@ -74,5 +74,5 @@ void GameOver::SetLevel(int level){
 }
 
 void GameOver::SetHighslevels(){
-  SetRanking(&settings::highlevels, &hasNewHighlevel, 1, &level);
+  SetRanking(settings::highlevels, hasNewHighlevel, 1, level);
 }

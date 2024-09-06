@@ -24,7 +24,7 @@ private:
   void OptionsHandling();
   void Draw() override;
   void DrawScores();
-  void SetRanking(std::vector<int> *vector, bool *hasNew, int index, int *value);
+  void SetRanking(std::vector<int> &vector, bool &hasNew, int index, int &value);
   bool hasNewHighscore = false, hasNewHighlevel = false;
   int score, level;
 };
