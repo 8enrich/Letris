@@ -18,9 +18,9 @@ class CoopOptions : public Screen{
     void Tick() override;
   private:
     void Draw() override;
-    void CoopOptionsHandling();
+    bool CoopOptionsHandling();
     void ReadyButtonsHandling();
-    void SkinSelectorHandling();
+    bool SkinSelectorHandling();
     void ControlButtonsHandling();
     void BgSelectorHandling();
     void Close(Screens screen);

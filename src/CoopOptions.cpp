@@ -37,7 +37,8 @@ CoopOptions::~CoopOptions(){
 }
 
 void CoopOptions::Tick(){
-  CoopOptionsHandling();
+  bool error = CoopOptionsHandling();
+  if(error) throw AllocError("CoopOptions", "shapes");
   BeginDrawing();
   Draw();
   buttonManager->Tick();
@@ -56,24 +57,26 @@ void CoopOptions::Tick(){
 }
 
 void CoopOptions::Draw(){
-  ClearBackground(BLACK);
+  ClearBackground(BGCOLOR);
   ray_functions::DrawFormatedText("Select background:", Vec2<double>{1.0f/2, 0.45}, fontSize, RAYWHITE);
   ray_functions::DrawFormatedText(imagesName[bgImageIndex].c_str(), Vec2<double>{1.0f/2, 0.75}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("Skin P1:", Vec2<double>{0.15, 1.0f/8}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("Skin P2:", Vec2<double>{0.85, 1.0f/8}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("Control P1:", Vec2<double>{0.15, 0.65}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("Control P2:", Vec2<double>{0.85, 0.65}, fontSize, RAYWHITE);
+  for(int i = 0; i < 2; i++){
+    ray_functions::DrawFormatedText(TextFormat("Skin P%d:", i + 1), Vec2<double>{0.15 + i * 0.70, 1.0f/8}, fontSize, RAYWHITE);
+    ray_functions::DrawFormatedText(TextFormat("Control P%d:", i + 1), Vec2<double>{0.15 + i * 0.70, 0.65}, fontSize, RAYWHITE);
+  }
 }
 
-void CoopOptions::CoopOptionsHandling(){
+bool CoopOptions::CoopOptionsHandling(){
   for(int i = 0; i < 2; i++) readyButtons[i].SetButtonText(readyStr[clicked[i]]);
-  SkinSelectorHandling();
+  bool hasError = SkinSelectorHandling();
+  if(hasError) return true;
   ControlButtonsHandling();
   BgSelectorHandling();
   ReadyButtonsHandling();
+  return false;
 }
 
-void CoopOptions::SkinSelectorHandling(){
+bool CoopOptions::SkinSelectorHandling(){
   string skinString;
   int skinIndex;
   for(int i = 0; i < 2; i++){
@@ -83,9 +86,10 @@ void CoopOptions::SkinSelectorHandling(){
     selectedSkin[i] = skinString;
     delete shapes[i];
     shapes[i] = new L_Shape(boards[i], db["COOPSKINS"][i]);
-    if(!shapes[i]) throw AllocError("CoopOptions", "shapes[" + to_string(i) + "]");
+    if(!shapes[i]) return true;
     shapes[i]->Fall();
   }
+  return false;
 }
 
 void CoopOptions::ControlButtonsHandling(){
