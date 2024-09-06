@@ -69,7 +69,9 @@ void ScreenManager::SetScoreInGameOver(){
   Game *game = dynamic_cast<Game*>(gameScreen);
   if(gameOver && game){
     gameOver->SetScore(game->GetScore());
+    gameOver->SetLevel(game->GetLevel());
     gameOver->SetHighscores();
+    gameOver->SetHighslevels();
   }
 }
 

@@ -331,6 +331,10 @@ int Game::GetScore(){
   return score;
 }
 
+int Game::GetLevel(){
+  return level;
+}
+
 void Game::DrawHold() const{
   DrawHold(Vec2<double>{4, 2}, Vec2<double>{-6, -1/2.1});
 }

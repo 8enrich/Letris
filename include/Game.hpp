@@ -12,7 +12,8 @@ class Game : public Screen {
     Game(Board *board);
     ~Game();
     void Tick() override;
-  int GetScore();
+    int GetScore();
+    int GetLevel();
   private:
     Shape i, o, t, j, l, s, z;
     Shape shapes[7];
@@ -87,5 +88,3 @@ class Game : public Screen {
     void MoveIfKeyPressed(Player*,int);
     void MoveIfKeyDown(Player*,int);
 };
-
-
