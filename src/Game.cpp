@@ -142,6 +142,7 @@ void Game::Draw(){
   board->DrawBorder();
   if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
+  DrawPontuation(); 
 }
 
 void Game::DrawBoard(){
@@ -149,6 +150,13 @@ void Game::DrawBoard(){
   DrawNext();
   DrawStats();
   board->Draw();
+}
+
+void Game::DrawPontuation(){
+  const std::string points[4] = {"Single", "Double", "Triple", "Letris"};
+  ray_functions::DrawFormatedText(points[pontuation].c_str(), Vec2<double>{0.80, 1.0f/2}, 1.0f/10, pontuationColor);
+  ray_functions::DrawFormatedText(TextFormat("+ %d", scores[pontuation] * (level + 1)), Vec2<double>{0.80, 0.60}, 1.0f/10, pontuationColor);
+  if(pontuationColor.a >= 5) pontuationColor.a -= 5;
 }
 
 void Game::Update(){
@@ -278,7 +286,8 @@ void Game::UpdateScore(int points){
 void Game::Score(){
   int lines = QuantityOfLines(), points;
   if(lines){
-    int scores[4] = {40, 100, 300, 1200};
+    pontuation = lines - 1;
+    pontuationColor.a = 255;
     points = scores[lines - 1];
     cleanedLinesCount += lines;
     UpdateScore(points);

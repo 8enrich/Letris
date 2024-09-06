@@ -50,7 +50,8 @@ void Coop::Draw(){
   }
   board->DrawBorder();
   DrawNextShapes();
-  if(hold >= 0) DrawHoldShape();  
+  if(hold >= 0) DrawHoldShape();
+  DrawPontuation();
 }
 
 void Coop::Update(){

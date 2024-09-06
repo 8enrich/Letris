@@ -87,4 +87,8 @@ class Game : public Screen {
     virtual void ResetShape(Player*);
     void MoveIfKeyPressed(Player*,int);
     void MoveIfKeyDown(Player*,int);
+    const int scores[4] = {40, 100, 300, 1200};
+    int pontuation = 0;
+    Color pontuationColor = Color{255, 255, 255, 0};
+    void DrawPontuation();
 };
