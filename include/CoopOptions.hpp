@@ -47,13 +47,13 @@ class CoopOptions : public Screen{
     OptionsButton 
       *controlButtons[2] = {nullptr, nullptr},
       skinSelector[2] = {
-        OptionsButton(selectedSkin[0], Vec2<double>{0.15, 0.41}, fontSize, skinNames),
-        OptionsButton(selectedSkin[1], Vec2<double>{0.85, 0.41}, fontSize, skinNames)
+        OptionsButton(selectedSkin[0], Vec2<double>{0.15, 0.20 + (float)(5.55 * settings::cellSize)/settings::screenHeight}, fontSize, skinNames),
+        OptionsButton(selectedSkin[1], Vec2<double>{0.85, 0.20 + (float)(5.55 * settings::cellSize)/settings::screenHeight}, fontSize, skinNames)
       };
     ScreenButton 
       readyButtons[2] = {
-        ScreenButton(readyStr[0], Vec2<double>{0.15, 0.80}, fontSize, COOP, RED), 
-        ScreenButton(readyStr[0], Vec2<double>{0.85, 0.80}, fontSize, COOP, RED)
+        ScreenButton(readyStr[0], Vec2<double>{0.15, 0.85}, fontSize, COOP, RED), 
+        ScreenButton(readyStr[0], Vec2<double>{0.85, 0.85}, fontSize, COOP, RED)
       },
       backgroundSelector = ScreenButton(Vec2<double>{0.37, 1.0f/2}, COOP, settings::bgImagesNames[settings::coopBgImage], 
         Vec2<double>{4, 8});

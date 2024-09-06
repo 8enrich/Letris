@@ -14,11 +14,12 @@ CoopOptions::CoopOptions(){
         break;
       }
     }
-    controlButtons[i] = new OptionsButton(selectedControls[i], Vec2<double>{0.15 + i * 0.70, 1/1.5}, fontSize, controlOptions[i]);
+    controlButtons[i] = new OptionsButton(selectedControls[i], Vec2<double>{0.15 + i * 0.70, 1/1.4}, fontSize, controlOptions[i]);
     if(!controlButtons[i]) throw AllocError("CoopOptions", "controlButtons[" + to_string(i) + "]");
     buttons.push_back(&(readyButtons[i]));
     buttons.push_back(controlButtons[i]);
     shapes[i] = new L_Shape(boards[i], db["COOPSKINS"][i]);
+    if(!shapes[i]) throw AllocError("CoopOptions", "shapes[" + to_string(i) + "]");
     shapes[i]->Fall();
     buttons.push_back(&(skinSelector[i]));
   }
@@ -43,7 +44,9 @@ void CoopOptions::Tick(){
   int posX;
   for(int i = 0; i < 2; i++){
     posX = (int)(screenWidth * (0.15 + i * 0.70)) - 2 * cellSize;
-    if(boards[i].GetScreenPos().GetX() != posX) boards[i].ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
+    if(boards[i].GetScreenPos().GetX() != posX){
+      boards[i].ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
+    }
     boards[i].Draw();
     boards[i].DrawBorder();
     shapes[i]->DrawSkin(db["COOPSKINS"][i]);
@@ -58,8 +61,8 @@ void CoopOptions::Draw(){
   ray_functions::DrawFormatedText(imagesName[bgImageIndex].c_str(), Vec2<double>{1.0f/2, 0.75}, fontSize, RAYWHITE);
   ray_functions::DrawFormatedText("Skin P1:", Vec2<double>{0.15, 1.0f/8}, fontSize, RAYWHITE);
   ray_functions::DrawFormatedText("Skin P2:", Vec2<double>{0.85, 1.0f/8}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("Control P1:", Vec2<double>{0.15, 0.6}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText("Control P2:", Vec2<double>{0.85, 0.6}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText("Control P1:", Vec2<double>{0.15, 0.65}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText("Control P2:", Vec2<double>{0.85, 0.65}, fontSize, RAYWHITE);
 }
 
 void CoopOptions::CoopOptionsHandling(){
@@ -80,6 +83,7 @@ void CoopOptions::SkinSelectorHandling(){
     selectedSkin[i] = skinString;
     delete shapes[i];
     shapes[i] = new L_Shape(boards[i], db["COOPSKINS"][i]);
+    if(!shapes[i]) throw AllocError("CoopOptions", "shapes[" + to_string(i) + "]");
     shapes[i]->Fall();
   }
 }
