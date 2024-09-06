@@ -13,7 +13,8 @@ class Game : public Screen {
     Game(Board *board, int bgImage, int control, int skin);
     ~Game();
     void Tick() override;
-  int GetScore();
+    int GetScore();
+    int GetLevel();
   private:
     Shape i, o, t, j, l, s, z;
     Shape shapes[7];
@@ -89,6 +90,8 @@ class Game : public Screen {
     virtual void ResetShape(Player*);
     void MoveIfKeyPressed(Player*);
     void MoveIfKeyDown(Player*);
+    const int scores[4] = {40, 100, 300, 1200};
+    int pontuation = 0;
+    Color pontuationColor = Color{255, 255, 255, 0};
+    void DrawPontuation();
 };
-
-

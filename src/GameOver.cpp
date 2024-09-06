@@ -18,9 +18,13 @@ void GameOver::Draw(){
 }
 
 void GameOver::DrawScores(){
-  ray_functions::DrawFormatedText("Score:", Vec2<double>{1.0f/2, 1/3.2}, fontSize, RAYWHITE);
-  ray_functions::DrawFormatedText(TextFormat("%d", score), Vec2<double>{1.0f/2, 1/2.6}, fontSize, RAYWHITE);
-  if(hasNewHighscore) ray_functions::DrawFormatedText("New HighScore!", Vec2<double>{1.0f/2, 1/1.8}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText("Score:", Vec2<double>{1.0f/4, 1/3.2}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText(TextFormat("%d", score), Vec2<double>{1.0f/4, 1/2.6}, fontSize, RAYWHITE);
+  if(hasNewHighscore) ray_functions::DrawFormatedText("New HighScore!", Vec2<double>{1.0f/4, 1/1.8}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText("Level:", Vec2<double>{3.0f/4, 1/3.2}, fontSize, RAYWHITE);
+  ray_functions::DrawFormatedText(TextFormat("%d", level), Vec2<double>{3.0f/4, 1/2.6}, fontSize, RAYWHITE);
+  if(hasNewHighlevel) ray_functions::DrawFormatedText("New HighLevel!", Vec2<double>{3.0f/4, 1/1.8}, fontSize, RAYWHITE);
+
 }
 
 void GameOver::OptionsHandling(){
@@ -28,7 +32,10 @@ void GameOver::OptionsHandling(){
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
     OpenClose();
-    if(nextScreen == GAME || nextScreen == COOP) hasNewHighscore = false;
+    if(nextScreen == GAME || nextScreen == COOP){
+      hasNewHighscore = false;
+      hasNewHighlevel = false;
+    }
   }
 }
 
@@ -37,16 +44,21 @@ void GameOver::SetScore(int newScore){
 }
 
 void GameOver::SetHighscores(){
+  SetRanking(settings::highscores, hasNewHighscore, 0, score); 
+}
+
+void GameOver::SetRanking(std::vector<int> &vector, bool &hasNew, int index, int &value){
+  const std::string keys[2] = {"HIGHSCORES", "HIGHLEVELS"};
   for(int i = 0; i < 5; i++){
-    if(score == settings::highscores[i]) break;
-    if(score > settings::highscores[i]){
+    if(value == vector[i]) break;
+    if(value > vector[i]){
       for(int j = 4; j > i; j--){
-        settings::highscores[j] = settings::highscores[j - 1];
-        settings::db["HIGHSCORES"][j] = settings::highscores[j];
+        vector[j] = vector[j - 1];
+        settings::db[keys[index]][j] = vector[j];
       }
-      settings::highscores[i] = score;
-      hasNewHighscore = true;
-      settings::db["HIGHSCORES"][i] = settings::highscores[i];
+      vector[i] = value;
+      hasNew = true;
+      settings::db[keys[index]][i] = vector[i];
       break;
     }
   }
@@ -55,4 +67,12 @@ void GameOver::SetHighscores(){
 void GameOver::OpenClose(){
   Screen::OpenClose();
   if(nextScreen == GAME || nextScreen == COOP) PlayAgain.SetScreen(nextScreen);
+}
+
+void GameOver::SetLevel(int level){
+  this->level = level;
+}
+
+void GameOver::SetHighslevels(){
+  SetRanking(settings::highlevels, hasNewHighlevel, 1, level);
 }

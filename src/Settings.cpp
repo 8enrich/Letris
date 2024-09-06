@@ -10,6 +10,7 @@ int settings::cellSize = settings::db["CELLSIZE"];
 Vec2<int> settings::boardWidthHeight {settings::db["BOARD_RESOLUTION"][0], settings::db["BOARD_RESOLUTION"][1]};
 int settings::volume = settings::db["VOLUME"];
 std::vector<int> settings::highscores = settings::db["HIGHSCORES"];
+std::vector<int> settings::highlevels = settings::db["HIGHLEVELS"];
 std::vector<std::vector<KeyboardKey>> settings::controls = {
   {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_LEFT_SHIFT, KEY_C},
   {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z, KEY_C},
