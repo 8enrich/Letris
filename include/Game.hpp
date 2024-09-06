@@ -10,6 +10,7 @@
 class Game : public Screen {
   public:
     Game(Board *board);
+    Game(Board *board, int bgImage, int control, int skin);
     ~Game();
     void Tick() override;
     int GetScore();
@@ -24,9 +25,11 @@ class Game : public Screen {
       int tickToFix;
       bool canHold;
       int nextShapes[3];
+      int control;
+      int skin;
 
-      Player(int tickToFix, bool canHold, Shape *shapes) :
-        tickToFix(tickToFix), canHold(canHold) 
+      Player(int tickToFix, bool canHold, Shape *shapes, int control, int skin) :
+        tickToFix(tickToFix), canHold(canHold), control(control), skin(skin) 
       {
         this->shapes = new Shape*[7];
         for (int i = 0; i < 7; ++i) this->shapes[i] = &shapes[i];
@@ -41,12 +44,12 @@ class Game : public Screen {
     int hold;
     void Draw() override;
     virtual void Update();
-    void Update(Player*,int);
-    void UpdateBoard(Player*,int);
+    void Update(Player*);
+    void UpdateBoard(Player*);
     void UpdateShape(Player*);
     void UpdateShape(Shape*&,Shape*,int*);
     virtual Shape*NextShape(Player*);
-    void FixShape(Shape*&);
+    void FixShape(Player*);
     Shape *NewShape();
     Shape *NewShape(Shape*);
     void ClearLines();
@@ -68,7 +71,7 @@ class Game : public Screen {
     int cleanedLinesCount;
     void UpdateLevel();
     void DrawHoldShape() const;
-    void DrawHoldShape(Vec2<double>,bool) const;
+    void DrawHoldShape(Vec2<double>, bool) const;
     virtual void DrawNextShapes() const;
     void DrawNextShapes(Player*,double) const;
     virtual void DrawNext() const;
@@ -80,13 +83,13 @@ class Game : public Screen {
     void DrawBoard();
     bool HasLost();
     int maxTickToFix;
-    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, "pause.png");
+    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, "pause.png", Vec2<double>{25, 25});
     std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);
     Player *player;
     virtual void ResetShape(Player*);
-    void MoveIfKeyPressed(Player*,int);
-    void MoveIfKeyDown(Player*,int);
+    void MoveIfKeyPressed(Player*);
+    void MoveIfKeyDown(Player*);
     const int scores[4] = {40, 100, 300, 1200};
     int pontuation = 0;
     Color pontuationColor = Color{255, 255, 255, 0};

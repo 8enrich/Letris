@@ -1,17 +1,15 @@
 #include "../include/Shape.hpp"
 #include "raylib.h"
-#include <new>
 
-Shape::Shape(const bool* shape_matrix, int dimension, Color color, const Board& board, int index) :
+Shape::Shape(const bool* shape_matrix, int dimension, const Board& board, int index, int skin) :
   shape_matrix(shape_matrix),
   dimension(dimension),
-  color(color),
   boardPos((board.GetWidth() - dimension)/2,0),
   board(board),
   index(index),
+  color(settings::recolors[settings::skins[skin].recolor][index]),
   currentRotation(Rotation::UP)
-{
-}
+{}
 
 Shape::~Shape(){}
 
@@ -41,31 +39,38 @@ int Shape::GetIndex() const{
   return index;
 }
 
-void Shape::Draw() const {
-  Color offColor = Color{color.r, color.g, color.b, 90};
+void Shape::Draw(int imageIndex) const {
   int distanceFromTheGround;
   for (int y = 0; y < dimension; ++y){
     for (int x = 0; x < dimension; ++x) {
       bool cell = GetShapeRotation(x, y);
       if (cell) {
         distanceFromTheGround = GetDistanceUntilCollision(downAddVector);
-        board.DrawCell(boardPos + Vec2<int>{x, y}, color);
-        board.DrawOffCell(boardPos + Vec2<int>{x, y + distanceFromTheGround}, offColor);
+        board.DrawCell(boardPos + Vec2<int>{x, y}, color, imageIndex);
+        board.DrawOffCell(boardPos + Vec2<int>{x, y + distanceFromTheGround}, color, imageIndex);
       }
     }
   }
 }
 
-
-void Shape::DrawOutOfBoard(Vec2<double> pos) const{
-  DrawOutOfBoard(pos, color);
+void Shape::DrawSkin(int imageIndex) const {
+  for (int y = 0; y < dimension; ++y){
+    for (int x = 0; x < dimension; ++x) {
+      bool cell = GetShapeRotation(x, y, Rotation::DOWN);
+      if (cell) board.DrawCell(boardPos + Vec2<int>{x, y}, color, imageIndex);
+    }
+  }
 }
 
-void Shape::DrawOutOfBoard(Vec2<double> pos, Color c) const{
+void Shape::DrawOutOfBoard(Vec2<double> pos, int imageIndex) const{
+  DrawOutOfBoard(pos, color, imageIndex);
+}
+
+void Shape::DrawOutOfBoard(Vec2<double> pos, Color c, int imageIndex) const{
   for(int y = 0; y < dimension; ++y){
     for(int x = 0; x < dimension; ++x){
       bool cell = GetShapeRotation(x, y, Rotation::UP);
-      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2<int>{x, y}) - pos, c);
+      if(cell) board.DrawCellAnyLocal(Vec2<double>(Vec2<int>{x, y}) - pos, c, imageIndex);
     }
   }
 }
@@ -229,38 +234,38 @@ void Shape::RotateAntiClockWise(){
   currentRotation = Rotation((int(currentRotation) + 7) % 4);
 }
 
-I_Shape::I_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board, index)
+I_Shape::I_Shape(const Board& board, const int skin) :
+  Shape(shape_matrix, dimension, board, index, skin)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
-O_Shape::O_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board, index)
+O_Shape::O_Shape(const Board& board, const int skin) :
+  Shape(shape_matrix, dimension, board, index, skin)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
-T_Shape::T_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board, index)
+T_Shape::T_Shape(const Board& board, const int skin) :
+  Shape(shape_matrix, dimension, board, index, skin)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
-L_Shape::L_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board, index)
+L_Shape::L_Shape(const Board& board, const int skin) :
+  Shape(shape_matrix, dimension, board, index, skin)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
-J_Shape::J_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board, index)
+J_Shape::J_Shape(const Board& board, const int skin) :
+  Shape(shape_matrix, dimension, board, index, skin)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
-S_Shape::S_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board, index)
+S_Shape::S_Shape(const Board& board, const int skin) :
+  Shape(shape_matrix, dimension, board, index, skin)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }
-Z_Shape::Z_Shape(const Board& board) :
-  Shape(shape_matrix, dimension, color, board, index)
+Z_Shape::Z_Shape(const Board& board, const int skin) :
+  Shape(shape_matrix, dimension, board, index, skin)
 {
   static_assert(sizeof(shape_matrix) / sizeof(bool) == dimension * dimension);
 }

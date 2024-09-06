@@ -2,13 +2,17 @@
 #include "../include/Settings.hpp"
 #include <raylib.h>
 
-Coop::Coop(Board *board) :
-  Game(board),
-  i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
-  j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), 
-  z(Z_Shape(*board)),
+Coop::Coop(Board *board) : 
+  Coop(board, settings::db["COOPSKINS"][1])
+{}
+
+Coop::Coop(Board *board, int skin) :
+  Game(board, settings::db["COOPBGIMAGE"], settings::coopControls[0], settings::db["COOPSKINS"][0]),
+  i(I_Shape(*board, skin)), o(O_Shape(*board, skin)), t(T_Shape(*board, skin)),
+  j(J_Shape(*board, skin)), l(L_Shape(*board, skin)), s(S_Shape(*board, skin)), 
+  z(Z_Shape(*board, skin)),
   shapes{i, o, t, j, l, s, z},
-  player2(new Player(maxTickToFix, true, shapes))
+  player2(new Player(maxTickToFix, true, shapes, settings::coopControls[1], skin))
 {
   player2->shape = NewShape(*(player2->shapes));
   SetPlayers();
@@ -46,7 +50,7 @@ void Coop::Draw(){
   buttonManager.Tick();
   DrawBoard();
   for(int i = 0; i < 2; i++){
-    (players[i]->shape)->Draw();
+    (players[i]->shape)->Draw(players[i]->skin);
   }
   board->DrawBorder();
   DrawNextShapes();
@@ -65,7 +69,7 @@ void Coop::Update(){
 
 void Coop::UpdatePlayer(int index){
   if(index){
-    Game::Update(player2, 5);
+    Game::Update(player2);
     return;
   }
   Game::Update();

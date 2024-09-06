@@ -18,7 +18,7 @@ private:
   ScreenButton PlayAgain = ScreenButton("Play Again", Vec2<double>{1.0f / 4, 1 / 1.5}, fontSize, GAME);
   ScreenButton Options = ScreenButton("Options", Vec2<double>{1.0f / 2, 1 / 1.5}, fontSize, OPTIONS);
   ScreenButton MainMenu = ScreenButton("Main Menu", Vec2<double>{3.0f / 4, 1 / 1.5}, fontSize, MENU);
-  ScreenButton Stats = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, STATS, "stats.png");
+  ScreenButton Stats = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, STATS, "stats.png", Vec2<double>{25, 25});
   const std::vector<Button*> buttons = {&PlayAgain, &Options, &MainMenu, &Stats};
   ButtonManager buttonManager = ButtonManager(buttons);
   void OptionsHandling();
