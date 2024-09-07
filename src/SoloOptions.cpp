@@ -49,6 +49,7 @@ void SoloOptions::Draw(){
   shape->DrawSkin(db["SKIN"]);
   DrawFormatedText("Skin", Vec2<double>{1.0f/4, 0.13}, fontSize, RAYWHITE);
   DrawFormatedText("Select background:", Vec2<double>{3.0f/4, 0.13}, fontSize, RAYWHITE);
+  DrawFormatedText(imagesName[bgImageIndex].c_str(), Vec2<double>{3.0f/4, 0.45}, fontSize, RAYWHITE);
   DrawFormatedText("Level:", Vec2<double>{1.0f/2, 0.45}, fontSize, RAYWHITE);
 }
 

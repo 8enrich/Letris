@@ -11,7 +11,7 @@ Window::Window(int width, int height, int fps, std::string title)
   Image wicon = LoadImage((std::string(ASSETS_PATH) + "letris.png").c_str());
   SetWindowIcon(wicon);
   UnloadImage(wicon);
-  //SetExitKey(KEY_Q);
+  SetExitKey(KEY_NULL);
 }
 
 Window::~Window() noexcept{
