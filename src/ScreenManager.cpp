@@ -71,6 +71,7 @@ void ScreenManager::SetScoreInGameOver(){
     gameOver->SetScore(game->GetScore());
     gameOver->SetLevel(game->GetLevel());
     gameOver->SetHighscores();
+    screens[lastScreen] = nullptr;
   }
 }
 

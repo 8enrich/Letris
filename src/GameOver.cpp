@@ -41,20 +41,19 @@ void GameOver::SetScore(int newScore){
 }
 
 void GameOver::SetHighscores(){
-  for(int i = 0; i < 5; i++){
-    if(score == settings::highscores[i]) break;
+  for(int i = 0; i < 5; i++){ 
     if(score > settings::highscores[i]){
       for(int j = 4; j > i; j--){
         settings::highscores[j] = settings::highscores[j - 1];
         settings::highlevels[j] = settings::highlevels[j - 1];
         settings::db["HIGHSCORES"][j] = settings::highscores[j];
-        settings::db["HIGHLEVELS"][j] = settings::highscores[j];
+        settings::db["HIGHLEVELS"][j] = settings::highlevels[j];
       }
       settings::highscores[i] = score;
       settings::highlevels[i] = level;
       hasNewHighscore = true;
       settings::db["HIGHSCORES"][i] = settings::highscores[i]; 
-      settings::db["HIGHSLEVELS"][i] = settings::highlevels[i];
+      settings::db["HIGHLEVELS"][i] = settings::highlevels[i];
       break;
     }
   }
