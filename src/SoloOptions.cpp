@@ -13,7 +13,7 @@ SoloOptions::SoloOptions() :
   inputText(ScreenButton("                ", Vec2<double>{1.0f/2, 1.0f/2}, fontSize, GAME)),
   play(ScreenButton("Play", Vec2<double>{1.0f/2, 1.0f/1.2}, 1.0f/20, GAME, Color{11,229,248, 255})),
   returnButton(ScreenButton("<", Vec2<double>{1.0f/30, 1.0f/50}, 1.0f/20, MENU)),
-  bgImageIndex(0), bgImagesSize(settings::bgImagesNames.size()), inputTextSelected(false),
+  bgImageIndex(db["SOLOBGIMAGE"]), bgImagesSize(settings::bgImagesNames.size()), inputTextSelected(false),
   inputTextStr("0")
 {
   shape = new L_Shape(board, db["SKIN"]);
