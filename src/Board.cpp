@@ -10,7 +10,7 @@ bool Board::Cell::Exists() const { return doExists;}
 void Board::Cell::SetColor(Color color, int imageIndex) {
   c = color;
   doExists = true;
-  this->imageIndex = settings::skins[imageIndex].image;
+  this->imageIndex = imageIndex;
 }
 
 Color Board::Cell::GetColor() const{

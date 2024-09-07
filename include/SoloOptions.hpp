@@ -1,3 +1,4 @@
+#pragma once
 #include "Board.hpp"
 #include "Button.hpp"
 #include "ButtonManager.hpp"
@@ -11,6 +12,10 @@ class SoloOptions : public Screen{
     SoloOptions();
     ~SoloOptions();
     void Tick() override;
+  protected:
+    const float fontSize = 1.0f/30;
+    const std::vector<std::string> skinNames = {"Letris", "Retro", "Minimalist", "Pastel", "Tetr.io"};
+    const std::vector<std::string> imagesName = {"Calm river","Night forest", "Afternoon", "Gray smell"};
   private:
     void Draw() override;
     bool SoloOptionsHandling();
@@ -22,8 +27,6 @@ class SoloOptions : public Screen{
     void InputTextSettings();
     void SetBoardPosition();
     std::string GetKeyboardInput();
-    const float fontSize = 1.0f/30;
-    const std::vector<std::string> skinNames = {"Letris", "Retro", "Minimalist", "Pastel"};
     std::string selectedSkin = skinNames[settings::db["SKIN"]];
     Board board;
     Shape *shape;
