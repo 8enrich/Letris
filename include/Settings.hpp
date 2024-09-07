@@ -41,7 +41,7 @@ namespace settings {
     {SKYBLUE, YELLOW, MAGENTA, DARKBLUE, ORANGE, GREEN, RED}, 
     {WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE},
     {Color{235, 151, 202, 255}, Color{199, 155, 235, 255}, Color{155, 188, 235, 255}, Color{150, 235, 228, 255}, Color{235, 235, 156, 255}, Color{200, 150, 230, 255}, Color{235, 199, 151, 255}},
-    {Color{98,184,145,255}, Color{185,165,79,255}, Color{157,79,155,255}, Color{82,73,156,255}, Color{180,113,71,255}, Color{142,176,79,255}, Color{170,69,69,255}},
+    {Color{77, 250, 210, 255}, Color{240, 213, 41,255}, Color{247, 57, 212,255}, Color{111,94,201,255}, Color{255, 137, 46,255}, Color{105, 255, 102,255}, Color{255, 46, 53, 255}}
   };
   struct Skin{
     int image;
