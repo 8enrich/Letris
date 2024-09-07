@@ -24,6 +24,7 @@ class CoopOptions : public Screen{
     void ControlButtonsHandling();
     void BgSelectorHandling();
     void Close(Screens screen);
+    void SetBoardsPosition();
     const float fontSize = 1.0f/30;
     const std::vector<std::string> 
       controlOptions[2] = {

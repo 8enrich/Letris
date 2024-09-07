@@ -39,15 +39,11 @@ CoopOptions::~CoopOptions(){
 void CoopOptions::Tick(){
   bool error = CoopOptionsHandling();
   if(error) throw AllocError("CoopOptions", "shapes");
+  SetBoardsPosition();
   BeginDrawing();
   Draw();
   buttonManager->Tick();
-  int posX;
   for(int i = 0; i < 2; i++){
-    posX = (int)(screenWidth * (0.15 + i * 0.70)) - 2 * cellSize;
-    if(boards[i].GetScreenPos().GetX() != posX){
-      boards[i].ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
-    }
     boards[i].Draw();
     boards[i].DrawBorder();
     shapes[i]->DrawSkin(db["COOPSKINS"][i]);
@@ -128,5 +124,16 @@ void CoopOptions::Close(Screens screen){
   for(int i = 0; i < 2; i++){
     clicked[i] = false;
     readyButtons[i].SetColor(RED);
+  }
+}
+
+void CoopOptions::SetBoardsPosition(){
+  int posX = 0;
+  for(int i = 0; i < 2; i++){
+    posX = (int)(screenWidth * (0.15 + i * 0.70)) - 2 * cellSize;
+    if(boards[i].GetScreenPos().GetX() != posX){
+      boards[i].ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
+      skinSelector[i].SetButtonPosition(Vec2<double>{0.15 + i * 0.70, 0.20 + (float)(5.55 * settings::cellSize)/settings::screenHeight});
+    }
   }
 }

@@ -146,3 +146,7 @@ void Button::SetImage(Texture2D *image){
 void Button::SetColor(Color color){
   this->color = color;
 }
+
+void Button::SetButtonPosition(Vec2<double> buttonPosition){
+  this->buttonPosition = buttonPosition;
+}
