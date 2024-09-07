@@ -32,6 +32,7 @@ void Menu::Draw(){
   ClearBackground(Color{41, 16, 122});
   ray_functions::DrawScaledImage(backgroundTexture, {0, 0}, 2);
   ray_functions::DrawScaledImage(logoTexture, {1.0f/2, 1.0f/3}, 0.5);
+  //DrawFPS(0, 0);
 }
 
 void Menu::OptionsHandling(){
