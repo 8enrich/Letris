@@ -41,7 +41,7 @@ void Button::DrawRectButton() {
     pos -= hoveringPadding/2.0f;
   }
   Rectangle rect = {pos.GetX(), pos.GetY(), size.GetX(), size.GetY()};
-  DrawRectangleRounded(rect, 0.3, 0, color);
+  DrawRectangleRounded(rect, 0.3, 2, color);
 }
 
 void Button::DrawTextButton(){
