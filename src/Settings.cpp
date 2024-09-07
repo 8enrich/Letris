@@ -31,6 +31,7 @@ std::vector<int> settings::coopControls = db["COOPCONTROLS"];
 std::vector<Texture2D*> settings::skinImages;
 settings::Skin settings::skin = skins[db["SKIN"]];
 std::vector<settings::Skin> settings::coopSkins = {skins[db["COOPSKINS"][0]], skins[db["COOPSKINS"][1]]};
+int settings::level = 0;
 
 Sound settings::hoveringSound, 
       settings::clearLineSound, 

@@ -66,4 +66,5 @@ class CoopOptions : public Screen{
       Board{{(int)(settings::screenWidth * 0.85) - 2 * settings::cellSize, (int)(settings::screenHeight * 0.20)}, {4, 5}, settings::cellSize, settings::padding}
     };
     Shape *shapes[2] = {nullptr, nullptr};
+    ScreenButton returnButton;
 };

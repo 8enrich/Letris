@@ -10,7 +10,7 @@
 class Game : public Screen {
   public:
     Game(Board *board);
-    Game(Board *board, int bgImage, int control, int skin);
+    Game(Board *board, int bgImage, int control, int skin, int level);
     ~Game();
     void Tick() override;
     int GetScore();
@@ -94,4 +94,6 @@ class Game : public Screen {
     int pontuation = 0;
     Color pontuationColor = Color{255, 255, 255, 0};
     void DrawPontuation();
+    int SetSpeed();
+    int startLevel;
 };

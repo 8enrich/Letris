@@ -54,6 +54,7 @@ namespace settings {
   const std::vector<Skin> skins = {Skin(0, 0), Skin(1, 1), Skin(2, 0), Skin(2, 2)};
   extern Skin skin;
   extern std::vector<Skin> coopSkins;
+  extern int level;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();
@@ -69,6 +70,7 @@ namespace settings {
 enum Screens {
   GAME,
   COOP,
+  SOLOOPTIONS,
   COOPOPTIONS,
   OPTIONS,
   EXIT,

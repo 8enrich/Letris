@@ -44,7 +44,7 @@ Screens ScreenManager::GetActualScreen() const {
 void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
   if (!entered){
     board->ResetBoardSettings();
-    if (lastScreen == MENU || lastScreen == GAMEOVER || lastScreen == COOPOPTIONS){
+    if (lastScreen == SOLOOPTIONS || lastScreen == GAMEOVER || lastScreen == COOPOPTIONS){
       switch(actualScreen){
         case GAME:
           screens[actualScreen] = std::make_unique<Game>(board);
