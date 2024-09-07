@@ -9,6 +9,7 @@
 #include "../include/ScreenManager.hpp"
 #include "../include/CoopOptions.hpp"
 #include "../include/Stats.hpp"
+#include "../include/SoloOptions.hpp"
 #include <raylib.h>
 #include <memory>
 #include <iostream>
@@ -28,6 +29,7 @@ int main() {
       ScreenManager screenManager;
       screenManager.AddScreen(GAME, nullptr);
       screenManager.AddScreen(COOP, nullptr);
+      screenManager.AddScreen(SOLOOPTIONS, std::make_unique<SoloOptions>());
       screenManager.AddScreen(COOPOPTIONS, std::make_unique<CoopOptions>());
       screenManager.AddScreen(OPTIONS, std::make_unique<Options>());
       screenManager.AddScreen(EXIT, nullptr);

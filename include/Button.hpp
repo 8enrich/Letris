@@ -41,6 +41,7 @@ public:
   ButtonTypes type;
   void SetImage(Texture2D *image);
   void SetColor(Color color);
+  void SetButtonPosition(Vec2<double> buttonPosition);
 protected:
   void DrawRectButton();
   void DrawTextButton();

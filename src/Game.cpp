@@ -6,15 +6,15 @@
 #include <string>
 
 Game::Game(Board *board) :
-  Game(board, settings::soloBgImage, settings::db["CONTROL"], settings::db["SKIN"])
+  Game(board, settings::db["SOLOBGIMAGE"], settings::db["CONTROL"], settings::db["SKIN"], settings::level)
 {}
 
-Game::Game(Board *board, int bgImage, int control, int skin) :
+Game::Game(Board *board, int bgImage, int control, int skin, int level) :
   board(board), Screen(std::string(ASSETS_PATH)+"gameplay.mp3"),
   i(I_Shape(*board, skin)), o(O_Shape(*board, skin)), t(T_Shape(*board, skin)),
   j(J_Shape(*board, skin)), l(L_Shape(*board, skin)), s(S_Shape(*board, skin)), z(Z_Shape(*board, skin)),
   shapes{ i, o, t, j, l, s, z },
-  hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
+  hold(-1), score(0), level(level), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
   player(new Player(maxTickToFix, true, shapes, control, skin)),
   backgroundTexture(settings::bgImages[bgImage]),
   clearLineSound(settings::clearLineSound),
@@ -22,17 +22,31 @@ Game::Game(Board *board, int bgImage, int control, int skin) :
   gameOverSound(settings::gameOverSound),
   fixShapeSound(settings::fixShapeSound)
 {
+  speed = SetSpeed();
+  startLevel = level;
   if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();
   player->shape = NewShape();
   SetNextShapes();
 }
+
 Game::~Game() {
   UnloadTexture(*backgroundTexture);
   delete backgroundTexture;
   delete player;
-
 }
+
+int Game::SetSpeed(){
+  int speed = 15;
+  if(level <= 10) return speed -= level;
+  speed -= 10;
+  bool conditions[4] = {level >= 13, level >= 16, level >= 19, level == 29};
+  for(int i = 0; i < 4; i++){
+    if(conditions[i]) speed -= 1;
+  }
+  return speed;
+}
+
 void Game::Tick(){
   if(HasLost()){
     nextScreen = GAMEOVER;
@@ -309,9 +323,19 @@ int Game::QuantityOfLines(){
 }
 
 void Game::UpdateLevel(){
-  if(cleanedLinesCount >= 10 * (level + 1)){
+  if(!startLevel){
+    if(cleanedLinesCount >= 10 * (level + 1)){
+      level++;
+      if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
+    }
+    return;
+  }
+  bool conditions[2] = {cleanedLinesCount == 100, cleanedLinesCount == level * 10 - 50};
+  int index = 0;
+  if(100 < level * 10 - 50) index = 1; 
+  if(cleanedLinesCount == level * 10 + 10 || conditions[index]){
+    startLevel = 0;
     level++;
-    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
   }
 }
 
