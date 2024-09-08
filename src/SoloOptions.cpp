@@ -115,16 +115,14 @@ string SoloOptions::GetKeyboardInput(){
 bool SoloOptions::SkinSelectorHandling(){
   string skinString;
   int skinIndex;
-  for(int i = 0; i < 2; i++){
-    skinString = skinSelector.GetText();
-    for(skinIndex = 0; skinIndex < skinNames.size(); skinIndex++) if(skinNames[skinIndex] == skinString) break;
-    db["SKIN"] = skinIndex;
-    selectedSkin = skinString;
-    delete shape;
-    shape = new L_Shape(board, db["SKIN"]);
-    if(!shape) return true;
-    shape->Fall();
-  }
+  skinString = skinSelector.GetText();
+  for(skinIndex = 0; skinIndex < skinNames.size(); skinIndex++) if(skinNames[skinIndex] == skinString) break;
+  db["SKIN"] = skinIndex;
+  selectedSkin = skinString;
+  delete shape;
+  shape = new L_Shape(board, db["SKIN"]);
+  if(!shape) return true;
+  shape->Fall();
   return false;
 }
 
