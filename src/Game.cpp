@@ -343,9 +343,10 @@ bool Game::UpdateLevelStartLevelN(){
     int conditions[3] = {100, level * 10 - 50, level * 10 + 10};
     int indexOfMax = (100 > level * 10 - 50)? 0 : 1;
     int indexOfMin = (conditions[indexOfMax] < level * 10 + 10)? indexOfMax : 2;
-    if(cleanedLinesCount == conditions[indexOfMin]){
+    if(cleanedLinesCount >= conditions[indexOfMin]){
       initialLines = conditions[indexOfMin];
       level++;
+      return true;
     } 
     return false;
   }
