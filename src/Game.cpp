@@ -14,7 +14,7 @@ Game::Game(Board *board, int bgImage, int control, int skin, int level) :
   i(I_Shape(*board, skin)), o(O_Shape(*board, skin)), t(T_Shape(*board, skin)),
   j(J_Shape(*board, skin)), l(L_Shape(*board, skin)), s(S_Shape(*board, skin)), z(Z_Shape(*board, skin)),
   shapes{ i, o, t, j, l, s, z },
-  hold(-1), score(0), level(level), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
+  hold(-1), score(0), level(level), cleanedLinesCount(0), maxTickToFix(30), tickCount(0),                                                                                                          
   player(new Player(maxTickToFix, true, shapes, control, skin)),
   backgroundTexture(settings::bgImages[bgImage]),
   clearLineSound(settings::clearLineSound),
@@ -24,6 +24,7 @@ Game::Game(Board *board, int bgImage, int control, int skin, int level) :
 {
   speed = SetSpeed();
   startLevel = level;
+  initialLines = 0;
   if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();
   player->shape = NewShape();
@@ -185,7 +186,7 @@ void Game::Update(){
 void Game::Update(Player *player){
   UpdateBoard(player);
   UpdateShape(player);
-  UpdateLevel();
+  UpdateLevelAndSpeed();
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
@@ -322,22 +323,39 @@ int Game::QuantityOfLines(){
   return lines;
 }
 
-void Game::UpdateLevel(){
-  if(!startLevel){
-    if(cleanedLinesCount >= 10 * (level + 1)){
-      level++;
-      if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
-    }
-    return;
-  }
-  bool conditions[2] = {cleanedLinesCount == 100, cleanedLinesCount == level * 10 - 50};
-  int index = 0;
-  if(100 < level * 10 - 50) index = 1; 
-  if(cleanedLinesCount == level * 10 + 10 || conditions[index]){
-    startLevel = 0;
-    level++;
+void Game::UpdateLevelAndSpeed(){
+  if(UpdateLevel()){
+    if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
   }
 }
+
+bool Game::UpdateLevel(){
+  if(startLevel) return UpdateLevelStartLevelN();
+  if(cleanedLinesCount >= 10 * (level + 1)){
+    level++;
+    return true;
+  }
+  return false;
+}
+
+bool Game::UpdateLevelStartLevelN(){
+  if(startLevel == level){
+    int conditions[3] = {100, level * 10 - 50, level * 10 + 10};
+    int indexOfMax = (100 > level * 10 - 50)? 0 : 1;
+    int indexOfMin = (conditions[indexOfMax] < level * 10 + 10)? indexOfMax : 2;
+    if(cleanedLinesCount == conditions[indexOfMin]){
+      initialLines = conditions[indexOfMin];
+      level++;
+    } 
+    return false;
+  }
+  if(cleanedLinesCount >= initialLines + (10 * (level - startLevel))){
+    level++;
+    return true;
+  }
+  return false;
+}
+ 
 
 void Game::DrawHoldShape() const{
   DrawHoldShape(Vec2<double>{(double)6, (double)0}, player->canHold);

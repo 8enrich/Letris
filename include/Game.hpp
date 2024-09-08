@@ -69,7 +69,8 @@ class Game : public Screen {
     int level;
     int speed;
     int cleanedLinesCount;
-    void UpdateLevel();
+    void UpdateLevelAndSpeed();
+    bool UpdateLevel();
     void DrawHoldShape() const;
     void DrawHoldShape(Vec2<double>, bool) const;
     virtual void DrawNextShapes() const;
@@ -96,4 +97,6 @@ class Game : public Screen {
     void DrawPontuation();
     int SetSpeed();
     int startLevel;
+    bool UpdateLevelStartLevelN();
+    int initialLines;
 };
