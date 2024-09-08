@@ -56,6 +56,8 @@ namespace settings {
   extern Skin skin;
   extern std::vector<Skin> coopSkins;
   extern int level;
+  const std::vector<std::string> btnImagesNames = {"stats.png", "pause.png"};
+  extern std::vector<Texture2D*> btnImages;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();
@@ -64,6 +66,7 @@ namespace settings {
   void SetTextures();
   void SetSkinTextures();
   void SetBgTextures();
+  void SetBtnTextures();
   void SetSounds();
   void SetTexturesVec(std::vector<std::string> names, std::vector<Texture2D*> *images);
 }

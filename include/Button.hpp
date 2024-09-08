@@ -21,7 +21,7 @@ class Button {
 public:
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type);
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, Color color);
-  Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName, Vec2<double> size);
+  Button(Vec2<double> buttonPosition, ButtonTypes type, Texture2D *image, Vec2<double> size);
   Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style);
   ~Button();
   void Draw();

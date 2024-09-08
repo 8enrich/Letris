@@ -1,5 +1,6 @@
 #pragma once
 #include "Board.hpp"
+#include "Settings.hpp"
 #include "Shape.hpp"
 #include "Screen.hpp"
 #include "ButtonManager.hpp"
@@ -84,7 +85,7 @@ class Game : public Screen {
     void DrawBoard();
     bool HasLost();
     int maxTickToFix;
-    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, "pause.png", Vec2<double>{25, 25});
+    ScreenButton Pause = ScreenButton(Vec2<double>{1.0f/1.08, 1.0f/50}, PAUSE, settings::btnImages[1], Vec2<double>{25, 25});
     std::vector<Button*> buttons = { &Pause };
     ButtonManager buttonManager = ButtonManager(buttons);
     Player *player;

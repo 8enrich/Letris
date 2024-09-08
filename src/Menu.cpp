@@ -1,5 +1,6 @@
 #include "../include/Menu.hpp"
 #include "../include/Settings.hpp"
+#include "../include/AllocError.hpp"
 #include <raylib.h>
 #include <string>
 
@@ -8,8 +9,8 @@ Menu::Menu() :
   backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "menubg.png").c_str()))),
   Screen(std::string(ASSETS_PATH)+"menu.mp3")
 {
-  if(!logoTexture) throw std::bad_alloc();
-  if (!backgroundTexture) throw std::bad_alloc();
+  if(!logoTexture) throw AllocError("Menu", "logoTexture");
+  if(!backgroundTexture) throw AllocError("Menu", "backgroundTexture");
 }
 
 Menu::~Menu(){
@@ -30,7 +31,7 @@ void Menu::Tick(){
 
 void Menu::Draw(){
   ClearBackground(Color{41, 16, 122});
-  ray_functions::DrawScaledImage(backgroundTexture, {0, 0}, 2);
+  ray_functions::DrawImage(backgroundTexture);
   ray_functions::DrawScaledImage(logoTexture, {1.0f/2, 1.0f/3}, 0.5);
   //DrawFPS(0, 0);
 }

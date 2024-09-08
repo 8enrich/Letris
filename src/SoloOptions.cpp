@@ -9,7 +9,7 @@ using namespace ray_functions;
 SoloOptions::SoloOptions() :
   board(Board({{(int)(screenWidth * 1.0f/4) - 2 * cellSize, (int)(screenHeight * 0.20)}, {4, 5}, cellSize, padding})), 
   skinSelector(OptionsButton(selectedSkin, Vec2<double>{1.0f/4, 0.20 + (float)(5.55 * cellSize)/screenHeight}, fontSize, skinNames)),
-  backgroundSelector(ScreenButton(Vec2<double>{0.62, 0.18}, COOP, bgImagesNames[soloBgImage], Vec2<double>{4, 8})),
+  backgroundSelector(ScreenButton(Vec2<double>{0.62, 0.18}, COOP, bgImages[soloBgImage], Vec2<double>{4, 8})),
   inputText(ScreenButton("                ", Vec2<double>{1.0f/2, 1.0f/2}, fontSize, GAME)),
   play(ScreenButton("Play", Vec2<double>{1.0f/2, 1.0f/1.2}, 1.0f/20, GAME, Color{11,229,248, 255})),
   returnButton(ScreenButton("<", Vec2<double>{1.0f/30, 1.0f/50}, 1.0f/20, MENU)),

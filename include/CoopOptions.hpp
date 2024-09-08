@@ -50,7 +50,7 @@ class CoopOptions : public SoloOptions{
         ScreenButton(readyStr[0], Vec2<double>{0.15, 0.85}, fontSize, COOP, RED), 
         ScreenButton(readyStr[0], Vec2<double>{0.85, 0.85}, fontSize, COOP, RED)
       },
-      backgroundSelector = ScreenButton(Vec2<double>{0.37, 1.0f/2}, COOP, settings::bgImagesNames[settings::coopBgImage], 
+      backgroundSelector = ScreenButton(Vec2<double>{0.37, 1.0f/2}, COOP, settings::bgImages[settings::coopBgImage], 
         Vec2<double>{4, 8});
     std::vector<Button*> buttons;
     ButtonManager *buttonManager = nullptr;

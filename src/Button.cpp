@@ -13,9 +13,9 @@ Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSi
   this->color = color;
 }
 
-Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName, Vec2<double> size):
+Button::Button(Vec2<double> buttonPosition, ButtonTypes type, Texture2D *image, Vec2<double> size):
   buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
-  image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
+  image(image),
   isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0}),
   hoveringSound(settings::hoveringSound), size(size)
 {}

@@ -32,6 +32,7 @@ std::vector<Texture2D*> settings::skinImages;
 settings::Skin skin = settings::skins[settings::db["SKIN"]];
 std::vector<settings::Skin> settings::coopSkins = {settings::skins[settings::db["COOPSKINS"][0]], settings::skins[settings::db["COOPSKINS"][1]]};
 int settings::level = 0;
+std::vector<Texture2D*> settings::btnImages;
 
 Sound settings::hoveringSound, 
       settings::clearLineSound, 
@@ -82,6 +83,7 @@ void settings::SetCustomControls(){
 void settings::SetTextures(){
   SetSkinTextures();
   SetBgTextures();
+  SetBtnTextures();
 }
 
 void settings::SetSkinTextures(){
@@ -90,6 +92,10 @@ void settings::SetSkinTextures(){
 
 void settings::SetBgTextures(){
   SetTexturesVec(bgImagesNames, &bgImages);
+}
+
+void settings::SetBtnTextures(){
+  SetTexturesVec(btnImagesNames, &btnImages);
 }
 
 void settings::SetTexturesVec(std::vector<std::string> names, std::vector<Texture2D*> *images){
