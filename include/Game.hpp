@@ -10,7 +10,7 @@
 class Game : public Screen {
   public:
     Game(Board *board);
-    Game(Board *board, int bgImage, int control, int skin);
+    Game(Board *board, int bgImage, int control, int skin, int level);
     ~Game();
     void Tick() override;
     int GetScore();
@@ -69,7 +69,8 @@ class Game : public Screen {
     int level;
     int speed;
     int cleanedLinesCount;
-    void UpdateLevel();
+    void UpdateLevelAndSpeed();
+    bool UpdateLevel();
     void DrawHoldShape() const;
     void DrawHoldShape(Vec2<double>, bool) const;
     virtual void DrawNextShapes() const;
@@ -94,4 +95,8 @@ class Game : public Screen {
     int pontuation = 0;
     Color pontuationColor = Color{255, 255, 255, 0};
     void DrawPontuation();
+    int SetSpeed();
+    int startLevel;
+    bool UpdateLevelStartLevelN();
+    int initialLines;
 };

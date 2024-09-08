@@ -7,7 +7,7 @@ Coop::Coop(Board *board) :
 {}
 
 Coop::Coop(Board *board, int skin) :
-  Game(board, settings::db["COOPBGIMAGE"], settings::coopControls[0], settings::db["COOPSKINS"][0]),
+  Game(board, settings::db["COOPBGIMAGE"], settings::coopControls[0], settings::db["COOPSKINS"][0], 0),
   i(I_Shape(*board, skin)), o(O_Shape(*board, skin)), t(T_Shape(*board, skin)),
   j(J_Shape(*board, skin)), l(L_Shape(*board, skin)), s(S_Shape(*board, skin)), 
   z(Z_Shape(*board, skin)),

@@ -17,7 +17,7 @@ Options::Options() :
   CreateControlButtons();
   CreateGeneralButtons();
   CreateSoundButtons();
-  returnButton = new ScreenButton("Return", Vec2<double>{1.0f/2, 3.0f/4}, 1.0f/20, MENU);
+  returnButton = new ScreenButton("<", Vec2<double>{1.0f/30, 1.0f/50}, 1.0f/20, MENU);
   buttons = { general, control, sound, returnButton };
   buttonManager = new ButtonManager(buttons);
 }

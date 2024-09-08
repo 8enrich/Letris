@@ -35,12 +35,13 @@ namespace settings {
   extern int coopBgImage;
   extern std::vector<int> coopControls;
   extern Sound hoveringSound, clearLineSound, moveShapeSound, gameOverSound, fixShapeSound;
-  const std::vector<std::string> skinImageNames = {"skin0.png", "skin1.png", "skin2.png"};
+  const std::vector<std::string> skinImageNames = {"skin0.png", "skin1.png", "skin2.png", "skin3.png"};
   extern std::vector<Texture2D*> skinImages;
   const std::vector<Color> recolors[7] = {
     {SKYBLUE, YELLOW, MAGENTA, DARKBLUE, ORANGE, GREEN, RED}, 
     {WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE},
     {Color{235, 151, 202, 255}, Color{199, 155, 235, 255}, Color{155, 188, 235, 255}, Color{150, 235, 228, 255}, Color{235, 235, 156, 255}, Color{200, 150, 230, 255}, Color{235, 199, 151, 255}},
+    {Color{98,184,145,255}, Color{185,165,79,255}, Color{157,79,155,255}, Color{82,73,156,255}, Color{180,113,71,255}, Color{142,176,79,255}, Color{170,69,69,255}},
   };
   struct Skin{
     int image;
@@ -51,9 +52,10 @@ namespace settings {
       this->recolor = color;
     }
   };
-  const std::vector<Skin> skins = {Skin(0, 0), Skin(1, 1), Skin(2, 0), Skin(2, 2)};
+  const std::vector<Skin> skins = {Skin(0, 0), Skin(1, 1), Skin(2, 0), Skin(2, 2), Skin(3, 3)};
   extern Skin skin;
   extern std::vector<Skin> coopSkins;
+  extern int level;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();
@@ -69,6 +71,7 @@ namespace settings {
 enum Screens {
   GAME,
   COOP,
+  SOLOOPTIONS,
   COOPOPTIONS,
   OPTIONS,
   EXIT,

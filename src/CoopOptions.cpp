@@ -6,7 +6,9 @@
 using namespace settings;
 using namespace std;
 
-CoopOptions::CoopOptions(){
+CoopOptions::CoopOptions() : 
+  returnButton(ScreenButton("<", Vec2<double>{1.0f/30, 1.0f/50}, 1.0f/20, MENU))
+{
   for(int i = 0; i < 2; i++){
     for (const auto& pair : controlsIndexes) {
       if (pair.second == coopControls[i]){
@@ -24,6 +26,7 @@ CoopOptions::CoopOptions(){
     buttons.push_back(&(skinSelector[i]));
   }
   buttons.push_back(&backgroundSelector);
+  buttons.push_back(&returnButton);
   buttonManager = new ButtonManager(buttons);
   if(!buttonManager) throw AllocError("CoopOptions", "buttonManager");
 }
@@ -39,21 +42,16 @@ CoopOptions::~CoopOptions(){
 void CoopOptions::Tick(){
   bool error = CoopOptionsHandling();
   if(error) throw AllocError("CoopOptions", "shapes");
+  SetBoardsPosition();
   BeginDrawing();
   Draw();
   buttonManager->Tick();
-  int posX;
-  for(int i = 0; i < 2; i++){
-    posX = (int)(screenWidth * (0.15 + i * 0.70)) - 2 * cellSize;
-    if(boards[i].GetScreenPos().GetX() != posX){
-      boards[i].ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
-    }
-    boards[i].Draw();
-    boards[i].DrawBorder();
-    shapes[i]->DrawSkin(db["COOPSKINS"][i]);
-  }
   EndDrawing();
   if(GetKeyPressed() == KEY_ESCAPE) Close(MENU);
+  if(returnButton.isButtonClicked()){
+    Close(MENU);
+    returnButton.Unclick();
+  }
 }
 
 void CoopOptions::Draw(){
@@ -63,6 +61,9 @@ void CoopOptions::Draw(){
   for(int i = 0; i < 2; i++){
     ray_functions::DrawFormatedText(TextFormat("Skin P%d:", i + 1), Vec2<double>{0.15 + i * 0.70, 1.0f/8}, fontSize, RAYWHITE);
     ray_functions::DrawFormatedText(TextFormat("Control P%d:", i + 1), Vec2<double>{0.15 + i * 0.70, 0.65}, fontSize, RAYWHITE);
+    boards[i].Draw();
+    boards[i].DrawBorder();
+    shapes[i]->DrawSkin(db["COOPSKINS"][i]);
   }
 }
 
@@ -128,5 +129,16 @@ void CoopOptions::Close(Screens screen){
   for(int i = 0; i < 2; i++){
     clicked[i] = false;
     readyButtons[i].SetColor(RED);
+  }
+}
+
+void CoopOptions::SetBoardsPosition(){
+  int posX = 0;
+  for(int i = 0; i < 2; i++){
+    posX = (int)(screenWidth * (0.15 + i * 0.70)) - 2 * cellSize;
+    if(boards[i].GetScreenPos().GetX() != posX){
+      boards[i].ResetBoardSettings(cellSize, {posX, (int)(screenHeight * 0.20)});
+      skinSelector[i].SetButtonPosition(Vec2<double>{0.15 + i * 0.70, 0.20 + (float)(5.55 * cellSize)/screenHeight});
+    }
   }
 }

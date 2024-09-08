@@ -41,7 +41,7 @@ void Button::DrawRectButton() {
     pos -= hoveringPadding/2.0f;
   }
   Rectangle rect = {pos.GetX(), pos.GetY(), size.GetX(), size.GetY()};
-  DrawRectangleRounded(rect, 0.3, 0, color);
+  DrawRectangleRounded(rect, 0.3, 2, color);
 }
 
 void Button::DrawTextButton(){
@@ -145,4 +145,8 @@ void Button::SetImage(Texture2D *image){
 
 void Button::SetColor(Color color){
   this->color = color;
+}
+
+void Button::SetButtonPosition(Vec2<double> buttonPosition){
+  this->buttonPosition = buttonPosition;
 }

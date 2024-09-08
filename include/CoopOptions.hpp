@@ -1,17 +1,16 @@
 #include "Board.hpp"
 #include "Button.hpp"
 #include "ButtonManager.hpp"
-#include "Screen.hpp"
 #include "OptionsButton.hpp"
 #include "ScreenButton.hpp"
 #include "Settings.hpp"
 #include "Shape.hpp"
+#include "SoloOptions.hpp"
 #include <raylib.h>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
-class CoopOptions : public Screen{
+class CoopOptions : public SoloOptions{
   public:
     CoopOptions();
     ~CoopOptions();
@@ -24,22 +23,18 @@ class CoopOptions : public Screen{
     void ControlButtonsHandling();
     void BgSelectorHandling();
     void Close(Screens screen);
-    const float fontSize = 1.0f/30;
+    void SetBoardsPosition();
     const std::vector<std::string> 
       controlOptions[2] = {
         {"W A S D SPACE LSHIFT C", "S Z X C LSHIFT D F"}, 
         {"^ < > v ENTER RCTRL RSHIFT", "I J K L N O P"}
       },
-      readyStr = {"Not Ready", "Ready!"},
-      imagesName = {
-        "Calm river","Night forest", "Afternoon", "Gray smell"
-      },
-      skinNames = {"Letris", "Retro", "Minimalist", "Pastel"};
+      readyStr = {"Not Ready", "Ready!"};
     std::unordered_map<std::string, int> controlsIndexes = {
-      {"W A S D SPACE LSHIFT C", 0},
-      {"S Z X C LSHIFT D F", 6},
-      {"^ < > v ENTER RCTRL RSHIFT", 5},
-      {"I J K L N O P", 7}
+      {controlOptions[0][0], 0},
+      {controlOptions[0][1], 6},
+      {controlOptions[1][0], 5},
+      {controlOptions[1][1], 7}
     };
     std::string selectedControls[2];
     std::string selectedSkin[2] = {skinNames[settings::db["COOPSKINS"][0]], skinNames[settings::db["COOPSKINS"][1]]};
@@ -65,4 +60,5 @@ class CoopOptions : public Screen{
       Board{{(int)(settings::screenWidth * 0.85) - 2 * settings::cellSize, (int)(settings::screenHeight * 0.20)}, {4, 5}, settings::cellSize, settings::padding}
     };
     Shape *shapes[2] = {nullptr, nullptr};
+    ScreenButton returnButton;
 };
