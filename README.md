@@ -97,11 +97,6 @@ make # Build the game binary
 
 Feel free to customize further, but this should make it more structured and clear!
 
-
-# Usage
-
-in progress
-
 # License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
