@@ -13,6 +13,7 @@ void GameOver::Tick(){
 
 void GameOver::Draw(){
   ClearBackground(BLACK);
+  ray_functions::DrawImage(bgImage);
   ray_functions::DrawFormatedText("GAME OVER", Vec2<double>{1.0f/2, 1.0f/5}, 1.0f/13, RAYWHITE);
   DrawScores();
 }

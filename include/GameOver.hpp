@@ -27,4 +27,5 @@ private:
   void DrawScores();
   bool hasNewHighscore = false;
   int score, level;
+  Texture2D* bgImage = settings::bgImage;
 };

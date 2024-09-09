@@ -58,6 +58,7 @@ namespace settings {
   extern int level;
   const std::vector<std::string> btnImagesNames = {"stats.png", "pause.png"};
   extern std::vector<Texture2D*> btnImages;
+  extern Texture2D* bgImage;
   void UpdateWindowSize(Vec2<int>);
   void UpdateBoardPosition();
   void FullScreen();

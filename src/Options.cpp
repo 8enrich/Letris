@@ -1,5 +1,6 @@
 #include "../include/Options.hpp"
 #include "../include/Settings.hpp"
+#include "../include/AllocError.hpp"
 #include <raylib.h>
 #include <string>
 #include <iostream>
@@ -12,7 +13,8 @@ Options::Options() :
   currentSelected(0), buttonClicked(0), volume(db["VOLUME"]),
   selectedResolution(to_string(db["WINDOW_WIDTH"]) + "x" + to_string(db["WINDOW_HEIGHT"])),
   selectedScreenMode(db["WINDOWED"] ? screenModes[0] : screenModes[1]),
-  selectedControl(controls[db["CONTROL"]])
+  selectedControl(controls[db["CONTROL"]]),
+  bgImage(settings::bgImage)
 {
   CreateControlButtons();
   CreateGeneralButtons();
@@ -20,6 +22,7 @@ Options::Options() :
   returnButton = new ScreenButton("<", Vec2<double>{1.0f/30, 1.0f/50}, 1.0f/20, MENU);
   buttons = { general, control, sound, returnButton };
   buttonManager = new ButtonManager(buttons);
+  if(!bgImage) throw AllocError("Options", "bgImage");
 }
 
 void Options::CreateControlButtons(){
@@ -51,6 +54,7 @@ Options::~Options(){
   deleteButtonVector(volumeButtons);
   deleteButtonVector(buttons);
   delete buttonManager;
+  delete bgImage;
 }
 
 
@@ -69,6 +73,7 @@ void Options::Tick(){
 
 void Options::Draw() {
   ClearBackground(BLACK);
+  DrawImage(bgImage);
   DrawFormatedRectangle(Vec2<double>{1.0f/2, 1.0f/12}, Vec2<double>{1/1.5, 1.0f/10}, WHITE);
   switch(currentSelected){
     case GENERAL:

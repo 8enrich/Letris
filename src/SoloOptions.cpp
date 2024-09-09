@@ -14,7 +14,7 @@ SoloOptions::SoloOptions() :
   play(ScreenButton("Play", Vec2<double>{1.0f/2, 1.0f/1.2}, 1.0f/20, GAME, Color{11,229,248, 255})),
   returnButton(ScreenButton("<", Vec2<double>{1.0f/30, 1.0f/50}, 1.0f/20, MENU)),
   bgImageIndex(db["SOLOBGIMAGE"]), bgImagesSize(settings::bgImagesNames.size()), inputTextSelected(false),
-  inputTextStr("0")
+  inputTextStr("0"), bgImage(settings::bgImage)
 {
   shape = new L_Shape(board, db["SKIN"]);
   if(!shape) throw AllocError("SoloOptions", "shape");
@@ -22,11 +22,13 @@ SoloOptions::SoloOptions() :
   buttons = {&skinSelector, &backgroundSelector, &inputText, &play, &returnButton};
   buttonManager = new ButtonManager(buttons);
   if(!buttonManager) throw AllocError("SoloOptions", "buttonManager");
+  if(!bgImage) throw AllocError("SoloOptions", "bgImage");
 }
 
 SoloOptions::~SoloOptions(){
   delete shape;
   delete buttonManager;
+  delete bgImage;
 }
 
 void SoloOptions::Tick(){
@@ -36,14 +38,13 @@ void SoloOptions::Tick(){
   BeginDrawing();
   Draw();
   buttonManager->Tick();
-  Color color = RAYWHITE;
-  if(!inputTextSelected) color = GRAY;
-  DrawFormatedText(inputTextStr.c_str(), Vec2<double>{1.0f/2, 1.0f/2}, fontSize, color);
   EndDrawing();
 }
 
 void SoloOptions::Draw(){
   ClearBackground(BLACK);
+  DrawImage(bgImage);
+  DrawRectangle(Vec2<double>{1.0f/2 * screenWidth - 1.0f/20 * screenWidth, 1.0f/2 * screenHeight}, Vec2<double>{1.0f/10 * screenWidth, 1.0f/20 * screenHeight}, DARKGRAY);
   board.Draw();
   board.DrawBorder();
   shape->DrawSkin(db["SKIN"]);
@@ -51,6 +52,10 @@ void SoloOptions::Draw(){
   DrawFormatedText("Select background:", Vec2<double>{3.0f/4, 0.13}, fontSize, RAYWHITE);
   DrawFormatedText(imagesName[bgImageIndex].c_str(), Vec2<double>{3.0f/4, 0.45}, fontSize, RAYWHITE);
   DrawFormatedText("Level:", Vec2<double>{1.0f/2, 0.45}, fontSize, RAYWHITE);
+  Color color = RAYWHITE;
+  if(!inputTextSelected) color = GRAY;
+  DrawFormatedText(inputTextStr.c_str(), Vec2<double>{1.0f/2, 1.0f/2}, fontSize, color);
+  if(inputTextSelected) DrawFormatedText(cursor.c_str(), Vec2<double>{1.0f/2, 0.51}, fontSize, RAYWHITE);
 }
 
 bool SoloOptions::SoloOptionsHandling(){
@@ -73,7 +78,6 @@ void SoloOptions::BgSelectorHandling(){
 
 void SoloOptions::InputTextHandling(){
   InputTextSettings();
-  DrawRectangle(Vec2<double>{1.0f/2 * screenWidth - 1.0f/20 * screenWidth, 1.0f/2 * screenHeight}, Vec2<double>{1.0f/10 * screenWidth, 1.0f/20 * screenHeight}, DARKGRAY);
   if(inputText.isMouseHoveringButton()) SetMouseCursor(MOUSE_CURSOR_IBEAM);
   if(inputTextSelected){
     string buttonText = GetKeyboardInput();
@@ -91,12 +95,12 @@ void SoloOptions::InputTextSettings(){
 }
 
 string SoloOptions::GetKeyboardInput(){
-  string cursor, buttonText = inputTextStr;
+  string buttonText = inputTextStr;
+  cursor = "";
   int value = 0, letterCount = buttonText.size();
   if(buttonText == "0") value = 1;
   for(int i = 0; i < letterCount - value; i++) cursor +=  "  ";
   cursor += "_";
-  DrawFormatedText(cursor.c_str(), Vec2<double>{1.0f/2, 0.51}, fontSize, RAYWHITE);
   int key = GetKeyPressed();
   if(key == KEY_ENTER) inputTextSelected = false;
   if(key >= 48 && key <= 57 && letterCount < 2){

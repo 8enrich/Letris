@@ -68,6 +68,7 @@ private:
   OptionsButton *sound;
   std::vector<Button*> buttons;
   ButtonManager *buttonManager;
+  Texture2D *bgImage = nullptr;
   enum buttonsNum {
     GENERAL,
     CONTROLS,

@@ -6,7 +6,7 @@
 
 Menu::Menu() :
   logoTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "logo.png").c_str()))),
-  backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "menubg.png").c_str()))),
+  backgroundTexture(settings::bgImage),
   Screen(std::string(ASSETS_PATH)+"menu.mp3")
 {
   if(!logoTexture) throw AllocError("Menu", "logoTexture");

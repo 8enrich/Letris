@@ -3,12 +3,13 @@
 
 Stats::Stats():
   returnButton(ScreenButton("<", Vec2<double>{1.0f/30, 1.0f/50}, 1.0f/20, MENU)),
-  buttonManager(new ButtonManager(buttons))
+  buttonManager(new ButtonManager(buttons)), bgImage(settings::bgImage)
 {}
 
 Stats::~Stats(){
   for(Button *button : buttons) delete button;
   delete buttonManager;
+  delete bgImage;
 }
 
 void Stats::Tick(){
@@ -21,6 +22,7 @@ void Stats::Tick(){
 
 void Stats::Draw(){
   ClearBackground(BLACK);
+  ray_functions::DrawImage(bgImage);
   ray_functions::DrawFormatedText("HIGHSCORES", Vec2<double>{1.0f/2, 1.0f/5}, 1.0f/13, RAYWHITE);
   ray_functions::DrawFormatedText("Scores:", Vec2<double>{1.0f/4, 1.0f/3.5}, 1.0f/20, RAYWHITE);
   ray_functions::DrawFormatedText("Levels:", Vec2<double>{3.0f/4, 1.0f/3.5}, 1.0f/20, RAYWHITE);
