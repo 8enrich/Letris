@@ -9,6 +9,7 @@
 #include "../include/ScreenManager.hpp"
 #include "../include/CoopOptions.hpp"
 #include "../include/Stats.hpp"
+#include "../include/SoloOptions.hpp"
 #include <raylib.h>
 #include <memory>
 #include <iostream>
@@ -21,14 +22,14 @@
 int main() {
     InitAudioDevice();
     Window window{settings::screenWidth, settings::screenHeight, settings::fps, "Letris"};
-    settings::skinTexture = LoadTexture((std::string(ASSETS_PATH) + "skin0.png").c_str());
     try{
       Board board{settings::boardPosition, settings::boardWidthHeight,
                                           settings::cellSize, settings::padding};
-      settings::SetCustomControls();
+      settings::SetSettings();
       ScreenManager screenManager;
       screenManager.AddScreen(GAME, nullptr);
       screenManager.AddScreen(COOP, nullptr);
+      screenManager.AddScreen(SOLOOPTIONS, std::make_unique<SoloOptions>());
       screenManager.AddScreen(COOPOPTIONS, std::make_unique<CoopOptions>());
       screenManager.AddScreen(OPTIONS, std::make_unique<Options>());
       screenManager.AddScreen(EXIT, nullptr);
@@ -44,7 +45,7 @@ int main() {
       }
     }
     catch(std::exception& e){
-      settings::db["LOG"] = e.what();
+      settings::db["LOG"].push_back(e.what());
     }
     std::ofstream o(std::string(ASSETS_PATH)+ "user_settings.json");
     o << std::setw(4) << settings::db << std::endl;

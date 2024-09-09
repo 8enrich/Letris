@@ -10,16 +10,37 @@ int settings::cellSize = settings::db["CELLSIZE"];
 Vec2<int> settings::boardWidthHeight {settings::db["BOARD_RESOLUTION"][0], settings::db["BOARD_RESOLUTION"][1]};
 int settings::volume = settings::db["VOLUME"];
 std::vector<int> settings::highscores = settings::db["HIGHSCORES"];
+std::vector<int> settings::highlevels = settings::db["HIGHLEVELS"];
 std::vector<std::vector<KeyboardKey>> settings::controls = {
-  {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z, KEY_C},
+  {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_LEFT_SHIFT, KEY_C},
   {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_I, KEY_J, KEY_K, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_K, KEY_H, KEY_J, KEY_L, KEY_SPACE, KEY_Z, KEY_C},
   {KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_Z, KEY_C},
-  {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT}
+  {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_ENTER, KEY_RIGHT_CONTROL, KEY_RIGHT_SHIFT},
+  {KEY_S, KEY_Z, KEY_X, KEY_C, KEY_LEFT_SHIFT, KEY_D, KEY_F},
+  {KEY_I, KEY_J, KEY_K, KEY_L, KEY_N, KEY_O, KEY_P}
 };
 
-Texture2D settings::skinTexture;
+std::vector<Texture2D*> settings::bgImages;
+
+int settings::soloBgImage = settings::db["SOLOBGIMAGE"]; 
+int settings::coopBgImage = settings::db["COOPBGIMAGE"];
+std::vector<int> settings::coopControls = settings::db["COOPCONTROLS"];
+
+std::vector<Texture2D*> settings::skinImages;
+settings::Skin skin = settings::skins[settings::db["SKIN"]];
+std::vector<settings::Skin> settings::coopSkins = {settings::skins[settings::db["COOPSKINS"][0]], settings::skins[settings::db["COOPSKINS"][1]]};
+int settings::level = 0;
+std::vector<Texture2D*> settings::btnImages;
+Texture2D* settings::bgImage;
+
+Sound settings::hoveringSound, 
+      settings::clearLineSound, 
+      settings::moveShapeSound, 
+      settings::gameOverSound, 
+      settings::fixShapeSound;
+
 void settings::UpdateWindowSize(Vec2<int> newSize) {
   screenWidth = newSize.GetX();
   screenHeight = newSize.GetY();
@@ -50,8 +71,47 @@ void settings::FullScreen(){
   ToggleBorderlessWindowed();
 }
 
+void settings::SetSettings(){
+  SetCustomControls();
+  SetTextures();
+  SetSounds();
+}
+
 void settings::SetCustomControls(){
   for(int i = 0; i < 7; i++) settings::controls[4][i] = settings::db["CUSTOM_CONTROLS"][i];
+}
+
+void settings::SetTextures(){
+  SetSkinTextures();
+  SetBgTextures();
+  SetBtnTextures();
+  bgImage = new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "menubg.png").c_str()));
+}
+
+void settings::SetSkinTextures(){
+  SetTexturesVec(skinImageNames, &skinImages);
+}
+
+void settings::SetBgTextures(){
+  SetTexturesVec(bgImagesNames, &bgImages);
+}
+
+void settings::SetBtnTextures(){
+  SetTexturesVec(btnImagesNames, &btnImages);
+}
+
+void settings::SetTexturesVec(std::vector<std::string> names, std::vector<Texture2D*> *images){
+  for(int i = 0; i < names.size(); i++){
+    images->push_back(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + names[i]).c_str())));
+  }
+}
+
+void settings::SetSounds(){
+  hoveringSound = LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str());
+  clearLineSound = LoadSound((std::string(ASSETS_PATH)+ "clear.wav").c_str());
+  moveShapeSound = LoadSound((std::string(ASSETS_PATH)+ "move.wav").c_str());
+  gameOverSound = LoadSound((std::string(ASSETS_PATH)+"gameover.wav").c_str());
+  fixShapeSound = LoadSound((std::string(ASSETS_PATH)+"fix.wav").c_str());
 }
 
 std::unordered_map<KeyboardKey, std::string> settings::keyToString = {

@@ -44,7 +44,7 @@ Screens ScreenManager::GetActualScreen() const {
 void ScreenManager::ResetGameScreenIfNeeded(Board *board) {
   if (!entered){
     board->ResetBoardSettings();
-    if (lastScreen == MENU || lastScreen == GAMEOVER || lastScreen == COOPOPTIONS){
+    if (lastScreen == SOLOOPTIONS || lastScreen == GAMEOVER || lastScreen == COOPOPTIONS){
       switch(actualScreen){
         case GAME:
           screens[actualScreen] = std::make_unique<Game>(board);
@@ -69,7 +69,9 @@ void ScreenManager::SetScoreInGameOver(){
   Game *game = dynamic_cast<Game*>(gameScreen);
   if(gameOver && game){
     gameOver->SetScore(game->GetScore());
+    gameOver->SetLevel(game->GetLevel());
     gameOver->SetHighscores();
+    screens[lastScreen] = nullptr;
   }
 }
 

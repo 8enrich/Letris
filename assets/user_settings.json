@@ -1,14 +1,23 @@
 {
     "BOARD_POSITION": [
-        320,
-        67
+        426,
+        89
     ],
     "BOARD_RESOLUTION": [
         10,
         20
     ],
-    "CELLSIZE": 23,
+    "CELLSIZE": 29,
     "CONTROL": 0,
+    "COOPBGIMAGE": 0,
+    "COOPCONTROLS": [
+        0,
+        5
+    ],
+    "COOPSKINS": [
+        0,
+        0
+    ],
     "CUSTOM_CONTROLS": [
         87,
         65,
@@ -18,6 +27,13 @@
         90,
         67
     ],
+    "HIGHLEVELS": [
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
     "HIGHSCORES": [
         0,
         0,
@@ -25,10 +41,12 @@
         0,
         0
     ],
-    "LOG": "",
+    "LOG": [],
     "PADDING": 2,
+    "SKIN": 0,
+    "SOLOBGIMAGE": 0,
     "VOLUME": 100,
-    "WINDOWED": true,
-    "WINDOW_HEIGHT": 576,
-    "WINDOW_WIDTH": 1024
+    "WINDOWED": false,
+    "WINDOW_HEIGHT": 768,
+    "WINDOW_WIDTH": 1366
 }

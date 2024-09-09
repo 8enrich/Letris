@@ -13,17 +13,17 @@ Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSi
   this->color = color;
 }
 
-Button::Button(Vec2<double> buttonPosition, ButtonTypes type, std::string fileName):
+Button::Button(Vec2<double> buttonPosition, ButtonTypes type, Texture2D *image, Vec2<double> size):
   buttonPosition(buttonPosition), style(ButtonStyles::IMAGE), 
-  image(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + fileName).c_str()))),
+  image(image),
   isSelected(false), isClicked(false), buttonWidthHeight({0, 0}), realButtonPosition({0, 0}),
-  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str()))
+  hoveringSound(settings::hoveringSound), size(size)
 {}
 
 Button::Button(std::string buttonText, Vec2<double> buttonPosition, float fontSize, ButtonTypes type, ButtonStyles style):
   buttonText(buttonText), buttonPosition(buttonPosition), fontSize(fontSize), type(type), style(style),
   isClicked(false), isSelected(false), buttonWidthHeight({0, 0}), realButtonPosition(0, 0),
-  hoveringSound(LoadSound((std::string(ASSETS_PATH)+"button.wav").c_str()))
+  hoveringSound(settings::hoveringSound)
 {}
 
 Button::~Button(){
@@ -41,7 +41,7 @@ void Button::DrawRectButton() {
     pos -= hoveringPadding/2.0f;
   }
   Rectangle rect = {pos.GetX(), pos.GetY(), size.GetX(), size.GetY()};
-  DrawRectangleRounded(rect, 0.3, 0, color);
+  DrawRectangleRounded(rect, 0.3, 2, color);
 }
 
 void Button::DrawTextButton(){
@@ -86,7 +86,7 @@ void Button::Update() {
     return;
   }
   realButtonPosition = ray_functions::FakePositionToRealPosition(buttonPosition);
-  buttonWidthHeight = Vec2<float>{GetScreenWidth()/25.0f, GetScreenWidth()/25.0f};
+  buttonWidthHeight = Vec2<float>{GetScreenWidth()/(float)size.GetX(), GetScreenWidth()/(float)size.GetY()};
 }
 
 std::string Button::GetText() {
@@ -137,4 +137,16 @@ double Button::GetMousePositionX(){
 
 void Button::SetButtonText(std::string buttonText){
   this->buttonText = buttonText;
+}
+
+void Button::SetImage(Texture2D *image){
+  this->image = image;
+}
+
+void Button::SetColor(Color color){
+  this->color = color;
+}
+
+void Button::SetButtonPosition(Vec2<double> buttonPosition){
+  this->buttonPosition = buttonPosition;
 }

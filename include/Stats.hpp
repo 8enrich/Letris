@@ -16,4 +16,5 @@ class Stats : public Screen {
     const std::vector<Button*> buttons = { &returnButton };
     ScreenButton returnButton;
     ButtonManager *buttonManager;
+    Texture2D *bgImage = nullptr;
 };

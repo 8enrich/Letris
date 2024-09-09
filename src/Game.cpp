@@ -6,29 +6,48 @@
 #include <string>
 
 Game::Game(Board *board) :
+  Game(board, settings::db["SOLOBGIMAGE"], settings::db["CONTROL"], settings::db["SKIN"], settings::level)
+{}
+
+Game::Game(Board *board, int bgImage, int control, int skin, int level) :
   board(board), Screen(std::string(ASSETS_PATH)+"gameplay.mp3"),
-  i(I_Shape(*board)), o(O_Shape(*board)), t(T_Shape(*board)),
-  j(J_Shape(*board)), l(L_Shape(*board)), s(S_Shape(*board)), z(Z_Shape(*board)),
+  i(I_Shape(*board, skin)), o(O_Shape(*board, skin)), t(T_Shape(*board, skin)),
+  j(J_Shape(*board, skin)), l(L_Shape(*board, skin)), s(S_Shape(*board, skin)), z(Z_Shape(*board, skin)),
   shapes{ i, o, t, j, l, s, z },
-  hold(-1), score(0), level(0), speed(15), cleanedLinesCount(0), maxTickToFix(30),                                                                                                          
-  player(new Player(maxTickToFix, true, shapes)),
-  backgroundTexture(new Texture2D(LoadTexture((std::string(ASSETS_PATH) + "relaxing-bg.png").c_str()))),
-  clearLineSound(LoadSound((std::string(ASSETS_PATH)+ "clear.wav").c_str())),
-  moveShapeSound(LoadSound((std::string(ASSETS_PATH)+ "move.wav").c_str())),
-  gameOverSound(LoadSound((std::string(ASSETS_PATH)+"gameover.wav").c_str())),
-  fixShapeSound(LoadSound((std::string(ASSETS_PATH)+"fix.wav").c_str()))
+  hold(-1), score(0), level(level), cleanedLinesCount(0), maxTickToFix(30), tickCount(0),                                                                                                          
+  player(new Player(maxTickToFix, true, shapes, control, skin)),
+  backgroundTexture(settings::bgImages[bgImage]),
+  clearLineSound(settings::clearLineSound),
+  moveShapeSound(settings::moveShapeSound),
+  gameOverSound(settings::gameOverSound),
+  fixShapeSound(settings::fixShapeSound)
 {
+  speed = SetSpeed();
+  startLevel = level;
+  initialLines = 0;
   if(!backgroundTexture) throw std::bad_alloc(); 
   board->ResetBoardCells();
   player->shape = NewShape();
   SetNextShapes();
 }
+
 Game::~Game() {
   UnloadTexture(*backgroundTexture);
   delete backgroundTexture;
   delete player;
-
 }
+
+int Game::SetSpeed(){
+  int speed = 15;
+  if(level <= 10) return speed -= level;
+  speed -= 10;
+  bool conditions[4] = {level >= 13, level >= 16, level >= 19, level == 29};
+  for(int i = 0; i < 4; i++){
+    if(conditions[i]) speed -= 1;
+  }
+  return speed;
+}
+
 void Game::Tick(){
   if(HasLost()){
     nextScreen = GAMEOVER;
@@ -110,7 +129,7 @@ void Game::UpdateShape(Player *player){
   if ((player->shape)->WillCollideDown()){
     (player->tickToFix)--;
     if((player->tickToFix) > 0) return;
-    FixShape(player->shape);
+    FixShape(player);
     PlaySound(fixShapeSound);
     player->shape = NextShape(player);
     player->canHold = true;
@@ -119,7 +138,8 @@ void Game::UpdateShape(Player *player){
   if((player->tickToFix) < maxTickToFix) (player->tickToFix)--;
 }
 
-void Game::FixShape(Shape*& s){
+void Game::FixShape(Player *player){
+  Shape *s = player->shape;
   Vec2<int> cellPosition;
   int dimension = s->GetDimension();
   for (int x = 0; x < dimension; ++x){
@@ -127,7 +147,7 @@ void Game::FixShape(Shape*& s){
       bool cell = s->GetShapeRotation(x, y);
       if(cell){
         cellPosition = s->GetBoardPos() + Vec2<int>{x, y};
-        board->SetCell(cellPosition, s->GetColor());
+        board->SetCell(cellPosition, s->GetColor(), player->skin);
       }
     }
   }
@@ -138,10 +158,11 @@ void Game::Draw(){
   ray_functions::DrawImage(backgroundTexture);
   buttonManager.Tick();
   DrawBoard();
-  (player->shape)->Draw();
+  (player->shape)->Draw(player->skin);
   board->DrawBorder();
   if(hold >= 0) DrawHoldShape();
   DrawNextShapes();
+  DrawPontuation(); 
 }
 
 void Game::DrawBoard(){
@@ -151,14 +172,21 @@ void Game::DrawBoard(){
   board->Draw();
 }
 
-void Game::Update(){
-  Update(player, settings::db["CONTROL"]);
+void Game::DrawPontuation(){
+  const std::string points[4] = {"Single", "Double", "Triple", "Letris"};
+  ray_functions::DrawFormatedText(points[pontuation].c_str(), Vec2<double>{0.80, 1.0f/2}, 1.0f/10, pontuationColor);
+  ray_functions::DrawFormatedText(TextFormat("+ %d", scores[pontuation] * (level + 1)), Vec2<double>{0.80, 0.60}, 1.0f/10, pontuationColor);
+  if(pontuationColor.a >= 5) pontuationColor.a -= 5;
 }
 
-void Game::Update(Player *player, int control){
-  UpdateBoard(player, control);
+void Game::Update(){
+  Update(player);
+}
+
+void Game::Update(Player *player){
+  UpdateBoard(player);
   UpdateShape(player);
-  UpdateLevel();
+  UpdateLevelAndSpeed();
   if(buttonManager.GetScreen() != NOTSCREEN) {
     nextScreen = buttonManager.GetScreen();
     buttonManager.ResetScreen();
@@ -166,14 +194,14 @@ void Game::Update(Player *player, int control){
   }
 }
 
-void Game::UpdateBoard(Player *player, int control){
+void Game::UpdateBoard(Player *player){
   if(!(player->shape)->WillCollideDown() && !(tickCount % speed)){ (player->shape)->Fall(); }
-  MoveIfKeyPressed(player, control);
-  if (!(tickCount%3)) MoveIfKeyDown(player, control);
+  MoveIfKeyPressed(player);
+  if (!(tickCount%3)) MoveIfKeyDown(player);
 }
 
-void Game::MoveIfKeyPressed(Player *player, int control){
-  auto keyPressed = ray_functions::GetAction(control);
+void Game::MoveIfKeyPressed(Player *player){  
+  auto keyPressed = ray_functions::GetAction(player->control);
   int fallen;
   switch(keyPressed){
     case INSTANTFALL:
@@ -205,8 +233,8 @@ void Game::MoveIfKeyPressed(Player *player, int control){
   }
 }
 
-void Game::MoveIfKeyDown(Player *player, int control){
-  auto keyDown = ray_functions::GetKeyDown(control);
+void Game::MoveIfKeyDown(Player *player){
+  auto keyDown = ray_functions::GetKeyDown(player->control);
   switch(keyDown){
     case RIGHT:
       if (!(player->shape)->WillCollideRight()){
@@ -278,7 +306,8 @@ void Game::UpdateScore(int points){
 void Game::Score(){
   int lines = QuantityOfLines(), points;
   if(lines){
-    int scores[4] = {40, 100, 300, 1200};
+    pontuation = lines - 1;
+    pontuationColor.a = 255;
     points = scores[lines - 1];
     cleanedLinesCount += lines;
     UpdateScore(points);
@@ -294,12 +323,40 @@ int Game::QuantityOfLines(){
   return lines;
 }
 
-void Game::UpdateLevel(){
-  if(cleanedLinesCount >= 10 * (level + 1)){
-    level++;
+void Game::UpdateLevelAndSpeed(){
+  if(UpdateLevel()){
     if(level <= 10 || level == 13 || level == 16 || level == 19 || level == 29) speed--;
   }
 }
+
+bool Game::UpdateLevel(){
+  if(startLevel) return UpdateLevelStartLevelN();
+  if(cleanedLinesCount >= 10 * (level + 1)){
+    level++;
+    return true;
+  }
+  return false;
+}
+
+bool Game::UpdateLevelStartLevelN(){
+  if(startLevel == level){
+    int conditions[3] = {100, level * 10 - 50, level * 10 + 10};
+    int indexOfMax = (100 > level * 10 - 50)? 0 : 1;
+    int indexOfMin = (conditions[indexOfMax] < level * 10 + 10)? indexOfMax : 2;
+    if(cleanedLinesCount >= conditions[indexOfMin]){
+      initialLines = conditions[indexOfMin];
+      level++;
+      return true;
+    } 
+    return false;
+  }
+  if(cleanedLinesCount >= initialLines + (10 * (level - startLevel))){
+    level++;
+    return true;
+  }
+  return false;
+}
+ 
 
 void Game::DrawHoldShape() const{
   DrawHoldShape(Vec2<double>{(double)6, (double)0}, player->canHold);
@@ -311,7 +368,7 @@ void Game::DrawHoldShape(Vec2<double> pos, bool canHold) const{
   Color c = LIGHTGRAY;
   if(canHold) c = player->shapes[hold]->GetColor();
   player->shapes[hold]->DrawOutOfBoard(Vec2<double>{(posX + dimension)/2, posY * -4 + ((double)1/4) *
-      (dimension * dimension) - ((double)5/4) * dimension + 1}, c);
+      (dimension * dimension) - ((double)5/4) * dimension + 1}, c, player->skin);
 }
 
 void Game::DrawNextShapes() const{
@@ -323,12 +380,16 @@ void Game::DrawNextShapes(Player *player, double posX) const{
   for(int i = 0; i < 3; i++){
     int dimension = player->shapes[player->nextShapes[i]]->GetDimension();
     player->shapes[player->nextShapes[i]]->DrawOutOfBoard(Vec2<double>{-(posX - dimension)/2, 
-      i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)});
+      i * -4 + (((double)1/4) * (dimension * dimension) - ((double)5/4) * dimension + 1)}, player->skin);
   }
 }
 
 int Game::GetScore(){
   return score;
+}
+
+int Game::GetLevel(){
+  return level;
 }
 
 void Game::DrawHold() const{
