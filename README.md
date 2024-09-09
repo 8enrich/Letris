@@ -40,7 +40,7 @@ To download the latest Windows version, click [here](https://github.com/8enrich/
 ## Linux
 ### Installing the .deb Package
 
-To download the latest version for Ubuntu/Debian, click [here](https://github.com/8enrich/Letris/releases/download/0.1v/letris.deb).
+To download the latest version for Ubuntu/Debian, click [here](https://github.com/8enrich/Letris/releases/download/0.2v/letris.deb).
 
 Simply run the .deb file and follow the installation instructions. The package is compatible with GLIBC_2.27 and higher (was compiled in Ubuntu 18.04 LTS).
 
