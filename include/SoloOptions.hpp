@@ -16,6 +16,7 @@ class SoloOptions : public Screen{
     const float fontSize = 1.0f/30;
     const std::vector<std::string> skinNames = {"Letris", "Retro", "Minimalist", "Pastel", "Tetr.io"};
     const std::vector<std::string> imagesName = {"Calm river","Night forest", "Afternoon", "Gray smell"};
+    Texture2D *bgImage = nullptr;
   private:
     void Draw() override;
     bool SoloOptionsHandling();
@@ -40,4 +41,5 @@ class SoloOptions : public Screen{
     int bgImageIndex, bgImagesSize;
     bool inputTextSelected;
     std::string inputTextStr;
+    std::string cursor;
 };

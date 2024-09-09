@@ -56,6 +56,7 @@ void CoopOptions::Tick(){
 
 void CoopOptions::Draw(){
   ClearBackground(BLACK);
+  ray_functions::DrawImage(bgImage);
   ray_functions::DrawFormatedText("Select background:", Vec2<double>{1.0f/2, 0.45}, fontSize, RAYWHITE);
   ray_functions::DrawFormatedText(imagesName[bgImageIndex].c_str(), Vec2<double>{1.0f/2, 0.75}, fontSize, RAYWHITE);
   for(int i = 0; i < 2; i++){
