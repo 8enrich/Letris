@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/8enrich/Letris/releases"><img src="https://img.shields.io/github/downloads/8enrich/Letris/total" alt="Total Downloads" /></a>
   <a href="https://github.com/8enrich/Letris/stargazers"><img src="https://img.shields.io/github/stars/8enrich/Letris?style=flat&label=stars" alt="Stars" /></a>
-  <a href="https://github.com/8enrich/Letris/commits/master"><img src="https://img.shields.io/github/commits-since/8enrich/Letris/0.1v" alt="Commits" /></a>
+  <a href="https://github.com/8enrich/Letris/commits/master"><img src="https://img.shields.io/github/commits-since/8enrich/Letris/0.2v" alt="Commits" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/8enrich/Letris" alt="License" /></a>
   <a href="https://github.com/8enrich/Letris/actions"><img src="https://img.shields.io/github/actions/workflow/status/8enrich/Letris/cmake-multi-platform.yml" alt="Build Status" /></a>
 </p>
@@ -40,13 +40,28 @@ To download the latest Windows version, click [here](https://github.com/8enrich/
 ## Linux
 ### Installing the .deb Package
 
-To download the latest version for Ubuntu/Debian, click [here](https://github.com/8enrich/Letris/releases/download/0.2v/letris.deb).
+To download the latest version for Ubuntu/Debian, click [here](https://github.com/8enrich/Letris/releases) and download 'letris.deb'.
 
 Simply run the .deb file and follow the installation instructions. The package is compatible with GLIBC_2.27 and higher (was compiled in Ubuntu 18.04 LTS).
 
+### Installing the pre-compiled tar.gz
+
+To download it, click [here](https://github.com/8enrich/Letris/releases) and download 'Letris-amd64-Linux.tar.gz'.
+
+After that untar it with
+```bash
+tar -xvf Letris-amd64-Linux.tar.gz
+```
+and simply run the installation script in the directory with:
+```
+cd Letris-amd64-Linux/
+./install.sh
+```
+The binary is compatible with GLIBC_2.27 and higher (was compiled in Ubuntu 18.04 LTS).
+
 ### Compiling the Game
 
-If you're using a non-Ubuntu/Debian based distribution, you can compile the code yourself. You'll need a relatively recent version of CMake, which can be downloaded [here](https://cmake.org/files/LatestRelease/) or found in your distribution's package manager.
+If you can't install the .deb version and the .tar.gz version you can also compile the code yourself. You'll need a relatively recent version of CMake, which can be downloaded [here](https://cmake.org/files/LatestRelease/) or found in your distribution's package manager.
 
 #### Build tools
 
@@ -89,8 +104,8 @@ Once the dependencies are installed, follow these steps to build the game:
 ```bash
 git clone https://github.com/8enrich/Letris.git # Clone the repository
 cd Letris # Enter the repository
-mkdir build && cd build # Create and navigate to the build directory
-cmake -S .. # Configure the project with CMake
+cmake -S . -B build # Configure the project with CMake
+cd build # Change to the build directory
 make # Build the game binary
 ./letris # Run the game
 ```
