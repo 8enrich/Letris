@@ -20,17 +20,19 @@ class SoloOptions : public Screen{
   private:
     void Draw() override;
     bool SoloOptionsHandling();
-    void Close(Screens screen);
     void ScreenButtonsHandling();
     void BgSelectorHandling();
     bool SkinSelectorHandling();
+    void SkinPreview();
+    void ChangeSelectedSkin();
+    bool ChangeSkin();
     void InputTextHandling();
     void InputTextSettings();
     void SetBoardPosition();
     std::string GetKeyboardInput();
     std::string selectedSkin = skinNames[settings::db["SKIN"]];
     Board board;
-    Shape *shape;
+    Shape *shape = nullptr;
     OptionsButton skinSelector;
     ScreenButton inputText;
     ScreenButton backgroundSelector;

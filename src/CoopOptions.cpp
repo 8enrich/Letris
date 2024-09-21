@@ -48,10 +48,7 @@ void CoopOptions::Tick(){
   buttonManager->Tick();
   EndDrawing();
   if(GetKeyPressed() == KEY_ESCAPE) Close(MENU);
-  if(returnButton.isButtonClicked()){
-    Close(MENU);
-    returnButton.Unclick();
-  }
+  if(returnButton.isButtonClicked()) Close(MENU);
 }
 
 void CoopOptions::Draw(){
@@ -79,18 +76,33 @@ bool CoopOptions::CoopOptionsHandling(){
 }
 
 bool CoopOptions::SkinSelectorHandling(){
-  string skinString;
-  int skinIndex;
   for(int i = 0; i < 2; i++){
-    skinString = skinSelector[i].GetText();
-    for(skinIndex = 0; skinIndex < skinNames.size(); skinIndex++) if(skinNames[skinIndex] == skinString) break;
-    db["COOPSKINS"][i] = skinIndex;
-    selectedSkin[i] = skinString;
-    delete shapes[i];
-    shapes[i] = new L_Shape(boards[i], db["COOPSKINS"][i]);
-    if(!shapes[i]) return true;
-    shapes[i]->Fall();
+    if(!skinSelector[i].GetIsMenuOpen()) ChangeSelectedSkin(i);
+    if(skinSelector[i].HasButtonSelected()) SkinPreview(i);
+    bool error = ChangeSkin(i);
+    if(error) return true;
   }
+  return false;
+}
+
+void CoopOptions::ChangeSelectedSkin(int index){
+  int skinIndex;
+  string skinString = skinSelector[index].GetText();
+  for(skinIndex = 0; skinIndex < skinNames.size(); skinIndex++) if(skinNames[skinIndex] == skinString) break;
+  db["COOPSKINS"][index] = skinIndex;
+  selectedSkin[index] = skinString;
+}
+
+void CoopOptions::SkinPreview(int index){
+  int skinIndex = skinSelector[index].GetButtonSelected();
+  db["COOPSKINS"][index] = skinIndex;
+}
+
+bool CoopOptions::ChangeSkin(int index){
+  delete shapes[index];
+  shapes[index] = new L_Shape(boards[index], db["COOPSKINS"][index]);
+  if(!shapes[index]) return true;
+  shapes[index]->Fall();
   return false;
 }
 
@@ -121,16 +133,18 @@ void CoopOptions::ReadyButtonsHandling(){
       readyButtons[i].SetColor(color);
     }
   }
-  if(clicked[0] == clicked[1] && clicked[0]) Close(COOP);
+  if(clicked[0] == clicked[1] && clicked[0]){
+    Close(COOP); 
+  }
 }
 
 void CoopOptions::Close(Screens screen){
-  nextScreen = screen;
-  OpenClose();
+  GoToScreen(screen);
   for(int i = 0; i < 2; i++){
     clicked[i] = false;
     readyButtons[i].SetColor(RED);
   }
+  returnButton.Unclick();
 }
 
 void CoopOptions::SetBoardsPosition(){

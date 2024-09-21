@@ -117,12 +117,27 @@ string SoloOptions::GetKeyboardInput(){
 }
 
 bool SoloOptions::SkinSelectorHandling(){
+  if(!skinSelector.GetIsMenuOpen()) ChangeSelectedSkin();
+  if(skinSelector.HasButtonSelected()) SkinPreview();
+  bool error = ChangeSkin();
+  return error;
+}
+
+void SoloOptions::ChangeSelectedSkin(){
   string skinString;
   int skinIndex;
   skinString = skinSelector.GetText();
   for(skinIndex = 0; skinIndex < skinNames.size(); skinIndex++) if(skinNames[skinIndex] == skinString) break;
-  db["SKIN"] = skinIndex;
   selectedSkin = skinString;
+  db["SKIN"] = skinIndex;
+}
+
+void SoloOptions::SkinPreview(){
+  int index = skinSelector.GetButtonSelected();
+  db["SKIN"] = index;
+}
+
+bool SoloOptions::ChangeSkin(){
   delete shape;
   shape = new L_Shape(board, db["SKIN"]);
   if(!shape) return true;
@@ -132,18 +147,13 @@ bool SoloOptions::SkinSelectorHandling(){
 
 void SoloOptions::ScreenButtonsHandling(){
   if(GetKeyPressed() == KEY_ESCAPE || returnButton.isButtonClicked()){
-    Close(MENU);
+    GoToScreen(MENU);
     returnButton.Unclick();
   }
   if(play.isButtonClicked()){
-    Close(GAME);
+    GoToScreen(GAME);
     play.Unclick();
   }
-}
-
-void SoloOptions::Close(Screens screen){
-  nextScreen = screen;
-  OpenClose();
 }
 
 void SoloOptions::SetBoardPosition(){

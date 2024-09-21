@@ -7,7 +7,6 @@ class Coop : public Game {
   public:
     Coop(Board *board);
     Coop(Board *board, int skin);
-    void Tick() override;
   private:
     void Draw() override;
     Shape i, o, t, j, l, s, z;

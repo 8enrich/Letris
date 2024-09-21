@@ -50,18 +50,21 @@ int Game::SetSpeed(){
 
 void Game::Tick(){
   if(HasLost()){
-    nextScreen = GAMEOVER;
-    OpenClose();
+    GoToScreen(GAMEOVER);
+    return;
+  }
+  if(!IsWindowFocused()){
+    GoToScreen(PAUSE);
     return;
   }
   if(IsMusicReady(music) && IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
   BeginDrawing();
-  Game::Update();
+  Update();
   if(!HasLost()){
-    Game::ClearLines();
-    Game::Draw();
-    Game::Score();
-    Game::DropLines();
+    ClearLines();
+    Draw();
+    Score();
+    DropLines();
   }
   EndDrawing();
   tickCount++;
@@ -180,6 +183,7 @@ void Game::DrawPontuation(){
 }
 
 void Game::Update(){
+  if(player->control != settings::db["CONTROL"]) player->control = settings::db["CONTROL"];
   Update(player);
 }
 
@@ -442,3 +446,4 @@ void Game::DrawStats(int firstValue) const{
     ray_functions::DrawText(numStr, Vec2<double>{xPos,yPos}, screenHeight * 1/25, RAYWHITE);
   }
 }
+

@@ -91,3 +91,23 @@ Vec2<double> OptionsButton::GetMenuWidthHeight(){
 void OptionsButton::SetCurrentSelectedOptionIndex(int index){
   currentSelectedOptionIndex = index;
 }
+
+bool OptionsButton::HasButtonSelected(){
+  for(Button *button : buttonOptions->GetButtons()){
+    if(button->isSelected) return true;
+  }
+  return false;
+}
+
+int OptionsButton::GetButtonSelected(){
+  int i = -1;
+  for(Button *button : buttonOptions->GetButtons()){
+    i++;
+    if(button->isSelected) break;
+  }
+  return i;
+}
+
+bool OptionsButton::GetIsMenuOpen(){
+  return isMenuOpen;
+}
