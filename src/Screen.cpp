@@ -44,3 +44,8 @@ Screens Screen::GetScreen(){ return nextScreen;}
 void Screen::SetNextScreen(Screens newNextScreen){
   nextScreen = newNextScreen;
 }
+
+void Screen::GoToScreen(Screens screen){
+  nextScreen = screen;
+  OpenClose();
+}

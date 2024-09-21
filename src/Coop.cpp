@@ -24,25 +24,6 @@ void Coop::SetPlayers(){
   players[1] = player2;
 }
 
-void Coop::Tick(){
-  if(HasLost()){
-    nextScreen = GAMEOVER;
-    OpenClose();
-    return;
-  }
-  if(IsMusicReady(music) && IsMusicStreamPlaying(music)) {UpdateMusicStream(music);}
-  BeginDrawing();
-  Update();
-  if(!HasLost()){
-    ClearLines();
-    Draw();
-    Score();
-    DropLines();
-  }
-  EndDrawing();
-  tickCount++;
-}
-
 void Coop::Draw(){
   ClearBackground(BLACK);
   float scale = (GetScreenWidth() * 1.2)/(float)backgroundTexture->width;
@@ -72,7 +53,7 @@ void Coop::UpdatePlayer(int index){
     Game::Update(player2);
     return;
   }
-  Game::Update();
+  Game::Update(player);
 }
 
 Shape *Coop::NextShape(Player* player){

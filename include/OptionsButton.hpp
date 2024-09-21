@@ -16,6 +16,9 @@ public:
   std::string GetButtonText();
   void SetButtonText(std::string);
   void SetCurrentSelectedOptionIndex(int);
+  bool HasButtonSelected();
+  int GetButtonSelected();
+  bool GetIsMenuOpen();
 private:
   void MenuHandling();
   void Update() override;

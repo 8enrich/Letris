@@ -20,6 +20,9 @@ class CoopOptions : public SoloOptions{
     bool CoopOptionsHandling();
     void ReadyButtonsHandling();
     bool SkinSelectorHandling();
+    void ChangeSelectedSkin(int index);
+    void SkinPreview(int index);
+    bool ChangeSkin(int index);
     void ControlButtonsHandling();
     void BgSelectorHandling();
     void Close(Screens screen);
